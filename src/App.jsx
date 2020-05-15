@@ -28,18 +28,12 @@ class App extends React.Component{
   constructor(){
     super();
     this.state={
-      isHome:true
+
     };
   }
 
 componentDidMount(){
-  const path = this.props.history.location.pathname.toString();
-  console.log(path);
-  if(path==="/"){
-      this.setState({isHome:true});
-  }else{
-    this.setState({isHome:false});
-  }
+
 
 }
 
@@ -48,7 +42,7 @@ render() {
   return(
 
        <div>
-     <Header isHome= {this.state.isHome}/>
+     <Header/>
      <Switch>
      <Route path="/" exact component={Home}/>
      <Route path="/Login=ServiceProvider" exact  render={()=>this.props.currentUser?(<Redirect to='/UserPage/Service-Provider'/>):(<ServiceProviderLogin/>)}/>

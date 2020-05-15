@@ -5,25 +5,24 @@ import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
 import Logo from "../../Images/Logo.png";
 import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from '../../redux/user/user-selector';
+import {selectCurrentUser,selectIsHome} from '../../redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
- import {setCurrentUser} from '../../redux/user/user-actions';
+ import {setCurrentUser,setIsHome } from '../../redux/user/user-actions';
  import {clearDropdown} from '../../redux/service/service-actions';
 import {Menu,MenuItem,Box,makeStyles,AppBar,Toolbar,Typography,Button} from '@material-ui/core';
 
 
 
 
-const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,home})=>{
+const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome})=>{
 
   const [anchorRegister, setAnchorRegister] = React.useState(null);
   const [anchorLogin, setAnchorLogin] = React.useState(null);
-  const [isHome,setHome] = React.useState(home);
+
 
   const handleClick = (event) => {
-    event.target.parentElement.style.background=' linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)';
-    event.target.style.color='white';
-    if(event.target.name == 'btn-register'){
+    alert(event.target.parentElement.name);
+    if(event.target.parentElement.name === 'btn-register'){
           setAnchorRegister(event.currentTarget);
     }else{
       setAnchorLogin(event.currentTarget)
@@ -31,12 +30,26 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,home})=>{
 
   };
 
-  const handleClose = () => {
+  const handleRegister = (type,event) => {
+    setIsHome(false);
+    if(currentUser!= null){
+      history.push('/');
+    }else{
+      if(type==='sp'){
+          history.push('/ProfessionalForm');
+      }else{
+        history.push('/ProfessionalForm');
+      }
     setAnchorRegister(null);
     setAnchorLogin(null);
-    history.push('/ProfessionalForm');
+}
   };
 
+
+const handleClose = ()=>{
+  setAnchorRegister(null);
+  setAnchorLogin(null);
+}
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,7 +92,7 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,home})=>{
 const classes = useStyles();
 
   function handleLogin(type,event){
-    setHome(!isHome);
+    setIsHome(false);
     if(currentUser!= null){
       setCurrentUser(null);
       ClearDropdown();
@@ -103,7 +116,7 @@ const classes = useStyles();
       <Box display="flex"justifyContent="flex-end" >
   <Toolbar className={classes.toolbar}>
       <img src={Logo} className={classes.imgLogo}/>
-    <Button className={classes.commonButton} color="inherit" onClick={()=>{history.push('/');setHome(true);}}>Home</Button>
+    <Button className={classes.commonButton} color="inherit" onClick={()=>{history.push('/');setIsHome(true);}}>Home</Button>
     <Button className={classes.commonButton} color="inherit">About</Button>
     <Button className={classes.commonButton} color="inherit">Services</Button>
     <Button aria-controls="simple-menu" name='btn-register' aria-haspopup="true" className={classes.userButton} color="inherit" onClick={(event) =>{handleClick(event);}}>Register</Button>
@@ -115,8 +128,8 @@ const classes = useStyles();
         open={Boolean(anchorRegister)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Service-Provider</MenuItem>
-        <MenuItem onClick={handleClose}>Customer</MenuItem>
+        <MenuItem onClick={(event)=>{handleRegister('sp',event);}}>Service-Provider</MenuItem>
+        <MenuItem onClick={(event)=>{handleRegister('c',event);}}>Customer</MenuItem>
       </Menu>
       <Menu
           id="login-menu"
@@ -141,12 +154,14 @@ const classes = useStyles();
 
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  isHome: selectIsHome
 })
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
-  ClearDropdown:() => dispatch(clearDropdown())
+  ClearDropdown:() => dispatch(clearDropdown()),
+  setIsHome: value => dispatch(setIsHome(value))
 });
 
 

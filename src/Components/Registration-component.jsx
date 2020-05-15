@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {Button} from 'react-bootstrap';
 
 
+
 class Registration extends React.Component{
   constructor(){
     super();
@@ -136,6 +137,7 @@ uploadDocuments = () => {
 
   render(){
     const{stage, registrationType} = this.state;
+
     if(stage === "1"){
       return(
       <Form type={this.props.type} handleClick={this.Stage1Click}></Form>
@@ -172,8 +174,8 @@ uploadDocuments = () => {
           <a href='/'><Button variant='login' type="submit" style={{width:"12%"}}>BACK TO HOME</Button></a>
       </div>);
     }
-    }
 
+}
   }
 
 

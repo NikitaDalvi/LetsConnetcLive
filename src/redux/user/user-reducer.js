@@ -2,7 +2,8 @@
 import {UserActionTypes} from './user-types';
 
 const Initial_State = {
-  currentUser: null
+  currentUser: null,
+  isHome:true
 };
 
 const userReducer = (state=Initial_State, action) => {
@@ -12,6 +13,12 @@ const userReducer = (state=Initial_State, action) => {
       ...state,
       currentUser: action.payload
     };
+
+    case UserActionTypes.SET_ISHOME:
+    return{
+      ...state,
+      isHome:action.payload
+    }
     default:
       return state;
   }
