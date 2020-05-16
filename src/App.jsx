@@ -18,7 +18,7 @@ import SPUserPage from "./Components/LoggedInUser-component";
 import Footer from "./Components/footer";
 import {Switch, Route, Redirect} from "react-router-dom";
 import {connect} from 'react-redux';
-import {setCurrentUser} from './redux/user/user-actions';
+import {setCurrentUser,setIsHome} from './redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from './redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
@@ -32,9 +32,8 @@ class App extends React.Component{
     };
   }
 
-componentDidMount(){
-
-
+componentWillUnmount(){
+  this.props.setIsHome(true);
 }
 
 render() {
@@ -69,11 +68,12 @@ render() {
 }
 }
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
+    setCurrentUser: user => dispatch(setCurrentUser(user)),
+    setIsHome: value => dispatch(setIsHome(value))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

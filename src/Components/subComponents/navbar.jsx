@@ -21,7 +21,7 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome
 
 
   const handleClick = (event) => {
-    alert(event.target.parentElement.name);
+  
     if(event.target.parentElement.name === 'btn-register'){
           setAnchorRegister(event.currentTarget);
     }else{
