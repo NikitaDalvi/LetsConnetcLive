@@ -13,7 +13,7 @@ class Registration extends React.Component{
   constructor(){
     super();
     this.state={
-      stage: "1",
+      stage: "2",
       registrationType:"",
       currentUserId:'',
       incorporationCertificate:{

@@ -13,7 +13,7 @@ import {Container} from '@material-ui/core';
      <br/>
      <br/>
      <br/>
-     <Container maxWidth="sm" style={{marginLeft:'600px'}}>
+     <Container maxWidth="sm" style={{marginLeft:'550px'}}>
      <ProgressBar
   percent={50}
   filledBackground='linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)'
