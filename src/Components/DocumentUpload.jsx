@@ -1,13 +1,12 @@
 import React from "react";
 import UploadItem from "./subComponents/DocumentUploadItem";
 import EmployeeList from "./subComponents/EmployeeList";
-import {Button} from 'react-bootstrap';
+import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
 
 
 
 function DocumentUpload(props){
   var Items =props.items;
-  const[isChanged, setChange] = React.useState(null);
 
   const [incorporationCertificate,setIncorporationCertificate] = React.useState({
     file:null,
@@ -28,17 +27,11 @@ function DocumentUpload(props){
   });
 
   function handleChange(event,id){
+    console.log('called');
     const{name,value} = event.target;
 
     const item = Items.filter((i,index) => {return index === id;});
     console.log(item[0]);
-
-    if(name === 'file'){
-      value !== null? setChange(id):setChange(null);
-      var newValue = value.replace(/C:\\fakepath\\/i, '');
-      document.getElementById(`document${id}`).innerText = newValue;
-    }
-
 
 
     switch (item[0]) {
@@ -104,19 +97,37 @@ function DocumentUpload(props){
       default:
 
     }
+    console.log(incorporationCertificate);
   }
+
+  const useStyles = makeStyles(theme =>({
+    title:{
+      textAlign:'center'
+    },
+    btnUpload:{
+      margin: theme.spacing(1),
+      width:'200px',
+      fontSize:'12px',
+      background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+      height:'40px',
+      color:'white',
+      borderRadius:'8px'
+    }
+  }));
+
+const classes = useStyles();
 
 
   return(
-    <div className="container professional-container">
-        <h1 className="login-title">KYC verification</h1>
+    <Container maxWidth="sm">
+        <Typography className={classes.title} variant='h4'>KYC verification</Typography>
         <br/>
         <br/>
-               {Items.map((uploadItem,index) => (<UploadItem item={uploadItem} isChanged={isChanged} change={handleChange} id={index}/>))}
+               {Items.map((uploadItem,index) => (<UploadItem item={uploadItem}  change={handleChange} id={index}/>))}
     <div style={{textAlign: "center",marginBottom: "10px"}}>
-    <a ><Button  variant='login' type="submit" onClick={()=>{props.handleDocuments();}}>UPLOAD AND VERIFY</Button></a>
+    <a ><Button  className={classes.btnUpload} type="submit" onClick={()=>{props.handleDocuments();}}>UPLOAD AND VERIFY</Button></a>
   </div>
-    </div>
+    </Container>
   );
 
 

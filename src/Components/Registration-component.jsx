@@ -6,6 +6,7 @@ import Subscription from "./Subscription";
 import DocumentForm from "./DocumentUpload";
 import {connect} from 'react-redux';
 import {Button} from 'react-bootstrap';
+import {setProgress} from '../redux/user/user-actions';
 
 
 
@@ -13,7 +14,7 @@ class Registration extends React.Component{
   constructor(){
     super();
     this.state={
-      stage: "2",
+      stage: "1",
       registrationType:"",
       currentUserId:'',
       incorporationCertificate:{
@@ -39,6 +40,7 @@ class Registration extends React.Component{
 
  Stage1Click = async (name,email,password,confirmPassword) =>{
 
+   this.props.setProgress(50);
 
   // if (password === confirmPassword){
   //   const registrationData = {
@@ -99,6 +101,7 @@ SubsSelectionClick = (type,companyName) =>{
   // }
 
 // console.log(companyName);
+this.props.setProgress(100);
 this.setState({
   stage:"3",
   registrationType: type
@@ -171,7 +174,7 @@ uploadDocuments = () => {
       return (<div className="container messageContainer">
         <p class="h3">Your documents are sent for Verification. <br/> We will inform you through e-mail once done.<br/><br/><span class="h1"> Thank You ! </span></p>
         <br/>
-          <a href='/'><Button variant='login' type="submit" style={{width:"12%"}}>BACK TO HOME</Button></a>
+          <a href='/'><Button variant='login' onClick={()=>{this.props.setProgress(0);}} type="submit" style={{width:"12%"}}>BACK TO HOME</Button></a>
       </div>);
     }
 
@@ -183,9 +186,11 @@ const mapStateToProps = ({user}) =>({
   currentUser: user.currentUser
 })
 
+const mapDispatchToProps = dispatch => ({
+  setProgress: value => dispatch(setProgress(value))
+});
 
-
-export default connect(mapStateToProps)(Registration);
+export default connect(mapStateToProps,mapDispatchToProps)(Registration);
 
 //incorporationCertificate,panCard,udyogAdhar
 

@@ -3,7 +3,8 @@ import {UserActionTypes} from './user-types';
 
 const Initial_State = {
   currentUser: null,
-  isHome:true
+  isHome:true,
+  progress:0
 };
 
 const userReducer = (state=Initial_State, action) => {
@@ -19,6 +20,12 @@ const userReducer = (state=Initial_State, action) => {
       ...state,
       isHome:action.payload
     }
+
+    case UserActionTypes.SET_REGISTRATION_PROGRESS:
+    return{
+      ...state,
+      progress: action.payload
+    };
     default:
       return state;
   }

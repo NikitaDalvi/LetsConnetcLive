@@ -14,3 +14,8 @@ export const selectIsHome = createSelector(
   [selectUser],
   user => user.isHome
 );
+
+export const selectProgress = createSelector(
+  [selectUser],
+  user => user.progress
+);

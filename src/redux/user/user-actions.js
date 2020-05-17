@@ -10,3 +10,8 @@ export const setIsHome = value => ({
   type:UserActionTypes.SET_ISHOME,
   payload:value
 });
+
+export const setProgress = value => ({
+  type:UserActionTypes.SET_REGISTRATION_PROGRESS,
+  payload:value
+});

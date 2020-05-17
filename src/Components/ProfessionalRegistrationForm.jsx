@@ -4,8 +4,11 @@ import Registration from "./Registration-component"
 import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import {Container} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
+import {selectProgress} from '../redux/user/user-selector';
 
- function ProfessionalForm(){
+ function ProfessionalForm({progress}){
 
    return(
      <div>
@@ -15,7 +18,7 @@ import {Container} from '@material-ui/core';
      <br/>
      <Container maxWidth="sm" style={{marginLeft:'550px'}}>
      <ProgressBar
-  percent={50}
+  percent={progress}
   filledBackground='linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)'
   height={6}
   width={400}
@@ -67,4 +70,9 @@ import {Container} from '@material-ui/core';
    );
  }
 
- export default ProfessionalForm;
+
+const mapStateToProps = createStructuredSelector({
+  progress: selectProgress
+});
+
+ export default connect(mapStateToProps)(ProfessionalForm);
