@@ -2,10 +2,12 @@
 import React from "react";
 import homeVector from "../Images/home-pg-vector.png";
 import img from "../Images/img.png";
+import {connect} from 'react-redux';
+ import {setIsHome } from '../redux/user/user-actions';
 // import Content from "./subComponents/home-content";
 import {Typography,makeStyles,Button} from '@material-ui/core';
 
-function Home(){
+function Home({setIsHome}){
   const useStyles = makeStyles(theme =>({
     TypographyBrand:{
       textAlign:'right',
@@ -68,7 +70,7 @@ const classes = useStyles();
       I want to work
       </Typography>
       <br/>
-      <Button className={classes.buttonRight}>&#10095;</Button>
+      <a href='/ProfessionalForm'><Button className={classes.buttonRight} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
     </div>
 
   </div>
@@ -83,7 +85,7 @@ const classes = useStyles();
     I want to hire
     </Typography>
     <br/>
-    <Button className={classes.buttonLeft}>&#10095;</Button>
+    <a href='/CustomerForm'><Button className={classes.buttonLeft} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
   </div>
   <div className='col-lg-8' style={{textAlign:'right'}}>
     <img src={img}/>
@@ -93,7 +95,11 @@ const classes = useStyles();
 
 }
 
-export default Home;
+const mapDispatchToProps = dispatch => ({
+  setIsHome: value => dispatch(setIsHome(value))
+});
+
+export default connect(null,mapDispatchToProps)(Home);
 //<img src="D:\MyWorkSpace\let-network\Images\banner.jpg"/>;
 //<div className="container row home-content">
 

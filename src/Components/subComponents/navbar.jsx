@@ -21,7 +21,7 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome
 
 
   const handleClick = (event) => {
-  
+
     if(event.target.parentElement.name === 'btn-register'){
           setAnchorRegister(event.currentTarget);
     }else{
@@ -38,7 +38,7 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome
       if(type==='sp'){
           history.push('/ProfessionalForm');
       }else{
-        history.push('/ProfessionalForm');
+        history.push('/CustomerForm');
       }
     setAnchorRegister(null);
     setAnchorLogin(null);
@@ -128,8 +128,8 @@ const classes = useStyles();
         open={Boolean(anchorRegister)}
         onClose={handleClose}
       >
-        <MenuItem onClick={(event)=>{handleRegister('sp',event);}}>Service-Provider</MenuItem>
-        <MenuItem onClick={(event)=>{handleRegister('c',event);}}>Customer</MenuItem>
+        <MenuItem onClick={(event)=>{handleRegister('sp',event);}}>To work</MenuItem>
+        <MenuItem onClick={(event)=>{handleRegister('c',event);}}>To hire</MenuItem>
       </Menu>
       <Menu
           id="login-menu"
@@ -138,8 +138,8 @@ const classes = useStyles();
           open={Boolean(anchorLogin)}
           onClose={handleClose}
         >
-          <MenuItem onClick={(event)=>{handleLogin('sp',event);}}>Service-Provider</MenuItem>
-          <MenuItem onClick={(event)=>{handleLogin('c',event);}}>Customer</MenuItem>
+          <MenuItem onClick={(event)=>{handleLogin('sp',event);}}>To work</MenuItem>
+          <MenuItem onClick={(event)=>{handleLogin('c',event);}}>To hire</MenuItem>
         </Menu>
   </Toolbar>
 </Box>

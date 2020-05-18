@@ -13,7 +13,8 @@ function RegistrationForm(props){
     name:'',
     email:'',
     password:'',
-    confirmPassword:''
+    confirmPassword:'',
+    mobile:''
   });
 
 
@@ -74,9 +75,7 @@ const {name, email, password, confirmPassword} = inputText;
 
   return(
     <div>
-    <br/>
-    <br/>
-    <br/>
+
       <Grid container spacing={2}>
         <Grid item xs={7} style={{textAlign:'right'}}>
           <img src={RegistrationLogo}/>
@@ -92,24 +91,7 @@ const {name, email, password, confirmPassword} = inputText;
         </Grid>
         </Grid>
           <form >
-          <FormControl className={classes.fromControl} variant="outlined" >
-     <InputLabel className={classes.label} id="demo-simple-select-outlined-label">I want a account to ?</InputLabel>
-     <Select
-     className={classes.select}
-       labelId="demo-simple-select-outlined-label"
-       id="demo-simple-select-outlined"
-       value={inputText.accountType}
-       onChange={handleChange}
-       label="I want a account to ?"
-       name='accountType'
-     >
-       <MenuItem value="">
-         <em>None</em>
-       </MenuItem>
-       <MenuItem value='service-provider'>To work</MenuItem>
-       <MenuItem value='customer'>To hire</MenuItem>
-     </Select>
-   </FormControl>
+
 
    <FormControl className={classes.fromControl} variant="outlined" disabled={inputText.accountType === 'customer'? true:false}>
 <InputLabel className={classes.label} id="demo-simple-select-outlined-label-2">Select Service Type</InputLabel>
@@ -120,7 +102,7 @@ id="demo-simple-select-outlined-2"
 value={inputText.serviceType}
 onChange={handleChange}
 label="Select Service Type"
-name='accountType'
+name='serviceType'
 >
 <MenuItem value="">
   <em>None</em>
@@ -137,6 +119,10 @@ name='accountType'
 
 <FormControl className={classes.fromControl}  >
 <TextField className={classes.textField} id="outlined-basic" value={inputText.email} name='email' onChange={handleChange} label="Email Address" variant="outlined" />
+</FormControl>
+
+<FormControl className={classes.fromControl}  >
+<TextField className={classes.textField} id="outlined-basic" value={inputText.mobile} name='mobile' onChange={handleChange} label="Mobile Number" variant="outlined" />
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
@@ -209,3 +195,25 @@ export default RegistrationForm;
 //  </div>
 //  </div>
 // </div>
+
+
+
+
+// <FormControl className={classes.fromControl} variant="outlined" >
+// <InputLabel className={classes.label} id="demo-simple-select-outlined-label">I want a account to ?</InputLabel>
+// <Select
+// className={classes.select}
+// labelId="demo-simple-select-outlined-label"
+// id="demo-simple-select-outlined"
+// value={inputText.accountType}
+// onChange={handleChange}
+// label="I want a account to ?"
+// name='accountType'
+// >
+// <MenuItem value="">
+// <em>None</em>
+// </MenuItem>
+// <MenuItem value='service-provider'>To work</MenuItem>
+// <MenuItem value='customer'>To hire</MenuItem>
+// </Select>
+// </FormControl>

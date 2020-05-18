@@ -53,6 +53,18 @@ import {selectProgress} from '../redux/user/user-selector';
               <g>
                  <circle cx="70 " cy="50" r="15"
                  style={{ fill: `${accomplished ? '#FF5343' : 'gray'}` }}> </circle>
+   <text  x="40" y="90" fill={`${accomplished ? 'black' : 'gray'}`}>Payment</text>
+                </g>
+
+           </svg>
+    )}
+  </Step>
+  <Step transition="scale">
+    {({ accomplished }) => (
+      <svg width="150" height="100">
+              <g>
+                 <circle cx="70 " cy="50" r="15"
+                 style={{ fill: `${accomplished ? '#FF5343' : 'gray'}` }}> </circle>
    <text  x="10" y="90" fill={`${accomplished ? 'black' : 'gray'}`}>KYC Verification</text>
                 </g>
 

@@ -5,9 +5,9 @@ import Subscription from "./Subscription";
 //import CompanyDocumentUpload from "./CompanyDocumentUpload";
 import DocumentForm from "./DocumentUpload";
 import {connect} from 'react-redux';
-import {Button} from 'react-bootstrap';
-import {setProgress} from '../redux/user/user-actions';
-
+import {withRouter} from 'react-router-dom';
+import {setProgress,setIsHome} from '../redux/user/user-actions';
+import {Container,styled,Typography,Button} from '@material-ui/core';
 
 
 class Registration extends React.Component{
@@ -40,7 +40,12 @@ class Registration extends React.Component{
 
  Stage1Click = async (name,email,password,confirmPassword) =>{
 
-   this.props.setProgress(50);
+if(this.props.type==='Service-Provider'){
+   this.props.setProgress(35);
+}else{
+  this.props.setProgress(50);
+}
+
 
   // if (password === confirmPassword){
   //   const registrationData = {
@@ -102,11 +107,17 @@ SubsSelectionClick = (type,companyName) =>{
 
 // console.log(companyName);
 this.props.setProgress(100);
-this.setState({
-  stage:"3",
-  registrationType: type
-},
-console.log(this.state))
+
+if(this.props.type==='Service-Provider'){
+  this.setState({
+    stage:"3",
+    registrationType: type
+  })
+}else{
+  this.props.setIshome(true);
+  this.props.history.push('/');
+}
+
 
 }
 
@@ -138,8 +149,24 @@ uploadDocuments = () => {
 }
 
 
+componentDidMount(){
+    console.log('called');
+this.props.setProgress(0);
+}
+
+
+
+
   render(){
     const{stage, registrationType} = this.state;
+    const MyButton =  styled(Button)({
+         width:'100px',
+         fontSize:'12px',
+         background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+         height:'40px',
+         color:'white',
+         borderRadius:'8px'
+     });
 
     if(stage === "1"){
       return(
@@ -171,11 +198,15 @@ uploadDocuments = () => {
         );
       }
     }else if(stage==='4'){
-      return (<div className="container messageContainer">
-        <p class="h3">Your documents are sent for Verification. <br/> We will inform you through e-mail once done.<br/><br/><span class="h1"> Thank You ! </span></p>
+      return (<Container>
+        <Typography variant='h5'>Your documents are sent for Verification. <br/> We will inform you through e-mail once done.<br/><br/><span class="h1"> Thank You ! </span></Typography>
         <br/>
-          <a href='/'><Button variant='login' onClick={()=>{this.props.setProgress(0);}} type="submit" style={{width:"12%"}}>BACK TO HOME</Button></a>
-      </div>);
+          <a href='/'><MyButton variant='login' onClick={()=>{this.props.setIshome(true);this.props.setProgress(0);}} type="submit" style={{width:"12%"}}>BACK TO HOME</MyButton></a>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+      </Container>);
     }
 
 }
@@ -187,10 +218,11 @@ const mapStateToProps = ({user}) =>({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setProgress: value => dispatch(setProgress(value))
+  setProgress: value => dispatch(setProgress(value)),
+  setIshome: value => dispatch(setIsHome(value))
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(Registration);
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Registration));
 
 //incorporationCertificate,panCard,udyogAdhar
 
