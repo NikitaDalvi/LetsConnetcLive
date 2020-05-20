@@ -5,7 +5,7 @@ import Home from "./Components/Home";
 import ServiceProviderLogin from "./Components/ServiceProviderLogin";
 import CustomerLogin from "./Components/CustomerLogin";
 import Register from "./Components/RegistrationType";
-import ProfessionalForm from "./Components/ProfessionalRegistrationForm";
+import Registration from "./Components/Registration-component";
 import CustomerForm from "./Components/CustomerRegistrationForm";
 import KYCmessage from "./Components/KYCMessage";
 import NextPage from "./Components/nextPage";
@@ -48,7 +48,7 @@ render() {
      <Route path="/UserPage/:type"  component={SPUserPage}/>
      <Route path="/Login=Customer" exact component={CustomerLogin}/>
      <Route path="/RegistrationType"  component={Register}/>
-     <Route path="/ProfessionalForm" exact component={ProfessionalForm}/>
+     <Route path="/Registration"  component={Registration}/>
      <Route path="/CustomerForm" exact component={CustomerForm}/>
      <Route path="/Message" exact component={KYCmessage}/>
      <Route path="/NextPage" exact component={NextPage}/>

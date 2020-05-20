@@ -15,3 +15,8 @@ export const setProgress = value => ({
   type:UserActionTypes.SET_REGISTRATION_PROGRESS,
   payload:value
 });
+
+export const setUserType = value => ({
+  type:UserActionTypes.SET_USER_TYPE,
+  payload: value
+});

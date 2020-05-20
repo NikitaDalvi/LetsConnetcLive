@@ -7,7 +7,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import {setCurrentUser} from '../redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from '../redux/user/user-selector';
+import {selectCurrentUser,selectUserType} from '../redux/user/user-selector';
 import {Typography,makeStyles,TextField,Grid,Button,Container} from '@material-ui/core';
 
 function Login(props){
@@ -39,6 +39,7 @@ function handleChange(event){
 // };
 
 async  function checkValidation(){
+  // props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
  const{setCurrentUser} = props;
 const result = await axios.post('https://localhost:44327/api/login/loginUser',input);
 const res = result.data.output;
@@ -56,7 +57,10 @@ if(res !== null){
 // console.log(props.currentUser);
 //
 if(props.currentUser !== null){
-  props.history.push(`/UserPage/${props.type}`);
+  debugger
+  if(this.props.userType === 'Service-Provider'){
+      props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
+  }
 }
 
 
@@ -137,7 +141,7 @@ if(props.currentUser !== null){
     <Container style={{width:"80%",marginTop:'100px'}}>
 <Typography className={classes.title} variant='h4'>Sign In</Typography>
   <Typography className={classes.title} variant='subtitle1'>{props.type}</Typography>
-  <form Validate className={classes.mainForm}>
+  <form  className={classes.mainForm}>
   <Container maxWidth="sm">
   <Grid container className={classes.mainGrid}>
   <Grid item xs={12} className={classes.griditem}>
@@ -147,7 +151,7 @@ if(props.currentUser !== null){
   <TextField onChange={handleChange} name="password" className={classes.txtField} id="outlined-basic" type='password'  label="Password" variant="outlined" />
   </Grid>
   <Grid item xs={12} className={classes.griditem}>
-  <Button type='submit' onClick={checkValidation} className={classes.btnSignIn}>Sign In</Button>
+  <Button type='button' onClick={checkValidation} className={classes.btnSignIn}>Sign In</Button>
   </Grid>
 </Grid>
 <a style={{marginLeft:'300px'}}>Forgot Password?</a>
@@ -180,7 +184,8 @@ if(props.currentUser !== null){
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  userType:selectUserType
 })
 
 const mapDispatchToProps = dispatch => ({

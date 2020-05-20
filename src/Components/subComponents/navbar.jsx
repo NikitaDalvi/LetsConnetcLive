@@ -7,14 +7,14 @@ import Logo from "../../Images/Logo.png";
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser,selectIsHome} from '../../redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
- import {setCurrentUser,setIsHome } from '../../redux/user/user-actions';
+ import {setCurrentUser,setIsHome,setUserType } from '../../redux/user/user-actions';
  import {clearDropdown} from '../../redux/service/service-actions';
 import {Menu,MenuItem,Box,makeStyles,AppBar,Toolbar,Typography,Button} from '@material-ui/core';
 
 
 
 
-const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome})=>{
+const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome,setUserType})=>{
 
   const [anchorRegister, setAnchorRegister] = React.useState(null);
   const [anchorLogin, setAnchorLogin] = React.useState(null);
@@ -36,10 +36,11 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome
       history.push('/');
     }else{
       if(type==='sp'){
-          history.push('/ProfessionalForm');
+setUserType('Service-Provider')
       }else{
-        history.push('/CustomerForm');
+        setUserType('Customer')
       }
+      history.push('/Registration/Form');
     setAnchorRegister(null);
     setAnchorLogin(null);
 }
@@ -59,7 +60,7 @@ const handleClose = ()=>{
  },
     appbar:{
 
-         display:'flex',
+         display:currentUser===null?'flex':'none',
             background:'transparent',
             boxShadow:'none',
 
@@ -99,8 +100,10 @@ const classes = useStyles();
       history.push('/');
     }else{
       if(type==='sp'){
+        setUserType('Service-Provider')
           history.push('/Login=ServiceProvider');
       }else{
+        setUserType('Customer')
         history.push('/Login=Customer');
       }
       setAnchorRegister(null);
@@ -161,7 +164,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
   ClearDropdown:() => dispatch(clearDropdown()),
-  setIsHome: value => dispatch(setIsHome(value))
+  setIsHome: value => dispatch(setIsHome(value)),
+  setUserType: value => dispatch(setUserType(value))
 });
 
 

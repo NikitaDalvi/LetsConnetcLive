@@ -6,6 +6,11 @@ import Heading from "./subComponents/page-headings";
 import SubscriptionCard from "./subComponents/Subscription-Card";
 import {Modal,Form} from 'react-bootstrap';
 import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {createStructuredSelector} from 'reselect';
+import {selectUserType} from '../redux/user/user-selector';
+import {setProgress,setIsHome} from '../redux/user/user-actions';
 
 function Subscription(props){
 const [modalShow, setModalShow] = React.useState(false);
@@ -29,6 +34,48 @@ const handleChange= event => {
 
   const classes = useStyles();
 
+  const SubsSelectionClick = (type,companyName) =>{
+    // console.log(this.state.currentUserId);
+    // if(this.props.type==='Service-Provider'){
+    //   const updatedData ={
+    //     Id:this.state.currentUserId,
+    //     UserRole: type === 'Individual'? 2:3,
+    //     Status:3,
+    //     CompanyName:companyName
+    //   }
+    //   if(type==='Individual'){
+    //   axios.post('https://localhost:44327/api/Update_UserRole',updatedData)
+    //   .then(
+    //     this.setState({
+    //       stage:"3",
+    //       registrationType: type
+    //     },
+    //   console.log(this.state))
+    // );
+    // }else{
+    //   axios.post('https://localhost:44327/api/UpdateCompanyName',updatedData)
+    //   .then(
+    //     this.setState({
+    //       stage:"3",
+    //       registrationType: type
+    //     },
+    //   console.log(this.state))
+    // );
+    // }
+    // }
+
+  // console.log(companyName);
+  props.setProgress(100);
+
+  if(props.userType==='Service-Provider'){
+    props.history.push('/Registration/KYC');
+  }else{
+    props.setIsHome(true);
+    props.history.push('/');
+  }
+
+}
+
   return (
     <div style={{paddingLeft:"center"}}>
     <Container style={{textAlign:"center"}}>
@@ -40,7 +87,7 @@ const handleChange= event => {
       <Grid itemn xs={5}>
       <SubscriptionCard type="Individual" img={singleUser} price="199" link="/DocumentUpload=Individual" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
     des2="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. "/>
-      <a><Button className={classes.btnSelect} onClick={()=>{props.subClick("Individual",null)}}>SELECT</Button></a>
+      <a><Button className={classes.btnSelect} onClick={()=>{SubsSelectionClick("Individual",null);}}>SELECT</Button></a>
       </Grid>
       <Grid item xs={5}>
       <SubscriptionCard type="Company" img={corporateUser} price="10,000" link="/DocumentUpload=Company" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
@@ -73,7 +120,7 @@ animation={false}
   </Form>
     </Modal.Body>
     <Modal.Footer>
-      <Button variant='login' style={{marginRight:'50px', width:'60%'}} onClick={props.onHide} onClick={()=>{props.subClick("Company",companyName);}}>UPDATE</Button>
+      <Button variant='login' style={{marginRight:'50px', width:'60%'}} onClick={props.onHide} onClick={()=>{SubsSelectionClick("Company",companyName);}}>UPDATE</Button>
     </Modal.Footer>
   </Modal>
 </Container>
@@ -86,7 +133,16 @@ animation={false}
 }
 
 
-export default Subscription;
+const mapStateToProps = createStructuredSelector({
+  userType: selectUserType
+})
+
+const mapDispatchToProps = dispatch => ({
+  setProgress: value => dispatch(setProgress(value)),
+  setIsHome: value => dispatch(setIsHome(value))
+});
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Subscription));
 
 
 

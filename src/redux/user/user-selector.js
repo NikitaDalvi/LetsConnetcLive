@@ -19,3 +19,8 @@ export const selectProgress = createSelector(
   [selectUser],
   user => user.progress
 );
+
+export const selectUserType = createSelector(
+  [selectUser],
+  user => user.userType
+);

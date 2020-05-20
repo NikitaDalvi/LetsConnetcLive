@@ -2,11 +2,23 @@ import React from "react";
 import UploadItem from "./subComponents/DocumentUploadItem";
 import EmployeeList from "./subComponents/EmployeeList";
 import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {createStructuredSelector} from 'reselect';
+import {selectUserType} from '../redux/user/user-selector';
 
 
+function DocumentUpload({userType,history}){
 
-function DocumentUpload(props){
-  var Items =props.items;
+      const SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+      const Citem = ["Adhaar Card","Pan Card"];
+var Items;
+      if(userType === 'Service-Provider'){
+         Items =SPitem;
+      }else{
+         Items =Citem;
+      }
+
 
   const [incorporationCertificate,setIncorporationCertificate] = React.useState({
     file:null,
@@ -100,6 +112,33 @@ function DocumentUpload(props){
     console.log(incorporationCertificate);
   }
 
+
+  const uploadDocuments = () => {
+  //   const allDocuments = [];
+  //   let result = null;
+  //   allDocuments.push(incorporationCertificate,panCard,udyogAdhar);
+  //   console.log(allDocuments);
+  //   allDocuments.map(async document => {
+  //     let formdata = new FormData();
+  //     formdata.append('Files',document.file);
+  //                       formdata.append('AddedById','e0e36616-c5f7-4add-8960-06ca80c71b5c');
+  //                       formdata.append('DocumentType',document.type);
+  //                       formdata.append('DocumentNumber',document.number);
+  //     result = await fetch(`https://localhost:44327/api/UploadDocuments/e0e36616-c5f7-4add-8960-06ca80c71b5c/${document.type}/${document.number}`,
+  //     {
+  //       method:'POST',
+  //       body:formdata
+  //     }
+  //   );
+  // let  res = await result.json();
+  //
+  //     console.log(res);
+  //   });
+
+  history.push('/Registration/message');
+  }
+
+
   const useStyles = makeStyles(theme =>({
     title:{
       textAlign:'center'
@@ -125,16 +164,18 @@ const classes = useStyles();
         <br/>
                {Items.map((uploadItem,index) => (<UploadItem item={uploadItem}  change={handleChange} id={index}/>))}
     <div style={{textAlign: "center",marginBottom: "10px"}}>
-    <a ><Button  className={classes.btnUpload} type="submit" onClick={()=>{props.handleDocuments();}}>UPLOAD AND VERIFY</Button></a>
+    <a ><Button  className={classes.btnUpload} type="submit" onClick={()=>{uploadDocuments();}}>UPLOAD AND VERIFY</Button></a>
   </div>
     </Container>
   );
 
 
 }
+const mapStateToProps = createStructuredSelector({
+  userType: selectUserType
+})
 
-
-export default DocumentUpload;
+export default withRouter(connect(mapStateToProps)(DocumentUpload));
 
 
 //incorporationCertificate,panCard,udyogAdhar

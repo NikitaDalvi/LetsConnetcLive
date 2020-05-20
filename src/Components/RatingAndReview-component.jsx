@@ -2,7 +2,8 @@
 
 import React from "react";
 import RatingContainer from "./subComponents/RatingAndReview-container";
-import {Container} from 'react-bootstrap';
+import {Container,AppBar,Toolbar,Typography,makeStyles} from '@material-ui/core';
+import StarHalfIcon from '@material-ui/icons/StarHalf';
 
 class RatingAndReview extends React.Component{
   constructor(){
@@ -12,18 +13,23 @@ class RatingAndReview extends React.Component{
     }
   }
 
+
+
+
   render(){
     return(
       <div>
-      <Container>
-      <div className="row">
-        <h1 className="display-4 col-lg-6">Rating and Review</h1>
-        <div className="col-lg-6" style={{textAlign:"right",marginTop:"20px"}}>
-        <a className="btn" style={{borderRadius:"5px", border:"1px solid #4B66EA"}} href={"/UserPage/Service-Provider"}>Back to Dashboard</a>
-        </div>
-      </div>
+      <Container >
+      <AppBar position="static" style={{borderRadius:'5px',height:'60px',backgroundColor:'white'}}>
+    <Toolbar variant="dense" style={{marginTop:'5px'}}>
+    <StarHalfIcon style={{color:'black'}}/>
+      <Typography variant="h6" style={{color:'black',marginLeft:'10px'}}>
+        Ratings & Reviews
+      </Typography>
+    </Toolbar>
+  </AppBar>
         <hr/>
-        <div className="card-mainContainer">
+        <div>
           <RatingContainer name1="Devang Khandhar" name2="Dishank Mehta" name3="Saurabh Mane" name4="Nikita Dalvi"/>
         </div>
         </Container>

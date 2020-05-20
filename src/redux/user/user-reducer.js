@@ -4,7 +4,8 @@ import {UserActionTypes} from './user-types';
 const Initial_State = {
   currentUser: null,
   isHome:true,
-  progress:0
+  progress:0,
+  userType:''
 };
 
 const userReducer = (state=Initial_State, action) => {
@@ -25,6 +26,12 @@ const userReducer = (state=Initial_State, action) => {
     return{
       ...state,
       progress: action.payload
+    };
+
+    case UserActionTypes.SET_USER_TYPE:
+    return{
+      ...state,
+      userType: action.payload
     };
     default:
       return state;

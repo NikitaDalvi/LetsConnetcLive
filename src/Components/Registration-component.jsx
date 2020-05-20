@@ -4,11 +4,14 @@ import Form from "./RegistrationForm";
 import Subscription from "./Subscription";
 //import CompanyDocumentUpload from "./CompanyDocumentUpload";
 import DocumentForm from "./DocumentUpload";
+import Message from './nextPage';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {setProgress,setIsHome} from '../redux/user/user-actions';
 import {Container,styled,Typography,Button} from '@material-ui/core';
-
+import "react-step-progress-bar/styles.css";
+import Progressbar from './subComponents/ProgressBar';
+import {Switch, Route} from "react-router-dom";
 
 class Registration extends React.Component{
   constructor(){
@@ -37,43 +40,43 @@ class Registration extends React.Component{
   }
 
 
-
- Stage1Click = async (name,email,password,confirmPassword) =>{
-
-if(this.props.type==='Service-Provider'){
-   this.props.setProgress(35);
-}else{
-  this.props.setProgress(50);
-}
-
-
-  // if (password === confirmPassword){
-  //   const registrationData = {
-  //     FullName: name,
-  //     EmailId: email,
-  //     Password:password
-  //   };
-  //
-  //   const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
-  //   const userId = userData.data.output.Id;
-  //   if(userId !== null){
-  //     this.setState({currentUserId:userId,
-  //       stage:'2'
-  //       });
-  //   }
-  //
-  //
-  //
-  // }else{
-  //   alert("Both passwords don't match!")
-  // }
-   this.setState({
-      stage:"2"
-    },
-  console.log(this.state));
-
-
-}
+//
+//  Stage1Click = async (name,email,password,confirmPassword) =>{
+//
+// if(this.props.type==='Service-Provider'){
+//    this.props.setProgress(35);
+// }else{
+//   this.props.setProgress(50);
+// }
+//
+//
+//   // if (password === confirmPassword){
+//   //   const registrationData = {
+//   //     FullName: name,
+//   //     EmailId: email,
+//   //     Password:password
+//   //   };
+//   //
+//   //   const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
+//   //   const userId = userData.data.output.Id;
+//   //   if(userId !== null){
+//   //     this.setState({currentUserId:userId,
+//   //       stage:'2'
+//   //       });
+//   //   }
+//   //
+//   //
+//   //
+//   // }else{
+//   //   alert("Both passwords don't match!")
+//   // }
+//    this.setState({
+//       stage:"2"
+//     },
+//   console.log(this.state));
+//
+//
+// }
 
 SubsSelectionClick = (type,companyName) =>{
   // console.log(this.state.currentUserId);
@@ -168,53 +171,36 @@ this.props.setProgress(0);
          borderRadius:'8px'
      });
 
-    if(stage === "1"){
-      return(
-      <Form type={this.props.type} handleClick={this.Stage1Click}></Form>
-    );}else if(stage === "2"){
-      return(
-        <div>
-        <Subscription subClick={this.SubsSelectionClick}/>
-        </div>
-      );
-    }else if(stage === "3"){
-      if(registrationType === "Individual"){
-        var SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
-        var Citem = ["Adhaar Card","Pan Card"];
-        if(this.props.type === 'Service-Provider'){
-          return(
-            <DocumentForm handleDocuments={this.uploadDocuments}   items={SPitem} type="Individual"/>
-          );
-        }else{
-            return(
-          <DocumentForm handleDocuments={this.uploadDocuments}   items={Citem} type="Individual"/>
-        );
-        }
+return(
+  <div>
+  <br/>
+  <br/>
+  <br/>
+  <Container maxWidth="sm" style={{marginLeft:'550px'}}>
+    <Progressbar type={this.props.userType} progress={this.props.progress} />
+</Container>
+<br/>
+<br/>
+<br/>
+  <Switch>
+    <Route exact path='/Registration/Form' component={Form}/>
+    <Route exact path='/Registration/Subscription' component={Subscription}/>
+    <Route exact path='/Registration/KYC' component={DocumentForm}/>
+    <Route exact path='/Registration/message' component={Message}/>
 
-      }else{
-        var item = ["Incorporation Certificate/Incorporation proof","Company PAN Card","Udhyog Adhaar","GST certificate" ];
-        return(
-          <DocumentForm items={item} type="Company" handleDocuments={this.uploadDocuments} />
-        );
-      }
-    }else if(stage==='4'){
-      return (<Container>
-        <Typography variant='h5'>Your documents are sent for Verification. <br/> We will inform you through e-mail once done.<br/><br/><span class="h1"> Thank You ! </span></Typography>
-        <br/>
-          <a href='/'><MyButton variant='login' onClick={()=>{this.props.setIshome(true);this.props.setProgress(0);}} type="submit" style={{width:"12%"}}>BACK TO HOME</MyButton></a>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-      </Container>);
-    }
+  </Switch>
+
+  </div>
+)
 
 }
   }
 
 
 const mapStateToProps = ({user}) =>({
-  currentUser: user.currentUser
+  currentUser: user.currentUser,
+  progress: user.progress,
+  userType:user.userType
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -241,3 +227,51 @@ export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Registrati
     //     stage:"2"
     //    },
     //  console.log(this.state)) : this.setState({stage:'1'}))
+
+
+
+
+
+
+    //
+    //
+    // if(stage === "1"){
+    //   return(
+    //   <Form type={this.props.type} handleClick={this.Stage1Click}></Form>
+    // );}else if(stage === "2"){
+    //   return(
+    //     <div>
+    //     <Subscription subClick={this.SubsSelectionClick}/>
+    //     </div>
+    //   );
+    // }else if(stage === "3"){
+    //   if(registrationType === "Individual"){
+    //     var SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+    //     var Citem = ["Adhaar Card","Pan Card"];
+    //     if(this.props.type === 'Service-Provider'){
+    //       return(
+    //         <DocumentForm handleDocuments={this.uploadDocuments}   items={SPitem} type="Individual"/>
+    //       );
+    //     }else{
+    //         return(
+    //       <DocumentForm handleDocuments={this.uploadDocuments}   items={Citem} type="Individual"/>
+    //     );
+    //     }
+    //
+    //   }else{
+    //     var item = ["Incorporation Certificate/Incorporation proof","Company PAN Card","Udhyog Adhaar","GST certificate" ];
+    //     return(
+    //       <DocumentForm items={item} type="Company" handleDocuments={this.uploadDocuments} />
+    //     );
+    //   }
+    // }else if(stage==='4'){
+    //   return (<Container>
+    //     <Typography variant='h5'>Your documents are sent for Verification. <br/> We will inform you through e-mail once done.<br/><br/><span class="h1"> Thank You ! </span></Typography>
+    //     <br/>
+    //       <a href='/'><MyButton variant='login' onClick={()=>{this.props.setIshome(true);this.props.setProgress(0);}} type="submit" style={{width:"12%"}}>BACK TO HOME</MyButton></a>
+    //       <br/>
+    //       <br/>
+    //       <br/>
+    //       <br/>
+    //   </Container>);
+    // }

@@ -3,12 +3,17 @@ import React,{useState} from "react";
 import {Link} from "react-router-dom";
 import {Typography,makeStyles,TextField,Grid,Button,Container,MenuItem,Select,FormControl,InputLabel,Checkbox} from '@material-ui/core';
 import RegistrationLogo from '../Images/registration.png';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {createStructuredSelector} from 'reselect';
+import {selectUserType} from '../redux/user/user-selector';
+import {setProgress} from '../redux/user/user-actions';
+import axios from 'axios';
 
 function RegistrationForm(props){
 
 
   const[inputText,setInput] = useState({
-    accountType:'',
     serviceType:'',
     name:'',
     email:'',
@@ -16,6 +21,40 @@ function RegistrationForm(props){
     confirmPassword:'',
     mobile:''
   });
+
+
+  async function handleClick(){
+    console.log('hit');
+    if(props.userType==='Service-Provider'){
+       props.setProgress(35);
+    }else{
+      props.setProgress(50);
+    }
+    const {name,email,password,confirmPassword,mobile} = inputText;
+
+
+      if (password === confirmPassword){
+        const registrationData = {
+          FullName: name,
+          EmailId: email,
+          Password:password,
+          ContactNo: mobile,
+          Status: 5
+        };
+
+        const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
+        const userId = userData.data.output.Id;
+        if(userId !== null){
+            props.history.push('/Registration/Subscription');
+
+        }
+
+
+
+      }else{
+        alert("Both passwords don't match!")
+      }
+  }
 
 
   function handleChange(event){
@@ -93,7 +132,7 @@ const {name, email, password, confirmPassword} = inputText;
           <form >
 
 
-   <FormControl className={classes.fromControl} variant="outlined" disabled={inputText.accountType === 'customer'? true:false}>
+   <FormControl className={classes.fromControl} variant="outlined" style={{display:props.userType==='Service-Provider'?'':'none'}}>
 <InputLabel className={classes.label} id="demo-simple-select-outlined-label-2">Select Service Type</InputLabel>
 <Select
 className={classes.select}
@@ -144,7 +183,7 @@ name='serviceType'
  <p className='muted'><span style={{fontSize:'12px'}}>I have read the </span><span style={{fontSize:'15px',fontWeight:'bold',textDecoration:'underline'}}>Terms and Conditions.</span></p>
  </Grid>
  </Grid>
-   <Button type='submit' onClick={()=>{props.handleClick(name,email,password,confirmPassword)}}  className={classes.btnSignUp}>Sign Up</Button>
+   <Button type='button' onClick={()=>{handleClick();}}  className={classes.btnSignUp}>Sign Up</Button>
           </form>
         </Grid>
       </Grid>
@@ -157,7 +196,16 @@ name='serviceType'
   );
 }
 
-export default RegistrationForm;
+
+const mapStateToProps = createStructuredSelector({
+  userType: selectUserType
+})
+
+const mapDispatchToProps = dispatch => ({
+  setProgress: value => dispatch(setProgress(value))
+});
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(RegistrationForm));
 
 // <div className=" professional-container">
 //
