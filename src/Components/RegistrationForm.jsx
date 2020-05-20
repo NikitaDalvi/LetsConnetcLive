@@ -42,12 +42,12 @@ function RegistrationForm(props){
           Status: 5
         };
 
-        const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
-        const userId = userData.data.output.Id;
-        if(userId !== null){
+        // const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
+        // const userId = userData.data.output.Id;
+        // if(userId !== null){
             props.history.push('/Registration/Subscription');
 
-        }
+        // }
 
 
 

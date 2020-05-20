@@ -1,27 +1,45 @@
 import React from 'react';
 import DashboardCard from "./subComponents/Dashboard-card";
- import Container from 'react-bootstrap/Container';
+ import {Container,Grid,makeStyles} from '@material-ui/core';
+
+ const useStyles = makeStyles((theme) => ({
+   grid:{
+     width:'80%'
+
+   }
+ }));
 
 
-const Dashboard = (props) => (
+
+const Dashboard = (props) => {
+  const classes = useStyles();
+  return(
   <div>
   <Container>
-  <h1 className="display-4">My Service Requests</h1>
-    <hr/>
-    <div className="card-mainContainer">
-    <DashboardCard id="Today" name="Today's" type="SP" routeName="TodayService"  />
-    <DashboardCard id="Upcoming" name="Upcoming" type="SP" routeName="Upcoming"  />
-    <DashboardCard id="New" name="New" type="SP" routeName="NewRequest" />
-    </div>
+  <Grid container spacing={2} className={classes.grid}>
+    <Grid item xs={4}>
+    <DashboardCard caption="Service Request" name="NEW" quantity='10'  />
+    </Grid>
+    <Grid item xs={4}>
+    <DashboardCard caption="Service Request" name="ONBOARD" quantity='5'  />
+    </Grid>
+    <Grid item xs={4}>
+    <DashboardCard caption="Service Request" name="UPCOMING" quantity='50' />
+    </Grid>
     <br/>
-    <h1 className="display-4">Others</h1>
-    <hr/>
-    <div className="card-mainContainer">
-    <DashboardCard id="RatingAndReview" type="SP" name="Rating & Review" routeName="RatingAndReview"  />
+
+<Grid item xs={4}>
+    <DashboardCard caption="Service Request" name="COMPLETED"  quantity='999'  />
+    </Grid>
+    <Grid item xs={4}>
+    <DashboardCard caption="Commission"  name="COMMISION DUE" quantity="&#8377;1,11,000" />
+    </Grid>
+    <Grid item xs={4}>
     <DashboardCard id="Wallet" type="SP" name="My Wallet" routeName="Wallet" />
-    </div>
+    </Grid>
+    </Grid>
     </Container>
     </div>
 );
-
+}
 export default Dashboard;
