@@ -3,25 +3,29 @@ import React from "react"
   import {withRouter} from 'react-router-dom';
   import {Paper, makeStyles,Typography,Grid} from '@material-ui/core';
 
+
+
+function DashboardCard(props){
+
   const useStyles = makeStyles((theme) => ({
     paper:{
       width:'250px',
       height:'150px',
-
+      color:'white',
+      backgroundColor:props.color
     }
   }));
 
-function DashboardCard(props){
   const classes = useStyles();
   return(
     <Paper className={classes.paper} style={{padding:'5px'}} elevation={0}>
       <Typography variant='subtitle1'>{props.caption}</Typography>
       <Typography variant='h5'>{props.name}</Typography>
       <Grid container style={{marginTop:'20%'}}>
-        <Grid item xs={1}>
+        <Grid item xs={3}>
         <Typography variant='h5'>{props.rating}</Typography>
         </Grid>
-        <Grid item xs={6} style={{marginLeft:'50%',textAlign:'right'}}>
+        <Grid item xs={6} style={{marginLeft:'20%',textAlign:'right'}}>
           <Typography variant='h5'>{props.quantity}</Typography>
         </Grid>
       </Grid>

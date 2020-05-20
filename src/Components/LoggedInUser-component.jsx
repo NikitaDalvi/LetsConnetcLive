@@ -37,6 +37,8 @@ import NextWeekIcon from '@material-ui/icons/NextWeek';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import {Avatar} from '@material-ui/core';
+import Sai from '../Images/sai.jpg';
 
 const drawerWidth = 280;
 const useStyles = makeStyles((theme) => ({
@@ -66,7 +68,15 @@ const useStyles = makeStyles((theme) => ({
   },
   profilePic:{
     color:'linear-gradient(239.6deg, #BB60FC 2.39%, #FF5343 82.96%)'
-  }
+  },
+
+    large: {
+     width: theme.spacing(9),
+     height: theme.spacing(9),
+     marginLeft:'105px',
+     marginBottom:'10px',
+     marginTop:'30px'
+   }
 }));
 
 function LoggedIn(props){
@@ -94,7 +104,7 @@ const classes = useStyles();
      <Toolbar />
        <div className={classes.drawerContainer} >
 
-       <AccountCircleIcon color='secondary' fontSize='large' style={{fontSize:'100px'}}/>
+       <Avatar alt="Remy Sharp" src={Sai} className={classes.large} />
        <Typography variant='h6'>Saikiran Bait</Typography>
        <Typography variant='caption'>Service Provider</Typography>
         <hr style={{width:'80%',marginLeft:'10%'}} />
@@ -113,7 +123,7 @@ const classes = useStyles();
         <br/>
        <List>
 
-           <ListItem button >
+           <ListItem button onClick={()=>{props.history.push('/UserPage/ServiceProvider/Dashboard')}}>
              <ListItemIcon style={{paddingLeft:'20px'}}><DashboardIcon/></ListItemIcon>
              <ListItemText primary='Dashboard' />
            </ListItem>
@@ -125,7 +135,7 @@ const classes = useStyles();
              <ListItemIcon style={{paddingLeft:'20px'}}><PermContactCalendarIcon/></ListItemIcon>
              <ListItemText primary='Service Requests' />
            </ListItem>
-           <ListItem button>
+           <ListItem button onClick={()=>{props.history.push('/UserPage/ServiceProvider/RatingAndReview')}}>
              <ListItemIcon style={{paddingLeft:'20px'}}><StarHalfIcon/></ListItemIcon>
              <ListItemText primary='Ratings & Reviews' />
            </ListItem>

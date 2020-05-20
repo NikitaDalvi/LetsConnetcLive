@@ -59,7 +59,7 @@ if(res !== null){
 if(props.currentUser !== null){
   debugger
   if(this.props.userType === 'Service-Provider'){
-      props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
+      props.history.push('/UserPage/ServiceProvider/RatingAndReview');
   }
 }
 

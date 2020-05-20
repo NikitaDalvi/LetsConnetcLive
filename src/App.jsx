@@ -44,7 +44,7 @@ render() {
      <Header/>
      <Switch>
      <Route path="/" exact component={Home}/>
-     <Route path="/Login=ServiceProvider" exact  render={()=>this.props.currentUser?(<Redirect to='/UserPage/Service-Provider'/>):(<ServiceProviderLogin/>)}/>
+     <Route path="/Login=ServiceProvider" exact  render={()=>this.props.currentUser?(<Redirect to='/UserPage/ServiceProvider/Dashboard'/>):(<ServiceProviderLogin/>)}/>
      <Route path="/UserPage/:type"  component={SPUserPage}/>
      <Route path="/Login=Customer" exact component={CustomerLogin}/>
      <Route path="/RegistrationType"  component={Register}/>
