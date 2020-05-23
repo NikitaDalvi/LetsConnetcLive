@@ -9,12 +9,14 @@ class RatingAndReview extends React.Component{
   constructor(){
     super();
     this.state = {
-
+        loading:true
     }
   }
 
 
-
+  componentDidMount(){
+    
+  }
 
   render(){
     return(

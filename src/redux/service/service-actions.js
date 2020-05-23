@@ -24,3 +24,12 @@ export const removeService = service => ({
   type:serviceActionTypes.REMOVE_SERVICE,
   payload:service
 });
+
+export const addServiceTypes = type => ({
+  type:serviceActionTypes.ADD_SERVICE_TYPES,
+  payload:type
+});
+
+export const removeServiceTypes = () => ({
+  type:serviceActionTypes.REMOVE_SERVICE_TYPES,
+});

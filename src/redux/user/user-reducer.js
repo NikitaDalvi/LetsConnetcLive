@@ -5,7 +5,10 @@ const Initial_State = {
   currentUser: null,
   isHome:true,
   progress:0,
-  userType:''
+  userType:'',
+  registeredUserId:'',
+  subscriptionType:'',
+  IndividualSub:{}
 };
 
 const userReducer = (state=Initial_State, action) => {
@@ -32,6 +35,24 @@ const userReducer = (state=Initial_State, action) => {
     return{
       ...state,
       userType: action.payload
+    };
+
+    case UserActionTypes.SET_REGISTERED_USERID:
+    return{
+      ...state,
+      registeredUserId: action.payload
+    };
+
+    case UserActionTypes.SET_SUBSCRIPTION_TYPE:
+    return{
+      ...state,
+      subscriptionType: action.payload
+    };
+
+    case UserActionTypes.SET_INDIVIDUAL_SUB:
+    return{
+      ...state,
+      IndividualSub: action.payload
     };
     default:
       return state;

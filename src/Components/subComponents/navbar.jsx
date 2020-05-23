@@ -8,13 +8,14 @@ import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser,selectIsHome} from '../../redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
  import {setCurrentUser,setIsHome,setUserType } from '../../redux/user/user-actions';
- import {clearDropdown} from '../../redux/service/service-actions';
+ import {clearDropdown, addServiceTypes} from '../../redux/service/service-actions';
 import {Menu,MenuItem,Box,makeStyles,AppBar,Toolbar,Typography,Button} from '@material-ui/core';
+import axios from 'axios';
 
 
 
 
-const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome,setUserType})=>{
+const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome,setUserType,addServiceTypes})=>{
 
   const [anchorRegister, setAnchorRegister] = React.useState(null);
   const [anchorLogin, setAnchorLogin] = React.useState(null);
@@ -30,12 +31,15 @@ const Navbar=({currentUser,history,setCurrentUser,ClearDropdown,isHome,setIsHome
 
   };
 
-  const handleRegister = (type,event) => {
+  const handleRegister = async (type,event) => {
     setIsHome(false);
     if(currentUser!= null){
       history.push('/');
     }else{
       if(type==='sp'){
+// const serviceTypes = await axios.get('https://localhost:44327/api/getServiceTypes');
+// console.log(serviceTypes.data.output);
+// serviceTypes.data.output.map(type => addServiceTypes(type));
 setUserType('Service-Provider')
       }else{
         setUserType('Customer')
@@ -165,7 +169,8 @@ const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
   ClearDropdown:() => dispatch(clearDropdown()),
   setIsHome: value => dispatch(setIsHome(value)),
-  setUserType: value => dispatch(setUserType(value))
+  setUserType: value => dispatch(setUserType(value)),
+  addServiceTypes: value => dispatch(addServiceTypes(value))
 });
 
 

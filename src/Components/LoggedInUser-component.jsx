@@ -11,7 +11,7 @@ import CDashboard from './dashboard-c-component';
  import UserProfile from "./UserProfile-component";
  import Wallet from "./Wallet-component";
 import Availability from "./Availability";
-import ServicesToProvide from "./ServicesToProvide";
+import MyServices from "./MyServices";
  import {withRouter} from 'react-router-dom';
  import {connect} from 'react-redux';
  import {setCurrentUser} from '../redux/user/user-actions';
@@ -127,11 +127,11 @@ const classes = useStyles();
              <ListItemIcon style={{paddingLeft:'20px'}}><DashboardIcon/></ListItemIcon>
              <ListItemText primary='Dashboard' />
            </ListItem>
-           <ListItem button>
+           <ListItem button onClick={()=>{props.history.push('/UserPage/ServiceProvider/MyServices/ServicesToProvide')}}>
              <ListItemIcon style={{paddingLeft:'20px'}}><NextWeekIcon/></ListItemIcon>
              <ListItemText primary='My Services' />
            </ListItem>
-           <ListItem button>
+           <ListItem button >
              <ListItemIcon style={{paddingLeft:'20px'}}><PermContactCalendarIcon/></ListItemIcon>
              <ListItemText primary='Service Requests' />
            </ListItem>
@@ -151,7 +151,7 @@ const classes = useStyles();
      <main className={classes.content}>
        <Toolbar />
       <Switch>
-        <Route path="/UserPage/ServiceProvider/ServicesToProvide"  component={ServicesToProvide}/>
+        <Route  path="/UserPage/ServiceProvider/MyServices"  component={MyServices}/>
         <Route path="/UserPage/ServiceProvider/Availability" exact component={Availability}/>
         <Route exact path='/UserPage/ServiceProvider/Dashboard' component={SPDashboard}/>
         <Route exact path='/UserPage/ServiceProvider/TodayService' component={TodayService}/>

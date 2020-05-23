@@ -10,6 +10,10 @@ subContainer:{
 }
   }));
 
+  React.useEffect(()=>{
+    console.log(props.description);
+  },[])
+
   const classes = useStyles();
 
   return(
@@ -21,10 +25,8 @@ subContainer:{
     <Typography variant='h5' style={{fontWeight:'bold'}}>{props.type}</Typography>
     <Typography variant="subtitle1" gutterBottom style={{fontWeight:'bold'}}>Rs {props.price}<span  style={{fontSize:"12px",fontWeight:'100!important'}}>/year</span></Typography>
     <br/>
-    <Typography variant='subtitle2'>{props.des1}</Typography>
-    <br/>
-    <Typography variant='subtitle2'>{props.des2}</Typography>
-    <br/>
+    {props.description.map(des => (<div><Typography variant='subtitle2'>{des.Feature}</Typography>
+    <br/></div>))}
 </Container>
     </div>
   );

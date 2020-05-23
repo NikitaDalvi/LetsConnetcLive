@@ -1,11 +1,12 @@
 /*jshint esversion:9*/
 import {serviceActionTypes} from './service-types';
-import { v4 as uuidv4 } from 'uuid';
+import {addServiceType,addService} from './service-utils';
 
 const INITIAL_STATE={
   serviceType:'',
   dropdownList:[],
-  serviceList:[]
+  serviceList:[],
+  serviceTypes:[]
 };
 
 const serviceReducer = (state=INITIAL_STATE,action) => {
@@ -25,7 +26,7 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
     case serviceActionTypes.ADD_SERVICE:
     return {
       ...state,
-      serviceList:[...state.serviceList,{...action.payload,Id:uuidv4()}]
+      serviceList:addService(state.serviceList,action.payload)
     };
 
     case serviceActionTypes.REMOVE_SERVICE:
@@ -40,6 +41,17 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       dropdownList:[]
     };
 
+    case serviceActionTypes.ADD_SERVICE_TYPES:
+    return{
+      ...state,
+      serviceTypes:addServiceType(state.serviceTypes,action.payload)
+    };
+
+    case serviceActionTypes.REMOVE_SERVICE_TYPES:
+    return{
+      ...state,
+      serviceTypes:[]
+    };
     default:
       return state;
   }

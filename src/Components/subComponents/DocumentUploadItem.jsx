@@ -36,6 +36,7 @@ function fileChange(event){
          aria-describedby="outlined-weight-helper-text"
          endAdornment={file!==''?<span position="end" style={{color:'#07C306'}}>&#10004;</span>:''}
         disabled
+        error={(props.item==='Pan Card' && props.validate)?true:false}
         value={file}
         className={classes.inputFile}
        />

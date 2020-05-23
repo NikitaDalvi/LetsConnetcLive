@@ -45,17 +45,7 @@ class New extends React.Component{
     return(
       <div >
         <Container>
-      <div className="row">
-        <h1 className="display-4 col-lg-4">New</h1>
-        <div className='col-lg-4' style={{marginTop:"20px"}}>
-            <input type="text" className="form-control " placeholder="Search By Date" onChange={e => this.setState({Date:e.target.value}) }/>
-      </div>
-        <div className="col-lg-4" style={{textAlign:"right",marginTop:"20px"}}>
-        <a className="btn" style={{borderRadius:"5px", border:"1px solid #4B66EA"}} href={"/UserPage/Service-Provider"}>Back to Dashboard</a>
-        </div>
-      </div>
-        <hr/>
-        <ServiceContainer Services={filteredServices}  type="new"/>
+    
         </Container>
       </div>
     );
@@ -64,3 +54,17 @@ class New extends React.Component{
 }
 
 export default New;
+
+
+
+// <div className="row">
+//   <h1 className="display-4 col-lg-4">New</h1>
+//   <div className='col-lg-4' style={{marginTop:"20px"}}>
+//       <input type="text" className="form-control " placeholder="Search By Date" onChange={e => this.setState({Date:e.target.value}) }/>
+// </div>
+//   <div className="col-lg-4" style={{textAlign:"right",marginTop:"20px"}}>
+//   <a className="btn" style={{borderRadius:"5px", border:"1px solid #4B66EA"}} href={"/UserPage/Service-Provider"}>Back to Dashboard</a>
+//   </div>
+// </div>
+//   <hr/>
+//   <ServiceContainer Services={filteredServices}  type="new"/>

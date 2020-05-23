@@ -5,24 +5,42 @@ import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
-import {selectUserType} from '../redux/user/user-selector';
+import {selectUserType,selectRegisteredUserId,selectSubscriptionType} from '../redux/user/user-selector';
 
 
-function DocumentUpload({userType,history}){
+function DocumentUpload({userType,history,subsType,userId}){
+var SPitem=[];
+      if(subsType === 'Individual'){
+        SPitem = [ "Pan Card", "Adhaar Card","CA Certificate"];
+      }else{
+        SPitem = [ "Company PAN Card","Incorporation Certificate/Incorporation proof","Udhyog Adhaar","CA Certificate"];
+      }
 
-      const SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
-      const Citem = ["Adhaar Card","Pan Card"];
+      const Citem = ["Pan Card","Adhaar Card"];
 var Items;
       if(userType === 'Service-Provider'){
          Items =SPitem;
       }else{
          Items =Citem;
       }
+const [validation,setValidation] = React.useState(true);
+
+const [incorporationCertificate,setIncorporationCertificate] = React.useState({
+  file:null,
+  type:5,
+  number:''
+});
+
+const [AdhaarCard,setAdhaarCard] = React.useState({
+  file:null,
+  type:1,
+  number:''
+});
 
 
-  const [incorporationCertificate,setIncorporationCertificate] = React.useState({
+  const [CACertificate,setCACertificate] = React.useState({
     file:null,
-    type:5,
+    type:4,
     number:''
   });
 
@@ -68,7 +86,54 @@ var Items;
         }
 
         break;
+
+        case "Adhaar Card":
+          if(name==='file'){
+            let file = event.target.files[0];
+            console.log(file.name);
+            setAdhaarCard(prevValue => {
+            return {
+              ...prevValue,
+              file:file
+            };
+            });
+
+          }else{
+            setAdhaarCard(prevValue => {
+              console.log(prevValue.number);
+            return {
+              ...prevValue,
+              number:value
+            };
+          });
+          }
+
+          break;
+
+          case "CA Certificate":
+            if(name==='file'){
+              let file = event.target.files[0];
+              setCACertificate(prevValue => {
+              return {
+                ...prevValue,
+                file:file
+              };
+              });
+
+            }else{
+              setCACertificate(prevValue => {
+                console.log(prevValue.number);
+              return {
+                ...prevValue,
+                number:value
+              };
+            });
+            }
+
+            break;
+
         case "Company PAN Card":
+        case "Pan Card":
           if(name==='file'){
             let file = event.target.files[0];
             setPanCard(prevValue => {
@@ -109,31 +174,40 @@ var Items;
       default:
 
     }
-    console.log(incorporationCertificate);
+    console.log(AdhaarCard);
   }
 
 
   const uploadDocuments = () => {
-  //   const allDocuments = [];
-  //   let result = null;
-  //   allDocuments.push(incorporationCertificate,panCard,udyogAdhar);
-  //   console.log(allDocuments);
-  //   allDocuments.map(async document => {
-  //     let formdata = new FormData();
-  //     formdata.append('Files',document.file);
-  //                       formdata.append('AddedById','e0e36616-c5f7-4add-8960-06ca80c71b5c');
-  //                       formdata.append('DocumentType',document.type);
-  //                       formdata.append('DocumentNumber',document.number);
-  //     result = await fetch(`https://localhost:44327/api/UploadDocuments/e0e36616-c5f7-4add-8960-06ca80c71b5c/${document.type}/${document.number}`,
-  //     {
-  //       method:'POST',
-  //       body:formdata
-  //     }
-  //   );
-  // let  res = await result.json();
-  //
-  //     console.log(res);
-  //   });
+    if(panCard.file === null || panCard.number === ''){
+      alert('Pan Card document and Pan Card number is mandatory!')
+      return;
+    }
+    const allDocuments = [];
+    let result = null;
+    if(subsType === 'Individual'){
+          allDocuments.push(panCard,AdhaarCard,CACertificate);
+    }else{
+          allDocuments.push(incorporationCertificate,panCard,udyogAdhar,CACertificate);
+    }
+
+    console.log(allDocuments);
+    allDocuments.map(async document => {
+      let formdata = new FormData();
+      formdata.append('Files',document.file);
+                        formdata.append('AddedById',{userId});
+                        formdata.append('DocumentType',document.type);
+                        formdata.append('DocumentNumber',document.number);
+      result = await fetch(`https://localhost:44327/api/UploadDocuments/${userId}/${document.type}/${document.number}`,
+      {
+        method:'POST',
+        body:formdata
+      }
+    );
+  let  res = await result.json();
+
+      console.log(res);
+    });
 
   history.push('/Registration/message');
   }
@@ -162,7 +236,7 @@ const classes = useStyles();
         <Typography className={classes.title} variant='h4'>KYC verification</Typography>
         <br/>
         <br/>
-               {Items.map((uploadItem,index) => (<UploadItem item={uploadItem}  change={handleChange} id={index}/>))}
+               {Items.map((uploadItem,index) => (<UploadItem item={uploadItem} validate={validation}  change={handleChange} id={index}/>))}
     <div style={{textAlign: "center",marginBottom: "10px"}}>
     <a ><Button  className={classes.btnUpload} type="submit" onClick={()=>{uploadDocuments();}}>UPLOAD AND VERIFY</Button></a>
   </div>
@@ -172,7 +246,9 @@ const classes = useStyles();
 
 }
 const mapStateToProps = createStructuredSelector({
-  userType: selectUserType
+  userType: selectUserType,
+  userId:selectRegisteredUserId,
+  subsType:selectSubscriptionType
 })
 
 export default withRouter(connect(mapStateToProps)(DocumentUpload));

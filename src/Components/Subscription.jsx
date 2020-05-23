@@ -1,5 +1,5 @@
 /*jshint esversion:6*/
-import React from "react";
+import React, { useState, useEffect } from "react";
 import singleUser from "../Images/Single-User.png";
 import corporateUser from '../Images/Corporate-User.png';
 import Heading from "./subComponents/page-headings";
@@ -9,16 +9,61 @@ import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
-import {selectUserType} from '../redux/user/user-selector';
-import {setProgress,setIsHome} from '../redux/user/user-actions';
+import {selectUserType,selectIndividualSub,selectRegisteredUserId} from '../redux/user/user-selector';
+import {setProgress,setIsHome,setSubscriptionType,setIndividualSub} from '../redux/user/user-actions';
+import axios from 'axios';
 
 function Subscription(props){
-const [modalShow, setModalShow] = React.useState(false);
-const [companyName, setCompanyName] = React.useState('');
+const [modalShow, setModalShow] = useState(false);
+const [companyName, setCompanyName] = useState('');
+const {setIndividualSub} = props;
 
+//
+const [loading, setLoading] = useState(true);
+const [initialData, setinitialData] = useState({});
+const [company,setCompany] = useState({});
+
+//
 const handleChange= event => {
   setCompanyName(event.target.value);
+};
+
+
+useEffect(() => {
+  // function getIndividualSub(){
+  //   return  axios.get('http://letnetworkdev.obtainbpm.com/api/getSubscription/0');
+  // }
+  //  getIndividualSub().then(result => {
+  //    setinitialData(result.data.output[0]);
+  //    // setIndividualSub(result.data.output[0]);
+  //  });
+  // setIndividualSub(IndividualSub.data.output);
+
+  const fetchData = () => {
+              axios.get(`https://localhost:44327/api/getSubscription/0`)
+                  .then((res) => {
+                      setinitialData(res.data);
+                      axios.get(`https://localhost:44327/api/getSubscription/1`)
+                        .then((res) => {
+                          setCompany(res.data);
+                          if(res.data.responseCode === 200){
+                            setLoading(false);
+                          }else{
+                            console.log(res.data.responseCode);
+                          }
+                        })
+                  });
+          };
+          fetchData();
+},[])
+
+
+if (!loading) {
+    console.log("initialData:",company);
+    console.log("SubscriptionFeatures:",company.output[0].SubscriptionFeatures );
+    console.log("SubscriptionFeatures[1]:",company.output[0].SubscriptionFeatures[1] );
 }
+
 
   const useStyles = makeStyles(theme =>({
     btnSelect:{
@@ -35,47 +80,33 @@ const handleChange= event => {
   const classes = useStyles();
 
   const SubsSelectionClick = (type,companyName) =>{
-    // console.log(this.state.currentUserId);
-    // if(this.props.type==='Service-Provider'){
-    //   const updatedData ={
-    //     Id:this.state.currentUserId,
-    //     UserRole: type === 'Individual'? 2:3,
-    //     Status:3,
-    //     CompanyName:companyName
-    //   }
-    //   if(type==='Individual'){
-    //   axios.post('https://localhost:44327/api/Update_UserRole',updatedData)
-    //   .then(
-    //     this.setState({
-    //       stage:"3",
-    //       registrationType: type
-    //     },
-    //   console.log(this.state))
-    // );
-    // }else{
-    //   axios.post('https://localhost:44327/api/UpdateCompanyName',updatedData)
-    //   .then(
-    //     this.setState({
-    //       stage:"3",
-    //       registrationType: type
-    //     },
-    //   console.log(this.state))
-    // );
-    // }
-    // }
+    if(props.userType==='Service-Provider'){
+      const updatedData ={
+        Id:props.registeredUserId,
+        UserRole: type === 'Individual'? 2:3,
+        Status:3,
+        CompanyName:companyName
+      }
+      if(type==='Individual'){
+      axios.post('https://localhost:44327/api/Update_UserRole',updatedData);
+    }else{
+      axios.post('https://localhost:44327/api/UpdateCompanyName',updatedData);
+    }
+    }
 
   // console.log(companyName);
   props.setProgress(100);
-
+props.setSubscriptionType(type);
   if(props.userType==='Service-Provider'){
     props.history.push('/Registration/KYC');
   }else{
     props.setIsHome(true);
     props.history.push('/');
   }
-
 }
 
+
+if(!loading){
   return (
     <div style={{paddingLeft:"center"}}>
     <Container style={{textAlign:"center"}}>
@@ -85,13 +116,11 @@ const handleChange= event => {
 <br/>
     <Grid container style={{textAlign:'center',paddingLeft:'180px'}} >
       <Grid itemn xs={5}>
-      <SubscriptionCard type="Individual" img={singleUser} price="199" link="/DocumentUpload=Individual" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-    des2="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. "/>
+      <SubscriptionCard type={initialData.output[0].Name} img={singleUser} price={initialData.output[0].Amount} link="/DocumentUpload=Individual" description={initialData.output[0].SubscriptionFeatures}/>
       <a><Button className={classes.btnSelect} onClick={()=>{SubsSelectionClick("Individual",null);}}>SELECT</Button></a>
       </Grid>
       <Grid item xs={5}>
-      <SubscriptionCard type="Company" img={corporateUser} price="10,000" link="/DocumentUpload=Company" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-      des2="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." handleClick={props.SubsSelectionClick}/>
+      <SubscriptionCard type={company.output[0].Name} img={corporateUser} price={company.output[0].Amount} link="/DocumentUpload=Company" description={company.output[0].SubscriptionFeatures} handleClick={props.SubsSelectionClick}/>
           <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
       </Grid>
     </Grid>
@@ -130,16 +159,27 @@ animation={false}
 <br/>
     </div>
   );
+}else{
+  return(
+    <div>
+    </div>
+  )
+}
+
 }
 
 
 const mapStateToProps = createStructuredSelector({
-  userType: selectUserType
+  userType: selectUserType,
+  IndividualSub: selectIndividualSub,
+  registeredUserId: selectRegisteredUserId
 })
 
 const mapDispatchToProps = dispatch => ({
   setProgress: value => dispatch(setProgress(value)),
-  setIsHome: value => dispatch(setIsHome(value))
+  setIsHome: value => dispatch(setIsHome(value)),
+  setSubscriptionType: value => dispatch(setSubscriptionType(value)),
+  setIndividualSub: value => dispatch(setIndividualSub(value))
 });
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Subscription));

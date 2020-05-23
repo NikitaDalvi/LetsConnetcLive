@@ -7,13 +7,16 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
 import {selectUserType} from '../redux/user/user-selector';
-import {setProgress} from '../redux/user/user-actions';
+import {selectAllServiceTypes} from '../redux/service/service-selector';
+import {setProgress,setRegisteredUserId} from '../redux/user/user-actions';
+import {addServiceTypes,removeServiceTypes} from '../redux/service/service-actions';
 import axios from 'axios';
 
 function RegistrationForm(props){
 
-
+const {userType,serviceTypes,setProgress,setRegisteredUserId,addServiceTypes,removeServiceTypes} = props;
   const[inputText,setInput] = useState({
+    serviceTypeId:'',
     serviceType:'',
     name:'',
     email:'',
@@ -22,15 +25,23 @@ function RegistrationForm(props){
     mobile:''
   });
 
+  React.useEffect(() => {
+    GetServiceType().then(result => result.data.output.map(value => addServiceTypes(value)));
+
+  },[]);
+
+  function GetServiceType(){
+    return axios.get('https://localhost:44327/api/getServiceTypes');
+  }
 
   async function handleClick(){
     console.log('hit');
     if(props.userType==='Service-Provider'){
-       props.setProgress(35);
+       setProgress(35);
     }else{
-      props.setProgress(50);
+      setProgress(50);
     }
-    const {name,email,password,confirmPassword,mobile} = inputText;
+    const {name,email,password,confirmPassword,mobile,serviceTypeId} = inputText;
 
 
       if (password === confirmPassword){
@@ -39,15 +50,15 @@ function RegistrationForm(props){
           EmailId: email,
           Password:password,
           ContactNo: mobile,
-          Status: 5
+          ServiceTypeId:serviceTypeId
         };
 
-        // const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
-        // const userId = userData.data.output.Id;
-        // if(userId !== null){
+        const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
+        const userId = userData.data.output.Id;
+        if(userId !== null){
+          setRegisteredUserId(userId);
             props.history.push('/Registration/Subscription');
-
-        // }
+          }
 
 
 
@@ -64,6 +75,17 @@ function RegistrationForm(props){
       ...prevValue,
       [name]:value}
     });
+    if(name === 'serviceType'){
+      const ServiceType = serviceTypes.find(type => type.Service === value.Service);
+      console.log(ServiceType);
+      setInput(prevValue =>{
+        return{
+        ...prevValue,
+        serviceTypeId:ServiceType.Id
+      };
+      });
+      return;
+    }
     console.log(inputText);
   }
 
@@ -110,7 +132,7 @@ function RegistrationForm(props){
     }));
 
 const classes = useStyles();
-const {name, email, password, confirmPassword} = inputText;
+const {name, email, password, confirmPassword,mobile,serviceType} = inputText;
 
   return(
     <div>
@@ -132,13 +154,13 @@ const {name, email, password, confirmPassword} = inputText;
           <form >
 
 
-   <FormControl className={classes.fromControl} variant="outlined" style={{display:props.userType==='Service-Provider'?'':'none'}}>
+   <FormControl className={classes.fromControl} variant="outlined" style={{display:userType==='Service-Provider'?'':'none'}}>
 <InputLabel className={classes.label} id="demo-simple-select-outlined-label-2">Select Service Type</InputLabel>
 <Select
 className={classes.select}
 labelId="demo-simple-select-outlined-label-2"
 id="demo-simple-select-outlined-2"
-value={inputText.serviceType}
+value={serviceType}
 onChange={handleChange}
 label="Select Service Type"
 name='serviceType'
@@ -146,30 +168,28 @@ name='serviceType'
 <MenuItem value="">
   <em>None</em>
 </MenuItem>
-<MenuItem value='CA'>CA</MenuItem>
-<MenuItem value='Lawyer'>Lawyer</MenuItem>
-<MenuItem value='Teacher'>Teacher</MenuItem>
+{serviceTypes? serviceTypes.map((type,index) => {return(<MenuItem key={index} value={type}>{type.Service}</MenuItem>);}):<MenuItem></MenuItem>}
 </Select>
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
-<TextField className={classes.textField} id="outlined-basic" value={inputText.name} name='name' onChange={handleChange} label="Full Name" variant="outlined" />
+<TextField className={classes.textField} id="outlined-basic" value={name} name='name' onChange={handleChange} label="Full Name" variant="outlined" />
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
-<TextField className={classes.textField} id="outlined-basic" value={inputText.email} name='email' onChange={handleChange} label="Email Address" variant="outlined" />
+<TextField className={classes.textField} id="outlined-basic" value={email} name='email' onChange={handleChange} label="Email Address" variant="outlined" />
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
-<TextField className={classes.textField} id="outlined-basic" value={inputText.mobile} name='mobile' onChange={handleChange} label="Mobile Number" variant="outlined" />
+<TextField className={classes.textField} id="outlined-basic" value={mobile} name='mobile' onChange={handleChange} label="Mobile Number" variant="outlined" />
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
-<TextField className={classes.textField} id="outlined-basic" value={inputText.password} name='password' onChange={handleChange} type='password' label="Password" variant="outlined" />
+<TextField className={classes.textField} id="outlined-basic" value={password} name='password' onChange={handleChange} type='password' label="Password" variant="outlined" />
 </FormControl>
 
 <FormControl className={classes.fromControl}  >
-<TextField className={classes.textField} id="outlined-basic" value={inputText.confirmPassword} name='confirmPassword' onChange={handleChange} type='password' label="Confirm Password" variant="outlined" />
+<TextField className={classes.textField} id="outlined-basic" value={confirmPassword} name='confirmPassword' onChange={handleChange} type='password' label="Confirm Password" variant="outlined" />
 </FormControl>
 <Grid container>
   <Grid item xs={1}>
@@ -198,11 +218,15 @@ name='serviceType'
 
 
 const mapStateToProps = createStructuredSelector({
-  userType: selectUserType
+  userType: selectUserType,
+  serviceTypes: selectAllServiceTypes
 })
 
 const mapDispatchToProps = dispatch => ({
-  setProgress: value => dispatch(setProgress(value))
+  setProgress: value => dispatch(setProgress(value)),
+  setRegisteredUserId: value => dispatch(setRegisteredUserId(value)),
+  addServiceTypes: value => dispatch(addServiceTypes(value)),
+  removeServiceTypes: () => dispatch(removeServiceTypes())
 });
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(RegistrationForm));

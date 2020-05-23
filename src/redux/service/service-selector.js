@@ -18,3 +18,8 @@ export const selectServices = createSelector(
   selectService,
   service => service.serviceList
 );
+
+export const selectAllServiceTypes = createSelector(
+  selectService,
+  service => service.serviceTypes
+);
