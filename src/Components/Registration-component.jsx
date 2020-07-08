@@ -12,6 +12,7 @@ import {Container,styled,Typography,Button} from '@material-ui/core';
 import "react-step-progress-bar/styles.css";
 import Progressbar from './subComponents/ProgressBar';
 import {Switch, Route} from "react-router-dom";
+import MediaQuery from 'react-responsive';
 
 class Registration extends React.Component{
   constructor(){
@@ -38,6 +39,7 @@ class Registration extends React.Component{
       allDocuments:[]
         }
   }
+
 
 
 //
@@ -176,9 +178,10 @@ return(
   <br/>
   <br/>
   <br/>
-  <Container maxWidth="sm" style={{marginLeft:'550px'}}>
+  <Container maxWidth="sm" style={{textAlign:'center',width:'100%'}}>
     <Progressbar type={this.props.userType} progress={this.props.progress} />
 </Container>
+
 <br/>
 <br/>
 <br/>

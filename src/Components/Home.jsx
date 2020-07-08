@@ -1,31 +1,38 @@
 /*jshint esversion:9*/
-import React from "react";
+import React,{useEffect} from "react";
 import homeVector from "../Images/home-pg-vector.png";
 import img from "../Images/img.png";
 import {connect} from 'react-redux';
- import {setIsHome } from '../redux/user/user-actions';
+import {createStructuredSelector} from 'reselect';
+import {selectCurrentUser,selectIsHome} from '../redux/user/user-selector';
+ import {setIsHome,setCurrentUser } from '../redux/user/user-actions';
 // import Content from "./subComponents/home-content";
 import {Typography,makeStyles,Button} from '@material-ui/core';
+import {withRouter} from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
-function Home({setIsHome}){
+function Home({setIsHome,setCurrentUser,currentUser,history}){
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
   const useStyles = makeStyles(theme =>({
     TypographyBrand:{
-      textAlign:'right',
+      textAlign:isMobile?'left':'right',
       color:'gray',
       marginRight:'165px',
       marginTop:'100px'
     },
     TypographyStart:{
-      textAlign:'right',
+      textAlign:isMobile?'left':'right',
     },
     buttonRight:{
-      marginLeft:'400px',
+      marginLeft:isMobile?'42%':'400px',
       width:'60px',
       height:'60px',
       background:'linear-gradient(239.6deg, #BB60FC 2.39%, #FF5343 82.96%)',
       color:'white',
       borderRadius:'100%',
-      fontSize:'30px'
+      fontSize:'30px',
+      marginBottom:isMobile?'20px':''
     },
     buttonLeft:{
       marginLeft:'210px',
@@ -38,14 +45,23 @@ function Home({setIsHome}){
     }
   }))
 
+
+  useEffect(()=>{
+    if(currentUser){
+      history.push('/UserPage/ServiceProvider/Dashboard');
+    }else{
+      setIsHome(true);
+    }
+  },[currentUser,setIsHome,history])
+
 const classes = useStyles();
 
 
   return(
      <div className="container" style={{marginTop:'100px'}}>
-  <img src={homeVector} style={{position:'absolute',top:'0',right:'10px',zIndex:'-9999'}} />
+  <img src={homeVector} style={{position:'absolute',top:'0',right:'10px',zIndex:'-9999',display:isMobile?'none':''}} />
   <div className='row mb-5' >
-    <div className='col-lg-4'>
+    <div className={isMobile?'col-lg-12':'col-lg-4'}>
       <Typography className={classes.TypographyBrand} variant="h6" gutterBottom>
       Let's Connect
       </Typography>
@@ -53,15 +69,26 @@ const classes = useStyles();
       Your Business / Profession
       </Typography>
     </div>
-    <div className='col-lg-8' style={{textAlign:'right'}}>
+    <div className={isMobile?'col-lg-12':'col-lg-8'} style={{textAlign:'right'}}>
       <img src={img}/>
     </div>
   </div>
   <div className='row mb-5'>
+  <div className='col-lg-6' style={{display:isMobile?'':'none'}}>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+    <Typography style={{textAlign:'center'}} variant="h4" gutterBottom>
+    I want to work
+    </Typography>
+    <br/>
+    <a href='/ProfessionalForm'><Button className={classes.buttonRight} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
+  </div>
   <div className='col-lg-4' >
     <img src={img}/>
   </div>
-    <div className='col-lg-6'>
+    <div className='col-lg-6'  style={{display:isMobile?'none':''}}>
     <br/>
     <br/>
     <br/>
@@ -70,7 +97,7 @@ const classes = useStyles();
       I want to work
       </Typography>
       <br/>
-      <a href='/ProfessionalForm'><Button className={classes.buttonRight} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
+      <a href='/Registration/Form'><Button className={classes.buttonRight} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
     </div>
 
   </div>
@@ -81,13 +108,13 @@ const classes = useStyles();
   <br/>
   <br/>
   <br/>
-    <Typography className={classes.TypographyStart} variant="h4" gutterBottom>
+    <Typography style={{textAlign:isMobile?'center':'right'}} variant="h4" gutterBottom>
     I want to hire
     </Typography>
     <br/>
-    <a href='/CustomerForm'><Button className={classes.buttonLeft} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
+    <a href='/Registration/Form'><Button className={classes.buttonLeft} onClick={()=>{setIsHome(false);}}>&#10095;</Button></a>
   </div>
-  <div className='col-lg-8' style={{textAlign:'right'}}>
+  <div className='col-lg-8' style={{textAlign:'right',display:isMobile?'none':''}}>
     <img src={img}/>
   </div>
   </div>
@@ -95,11 +122,17 @@ const classes = useStyles();
 
 }
 
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  isHome: selectIsHome
+})
+
 const mapDispatchToProps = dispatch => ({
-  setIsHome: value => dispatch(setIsHome(value))
+  setIsHome: value => dispatch(setIsHome(value)),
+  setCurrentUser: value => dispatch(setCurrentUser(value))
 });
 
-export default connect(null,mapDispatchToProps)(Home);
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Home));
 //<img src="D:\MyWorkSpace\let-network\Images\banner.jpg"/>;
 //<div className="container row home-content">
 

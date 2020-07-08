@@ -33,3 +33,51 @@ export const addServiceTypes = type => ({
 export const removeServiceTypes = () => ({
   type:serviceActionTypes.REMOVE_SERVICE_TYPES,
 });
+
+export const addLocation = location => ({
+  type:serviceActionTypes.ADD_LOCATION,
+  payload:location
+});
+
+export const clearLocation = () => ({
+  type:serviceActionTypes.CLEAR_LOCATION
+});
+
+export const addAvailability = availability => ({
+  type: serviceActionTypes.ADD_AVAILABILITY,
+  payload:availability
+});
+
+export const removeTimeslot = object => ({
+  type: serviceActionTypes.REMOVE_TIMESLOT,
+  payload:object
+});
+
+export const setWorkingHours = list => ({
+  type: serviceActionTypes.SET_WORKING_HOURS,
+  payload:list
+});
+
+export const clearWorkingHours = () =>({
+  type: serviceActionTypes.CLEAR_WORKING_HOURS,
+});
+
+export const addRatingAndReviews = ratings => ({
+  type: serviceActionTypes.ADD_RATING_AND_REVIEWS,
+  payload:ratings
+});
+
+export const setServicesProgress = value => ({
+  type: serviceActionTypes.SET_MY_SERVICES_PROGRESS,
+  payload:value
+});
+
+export const  setSavedServices = value => ({
+  type: serviceActionTypes.SET_SAVED_SERVICES,
+  payload: value
+});
+
+export const setNearbySPList = list =>({
+  type:serviceActionTypes.SET_NEARBY_SP_LIST,
+  payload: list
+});

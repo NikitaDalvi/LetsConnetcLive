@@ -1,12 +1,19 @@
 /*jshint esversion:9*/
 import {serviceActionTypes} from './service-types';
-import {addServiceType,addService} from './service-utils';
+import {addServiceType,addService,addLocation,addAvailability,removeTimeSlot} from './service-utils';
 
 const INITIAL_STATE={
   serviceType:'',
   dropdownList:[],
   serviceList:[],
-  serviceTypes:[]
+  serviceTypes:[],
+  locationList:[],
+  workingHours:[],
+  savedWorkingHours:[],
+  ratingAndReviews:[],
+  myServicesProgress:null,
+  savedServices:[],
+  nearbySPList:[]
 };
 
 const serviceReducer = (state=INITIAL_STATE,action) => {
@@ -52,6 +59,67 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       ...state,
       serviceTypes:[]
     };
+
+    case serviceActionTypes.ADD_LOCATION:
+    return{
+      ...state,
+      locationList:addLocation(state.locationList,action.payload)
+    };
+
+    case serviceActionTypes.CLEAR_LOCATION:
+    return{
+      ...state,
+      locationList:[]
+    };
+
+    case serviceActionTypes.ADD_AVAILABILITY:
+    return{
+      ...state,
+      workingHours:addAvailability(state.workingHours,action.payload)
+    };
+
+    case serviceActionTypes.SET_WORKING_HOURS:
+    return{
+      ...state,
+      workingHours:action.payload
+    };
+
+    case serviceActionTypes.CLEAR_WORKING_HOURS:
+    return{
+      ...state,
+      workingHours:[]
+    };
+
+    case serviceActionTypes.REMOVE_TIMESLOT:
+    return{
+      ...state,
+      workingHours:removeTimeSlot(state.workingHours,action.payload)
+    };
+
+    case serviceActionTypes.ADD_RATING_AND_REVIEWS:
+    return{
+      ...state,
+      ratingAndReviews:[...state.ratingAndReviews, action.payload]
+    };
+
+    case serviceActionTypes.SET_MY_SERVICES_PROGRESS:
+    return{
+      ...state,
+      myServicesProgress:action.payload
+    };
+
+    case serviceActionTypes.SET_SAVED_SERVICES:
+    return{
+      ...state,
+      savedServices:action.payload
+    };
+
+    case serviceActionTypes.SET_NEARBY_SP_LIST:
+    return{
+      ...state,
+      nearbySPList:action.payload
+    };
+
     default:
       return state;
   }

@@ -5,19 +5,25 @@ import React,{useState} from "react";
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {setCurrentUser} from '../redux/user/user-actions';
+import {setCurrentUser,setUserType,setRegisteredUser} from '../redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser,selectUserType} from '../redux/user/user-selector';
-import {Typography,makeStyles,TextField,Grid,Button,Container} from '@material-ui/core';
+import {Snackbar,Typography,makeStyles,TextField,Grid,Button,Container,Backdrop,CircularProgress} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+import { useMediaQuery } from 'react-responsive';
 
 function Login(props){
+
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   const [input,setInput] = useState({
     EmailId:"",
     password:""
   })
 
-
+const [loading, setLoading] = useState(false);
+const [open,setOpen] = useState(false);
+const[severity,setSeverity] = useState('info');
 
 
 
@@ -40,13 +46,95 @@ function handleChange(event){
 
 async  function checkValidation(){
   // props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
- const{setCurrentUser} = props;
+  setLoading(true);
+ const{setCurrentUser,setUserType,setRegisteredUser} = props;
 const result = await axios.post('https://localhost:44327/api/login/loginUser',input);
 const res = result.data.output;
 console.log(res);
 if(res !== null){
-  setCurrentUser(res);
+  console.log(res.Status);
+
+  if(props.userType === 'Service-Provider'){
+    debugger
+    if(res.UserRole === 4 || res.UserRole === 5){
+      setSeverity('info');
+      setAlert('These credentials belong to a Customer account. Please Login again !');
+      handleAlert();
+      setUserType('Customer');
+      setLoading(false);
+      return;
+    }
+    switch (res.Status) {
+      case 1:
+      setRegisteredUser(res);
+      props.history.push('/Registration/Subscription');
+      return;
+      case 2:
+      case 5:
+      setRegisteredUser(res);
+      props.history.push('/Registration/KYC');
+      return;
+      case 3:
+      case 4:
+      case 6:
+      case 7:
+      case 9:
+      setCurrentUser(res);
+      setLoading(false);
+      if(res.UserRole!== 6){
+              props.history.push('/UserPage/ServiceProvider/Dashboard');
+      }else{
+        props.history.push('/UserPage/SPAdmin/MyEmployees');
+      }
+
+      break;
+      default:
+          return;
+    }
+  }else{
+    debugger
+    if(res.UserRole === 2 ||res.UserRole === 3 ||res.UserRole === 6){
+      setSeverity('info');
+      setAlert('These credentials belong to a Service-Provider account. Please Login again !');
+      handleAlert();
+      setUserType('Service-Provider');
+      setLoading(false);
+      return;
+    }
+    switch (res.Status) {
+      case 1:
+      setRegisteredUser(res);
+      props.history.push('/Registration/Subscription');
+      return;
+      case 2:
+      setRegisteredUser(res);
+      props.history.push('/Registration/KYC');
+      return;
+      case 6:
+      case 7:
+      case 9:
+      setCurrentUser(res);
+      setLoading(false);
+      props.history.push('/UserPage/Customer/Dashboard');
+      break;
+      default:
+          return;
+    }
+    // if(res.Status === 1){
+    //   setRegisteredUser(res);
+    //   props.history.push('/Registration/Subscription');
+    //   return;
+    // }
+    //   setCurrentUser(res);
+    //   setLoading(false);
+    // props.history.push('/UserPage/Customer/Dashboard');
+  }
 }else{
+  setOpen(false);
+  setSeverity('error');
+  setAlert('Invalid Credentails!. Please try again.');
+  handleAlert();
+  setLoading(false);
   console.log('invalid');
 }
 // .then(res => res.data.output !== null ? setCurrentUser(res.data.output): console.log("invalid"))
@@ -56,12 +144,10 @@ if(res !== null){
 
 // console.log(props.currentUser);
 //
-if(props.currentUser !== null){
-  debugger
-  if(this.props.userType === 'Service-Provider'){
-      props.history.push('/UserPage/ServiceProvider/RatingAndReview');
-  }
-}
+// if(props.currentUser !== null){
+//   debugger
+//
+// }
 
 
   // if(input.username === "user" && input.password === "password"){
@@ -134,13 +220,37 @@ if(props.currentUser !== null){
     },
   }));
 
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleAlert = () => {
+   setOpen(true);
+  };
+
+  const[alert,setAlert]= useState('');
+
   const classes = useStyles();
 
 //if(stage===""){
   return (
-    <Container style={{width:"80%",marginTop:'100px'}}>
+    <div>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Alert onClose={handleClose} severity={severity}>
+      {alert}
+    </Alert>
+  </Snackbar>
+    <Container style={{width:"100%",marginTop:'100px'}}>
 <Typography className={classes.title} variant='h4'>Sign In</Typography>
-  <Typography className={classes.title} variant='subtitle1'>{props.type}</Typography>
+  <Typography className={classes.title} variant='subtitle1'>{props.userType}</Typography>
   <form  className={classes.mainForm}>
   <Container maxWidth="sm">
   <Grid container className={classes.mainGrid}>
@@ -154,11 +264,14 @@ if(props.currentUser !== null){
   <Button type='button' onClick={checkValidation} className={classes.btnSignIn}>Sign In</Button>
   </Grid>
 </Grid>
-<a style={{marginLeft:'300px'}}>Forgot Password?</a>
+<a style={{marginLeft:'300px'}} href='/forgotPassword'>Forgot Password?</a>
 </Container>
 </form>
-
+<Backdrop className={classes.backdrop} open={loading} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
   </Container>
+  </div>
 );
 // }else if (stage==="services") {
 //   return(
@@ -189,10 +302,12 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+    setRegisteredUser: value => dispatch(setRegisteredUser(value)),
+  setCurrentUser: user => dispatch(setCurrentUser(user)),
+  setUserType: value => dispatch(setUserType(value))
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Login));
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Login));
 
 
 

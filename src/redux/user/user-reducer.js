@@ -1,14 +1,18 @@
 /*jshint esversion:9*/
 import {UserActionTypes} from './user-types';
+import {ChangeUserServiceStatus} from './user-utils';
 
 const Initial_State = {
   currentUser: null,
   isHome:true,
   progress:0,
   userType:'',
-  registeredUserId:'',
+  registeredUser:null,
   subscriptionType:'',
-  IndividualSub:{}
+  IndividualSub:{},
+  DashboardDetails:null,
+  professionalList:[],
+  ExpertId:''
 };
 
 const userReducer = (state=Initial_State, action) => {
@@ -19,11 +23,17 @@ const userReducer = (state=Initial_State, action) => {
       currentUser: action.payload
     };
 
+    case UserActionTypes.EDIT_CURRENT_USER:
+    return{
+      ...state,
+      currentUser: {...state.currentUser,FullName:action.payload.FullName,EmailId:action.payload.EmailId,ContactNo:action.payload.ContactNo,Gender:action.payload.Gender,DOB: action.payload.DOB,Description: action.payload.Description}
+    };
+
     case UserActionTypes.SET_ISHOME:
     return{
       ...state,
       isHome:action.payload
-    }
+    };
 
     case UserActionTypes.SET_REGISTRATION_PROGRESS:
     return{
@@ -37,10 +47,10 @@ const userReducer = (state=Initial_State, action) => {
       userType: action.payload
     };
 
-    case UserActionTypes.SET_REGISTERED_USERID:
+    case UserActionTypes.SET_REGISTERED_USER:
     return{
       ...state,
-      registeredUserId: action.payload
+      registeredUser: action.payload
     };
 
     case UserActionTypes.SET_SUBSCRIPTION_TYPE:
@@ -54,6 +64,55 @@ const userReducer = (state=Initial_State, action) => {
       ...state,
       IndividualSub: action.payload
     };
+
+    case UserActionTypes.SET_PROFILE_PICTURE:
+    return{
+      ...state,
+      currentUser:{...state.currentUser,DPPath:action.payload}
+    };
+
+    case UserActionTypes.SET_DASHBOARD_DETAILS:
+    return{
+      ...state,
+      DashboardDetails:action.payload
+    };
+
+    case UserActionTypes.SET_PROFESSIONAL_LIST:
+    return{
+      ...state,
+      professionalList: [...state.professionalList, action.payload]
+    };
+
+    case UserActionTypes.SET_USER_SERVICE_STATUS:
+    return{
+      ...state,
+      currentUser:ChangeUserServiceStatus(state.currentUser,action.payload)
+    };
+
+    case UserActionTypes.SET_USER_STATUS:
+    return{
+      ...state,
+      registeredUser:{...state.registeredUser,Status:action.payload}
+    };
+
+    case UserActionTypes.SET_USER_ROLE:
+    return{
+      ...state,
+      registeredUser:{...state.registeredUser,UserRole:action.payload}
+    };
+
+    case UserActionTypes.SET_COMPANY_DETAILS:
+    return{
+      ...state,
+      registeredUser:{...state.registeredUser,CompanyName:action.payload.companyName,CompanyId:action.payload.companyId}
+    };
+
+    case UserActionTypes.SET_EXPERT_ID:
+    return{
+      ...state,
+      ExpertId: action.payload
+    };
+
     default:
       return state;
   }

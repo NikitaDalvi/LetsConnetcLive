@@ -23,3 +23,34 @@ export const selectAllServiceTypes = createSelector(
   selectService,
   service => service.serviceTypes
 );
+
+export const selectLocations = createSelector(
+  selectService,
+  service => service.locationList
+);
+
+export const selectWorkingHours = createSelector(
+  selectService,
+  service => service.workingHours
+);
+
+export const selectRatingAndReviews = createSelector(
+  selectService,
+  service => service.ratingAndReviews
+);
+
+export const selectMyServicesProgress = createSelector(
+  selectService,
+  service => service.myServicesProgress
+);
+
+
+export const selectSavedServices = createSelector(
+  selectService,
+  service => service.savedServices
+);
+
+export const selectNearbySPList = createSelector(
+  selectService,
+  service => service.nearbySPList
+);

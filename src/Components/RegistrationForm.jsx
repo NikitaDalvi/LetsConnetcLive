@@ -6,15 +6,17 @@ import RegistrationLogo from '../Images/registration.png';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
-import {selectUserType} from '../redux/user/user-selector';
+import {selectUserType,selectRegisteredUser} from '../redux/user/user-selector';
 import {selectAllServiceTypes} from '../redux/service/service-selector';
-import {setProgress,setRegisteredUserId} from '../redux/user/user-actions';
+import {setProgress,setRegisteredUser} from '../redux/user/user-actions';
 import {addServiceTypes,removeServiceTypes} from '../redux/service/service-actions';
 import axios from 'axios';
+import { useMediaQuery } from 'react-responsive';
+
 
 function RegistrationForm(props){
-
-const {userType,serviceTypes,setProgress,setRegisteredUserId,addServiceTypes,removeServiceTypes} = props;
+const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+const {userType,serviceTypes,setProgress,setRegisteredUser,addServiceTypes,removeServiceTypes,registeredUser,history} = props;
   const[inputText,setInput] = useState({
     serviceTypeId:'',
     serviceType:'',
@@ -26,23 +28,26 @@ const {userType,serviceTypes,setProgress,setRegisteredUserId,addServiceTypes,rem
   });
 
   React.useEffect(() => {
+    // if(registeredUser !== null){
+    //     history.push('/Registration/Subscription');
+    // }
     GetServiceType().then(result => result.data.output.map(value => addServiceTypes(value)));
-
-  },[]);
+    setProgress(0);
+  },[addServiceTypes,registeredUser,history,setProgress]);
 
   function GetServiceType(){
     return axios.get('https://localhost:44327/api/getServiceTypes');
   }
 
   async function handleClick(){
-    console.log('hit');
-    if(props.userType==='Service-Provider'){
-       setProgress(35);
-    }else{
-      setProgress(50);
-    }
+    // console.log('hit');
+    // if(props.userType==='Service-Provider'){
+    //    setProgress(50);
+    // }else{
+    //   setProgress(100);
+    // }
     const {name,email,password,confirmPassword,mobile,serviceTypeId} = inputText;
-
+debugger
 
       if (password === confirmPassword){
         const registrationData = {
@@ -50,18 +55,20 @@ const {userType,serviceTypes,setProgress,setRegisteredUserId,addServiceTypes,rem
           EmailId: email,
           Password:password,
           ContactNo: mobile,
-          ServiceTypeId:serviceTypeId
+          ServiceTypeId:serviceTypeId,
+          isCustomer:userType==='Service-Provider'?false:true,
+          UserRole:userType==='Service-Provider'?2:4
         };
 
         const userData = await axios.post('https://localhost:44327/api/registerUser',registrationData);
-        const userId = userData.data.output.Id;
-        if(userId !== null){
-          setRegisteredUserId(userId);
-            props.history.push('/Registration/Subscription');
-          }
-
-
-
+        if(userData.data.output !== null){
+          console.log(userData);
+          //const userId = userData.data.output.Id;
+          if(userData.data.output !== null){
+            setRegisteredUser(userData.data.output);
+              history.push('/Registration/Subscription');
+            }
+        }
       }else{
         alert("Both passwords don't match!")
       }
@@ -138,20 +145,20 @@ const {name, email, password, confirmPassword,mobile,serviceType} = inputText;
     <div>
 
       <Grid container spacing={2}>
-        <Grid item xs={7} style={{textAlign:'right'}}>
+        <Grid item xs={isMobile?12:7} style={{textAlign:'right'}}>
           <img src={RegistrationLogo}/>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={isMobile?12:5}>
         <Grid container className={classes.title}>
-        <Grid item xs={3}>
-        <Typography  variant='h4'>Sign Up</Typography>
+        <Grid item xs={isMobile?12:3}>
+        <Typography  variant='h4' style={{textAlign:isMobile?'center':''}}>Sign Up</Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={isMobile?12:3} style={{textAlign:isMobile?'center':''}}>
         <br/>
-        <Typography  variant='caption'>Have an account? <a href='/Login'>SignIn</a></Typography>
+        <Typography  variant='caption' >Have an account? <a href='/Login'>SignIn</a></Typography>
         </Grid>
         </Grid>
-          <form >
+          <form style={{textAlign:isMobile?'center':''}}>
 
 
    <FormControl className={classes.fromControl} variant="outlined" style={{display:userType==='Service-Provider'?'':'none'}}>
@@ -192,14 +199,14 @@ name='serviceType'
 <TextField className={classes.textField} id="outlined-basic" value={confirmPassword} name='confirmPassword' onChange={handleChange} type='password' label="Confirm Password" variant="outlined" />
 </FormControl>
 <Grid container>
-  <Grid item xs={1}>
+  <Grid item xs={isMobile?12:1}>
 <Checkbox
    defaultChecked
    color="default"
    inputProps={{ 'aria-label': 'checkbox with default color' }}
  />
  </Grid>
- <Grid item xs={5} style={{paddingTop:'10px'}}>
+ <Grid item xs={isMobile?12:5} style={{paddingTop:'10px'}}>
  <p className='muted'><span style={{fontSize:'12px'}}>I have read the </span><span style={{fontSize:'15px',fontWeight:'bold',textDecoration:'underline'}}>Terms and Conditions.</span></p>
  </Grid>
  </Grid>
@@ -219,12 +226,13 @@ name='serviceType'
 
 const mapStateToProps = createStructuredSelector({
   userType: selectUserType,
-  serviceTypes: selectAllServiceTypes
+  serviceTypes: selectAllServiceTypes,
+  registeredUser: selectRegisteredUser
 })
 
 const mapDispatchToProps = dispatch => ({
   setProgress: value => dispatch(setProgress(value)),
-  setRegisteredUserId: value => dispatch(setRegisteredUserId(value)),
+  setRegisteredUser: value => dispatch(setRegisteredUser(value)),
   addServiceTypes: value => dispatch(addServiceTypes(value)),
   removeServiceTypes: () => dispatch(removeServiceTypes())
 });

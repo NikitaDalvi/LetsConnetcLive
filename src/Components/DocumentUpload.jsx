@@ -1,3 +1,4 @@
+/*jshint esversion: 9*/
 import React from "react";
 import UploadItem from "./subComponents/DocumentUploadItem";
 import EmployeeList from "./subComponents/EmployeeList";
@@ -5,10 +6,11 @@ import {Typography,makeStyles,Grid,Button,Container} from '@material-ui/core';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
-import {selectUserType,selectRegisteredUserId,selectSubscriptionType} from '../redux/user/user-selector';
+import {selectUserType,selectRegisteredUser,selectSubscriptionType} from '../redux/user/user-selector';
+import {setRegisteredUser,setProgress,setCurrentUser,setUserStatus,setUserType} from '../redux/user/user-actions';
 
 
-function DocumentUpload({userType,history,subsType,userId}){
+function DocumentUpload({userType,history,subsType,user,setRegisteredUserId,setProgress,setUser,setUserStatus,setUserType}){
 var SPitem=[];
       if(subsType === 'Individual'){
         SPitem = [ "Pan Card", "Adhaar Card","CA Certificate"];
@@ -16,13 +18,10 @@ var SPitem=[];
         SPitem = [ "Company PAN Card","Incorporation Certificate/Incorporation proof","Udhyog Adhaar","CA Certificate"];
       }
 
-      const Citem = ["Pan Card","Adhaar Card"];
 var Items;
-      if(userType === 'Service-Provider'){
+
          Items =SPitem;
-      }else{
-         Items =Citem;
-      }
+
 const [validation,setValidation] = React.useState(true);
 
 const [incorporationCertificate,setIncorporationCertificate] = React.useState({
@@ -136,6 +135,7 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
         case "Pan Card":
           if(name==='file'){
             let file = event.target.files[0];
+            console.log(file);
             setPanCard(prevValue => {
             return {
               ...prevValue,
@@ -149,6 +149,7 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
               number:value
             };
             });
+            console.log(panCard);
           }
 
           break;
@@ -174,8 +175,17 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
       default:
 
     }
-    console.log(AdhaarCard);
   }
+
+
+React.useEffect(()=>{
+  if(user){
+    setUserType('Service-Provider');
+      setProgress(100);
+  }
+},[setProgress,user])
+
+
 
 
   const uploadDocuments = () => {
@@ -183,6 +193,7 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
       alert('Pan Card document and Pan Card number is mandatory!')
       return;
     }
+    debugger
     const allDocuments = [];
     let result = null;
     if(subsType === 'Individual'){
@@ -195,21 +206,30 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
     allDocuments.map(async document => {
       let formdata = new FormData();
       formdata.append('Files',document.file);
-                        formdata.append('AddedById',{userId});
+                        formdata.append('AddedById',user.Id);
                         formdata.append('DocumentType',document.type);
                         formdata.append('DocumentNumber',document.number);
-      result = await fetch(`https://localhost:44327/api/UploadDocuments/${userId}/${document.type}/${document.number}`,
+      result = await fetch(`https://localhost:44327/api/UploadDocuments/${user.Id}/${document.type}/${document.number}`,
       {
         method:'POST',
         body:formdata
       }
     );
   let  res = await result.json();
+  if(res){
+    setUserStatus(3);
+        console.log(res);
+        setUser(user);
+        if(user.UserRole!== 6){
+                history.push('/UserPage/ServiceProvider/Dashboard');
+        }else{
+        history.push('/UserPage/SPAdmin/MyEmployees');
+        }
+  }
 
       console.log(res);
     });
 
-  history.push('/Registration/message');
   }
 
 
@@ -247,11 +267,19 @@ const classes = useStyles();
 }
 const mapStateToProps = createStructuredSelector({
   userType: selectUserType,
-  userId:selectRegisteredUserId,
+  user:selectRegisteredUser,
   subsType:selectSubscriptionType
 })
 
-export default withRouter(connect(mapStateToProps)(DocumentUpload));
+const mapDispatchToProps = dispatch => ({
+  setRegisteredUser: value => dispatch(setRegisteredUser(value)),
+  setProgress: value => (dispatch(setProgress(value))),
+  setUser: value => dispatch(setCurrentUser(value)),
+  setUserStatus: value => dispatch(setUserStatus(value)),
+  setUserType: value => dispatch(setUserType(value))
+});
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(DocumentUpload));
 
 
 //incorporationCertificate,panCard,udyogAdhar

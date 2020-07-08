@@ -33,7 +33,7 @@ function RatingCard(props){
   <Paper className={classes.paper}>
     <Grid container spacing={2}>
       <Grid item xs={3} className={classes.profile}>
-        <Avatar alt="Remy Sharp" src={profile} className={classes.large} />
+        <Avatar alt="Remy Sharp" src={props.dp} className={classes.large} />
       </Grid>
       <Grid item xs={8}>
         <Typography variant='h6'>{props.name}</Typography>
@@ -42,7 +42,7 @@ function RatingCard(props){
           {props.rating}
         </Grid>
         <Grid item xs={3}>
-            <Rating name="read-only" value={props.rating} readOnly precision={0.5} />
+            <Rating name="read-only" value={props.rating} readOnly precision={0.1} />
         </Grid>
         </Grid>
       </Grid>

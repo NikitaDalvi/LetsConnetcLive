@@ -1,35 +1,105 @@
 /*jshint esversion: 6*/
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import EmployeeTableItem from "./subComponents/AdminPageItem";
-import Heading from './subComponents/page-headings';
-import {Button} from 'react-bootstrap';
+import {Container,Paper,Button,TextField,Grid,makeStyles,CircularProgress,Backdrop,Snackbar} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+import axios from 'axios';
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
+import {selectCurrentUser,selectProfessionalList} from '../redux/user/user-selector';
+import {setProfessionalList} from '../redux/user/user-actions';
+
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 
 function SPAdmin(props){
   const [EmployeeDetail, setDetail]=useState({
-    name:"",
-    email:"",
-    contact:""
+    FullName:"",
+    EmailId:"",
+    ContactNo:"",
+    AddedBy:'',
+    ServiceTypeId:'',
+    CompanyId:'',
+    Ticket:null
   });
 
   const[Employee,setEmployee]=useState([]);
   const[btnName,setBtn]=useState("Add");
   const[Identity,setID]=useState("");
+  const[loading,setLoading] =useState(false);
+  const [open, setOpen] = useState(false);
+  const [alert,setAlert] = useState('');
+  const [severity,setSeverity] = useState('error');
 
+  const {currentUser} = props;
 
   function handleChange(event){
     const {name,value}=event.target;
     setDetail(prevValue=>{
       return{
         ...prevValue,
-        [name]:value
+        [name]:value,
+        AddedBy:currentUser.Id,
+        ServiceTypeId:currentUser.ServiceTypeId,
+        CompanyId:currentUser.CompanyId,
+        Ticket: currentUser.Ticket
     };
   });
   }
 
-  function Add(){
-    setEmployee(prevValue => {
-      return [ ...prevValue,EmployeeDetail];
-    });
+  const {employeeList} = props;
+
+  useEffect(()=>{
+
+      if(currentUser){
+        setLoading(true);
+          const request = {
+            CorporateAdminId: currentUser.Id,
+            ticket: currentUser.Ticket
+          };
+
+          getEmployeeList(request)
+          .then(res => {setEmployee(res);setLoading(false);});
+      }
+
+
+  },[currentUser]);
+
+  async function getEmployeeList(data){
+    const result = await axios.post('https://localhost:44327/api/GetServiceProviderListByCorporateAdmin',data);
+    return result.data.output;
+  }
+
+  async function Add(){
+    // setEmployee(prevValue => {
+    //   return [ ...prevValue,EmployeeDetail];
+    // });
+    setLoading(true);
+    const res = await axios.post('https://localhost:44327/api/addServiceProvider',EmployeeDetail);
+    if(res){
+      if(res.data.output){
+        if(res.data.output === 'Email Id Already Exist'){
+          setAlert('Email Id already exists! Please try another email Id');
+          setSeverity('warning');
+          setLoading(false);
+          setOpen(true);
+
+          return;
+        }else{
+          console.log(res.data.output);
+          setEmployee(prevValue => {
+            return[...prevValue,res.data.output];
+          });
+          setAlert('User added successfully!');
+          setSeverity('success');
+          setLoading(false);
+          setOpen(true);
+        }
+      }
+    }
       setDetail({
         name:"",
         email:"",
@@ -51,12 +121,38 @@ function SPAdmin(props){
   }
 
   function removeEmployee(id){
-    var ID = id -1;
-    setEmployee(prevValue => {
-      return prevValue.filter((Employee, index) => {
-        return index !== ID;
-      });
+    // var ID = id -1;
+    // setEmployee(prevValue => {
+    //   return prevValue.filter((Employee, index) => {
+    //     return index !== ID;
+    //   });
+    // });
+setLoading(true);
+    const request = {
+      Id: id,
+      ticket:currentUser.Ticket
+    };
+
+    deactivatingUser(request)
+    .then(res => {
+      if(res === true){
+        Employee.map(item => item.Id === id?{...item,userStatus:8}:item);
+        setAlert('User deactivated successully!');
+        setSeverity('success');
+        setLoading(false);
+        setOpen(true);
+      }else{
+        setAlert('User could not be deactivated!');
+        setSeverity('error');
+        setLoading(false);
+        setOpen(true);
+      }
     });
+}
+
+async function deactivatingUser(data){
+  const result = await axios.post('https://localhost:44327/api/DeActivateAccount',data);
+  return result.data.output;
 }
 
 function handleEdit(id){
@@ -73,29 +169,62 @@ function handleEdit(id){
   setID(ID);
   setBtn("Edit");
 }
+//8o8s0D
+const useStyles = makeStyles((theme) => ({
+  button:{
+    width:'60%',
+    height:'40px',
+    background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+    color:'white'
+  },
+  backdrop: {
+   zIndex: theme.zIndex.drawer + 1,
+   color: '#fff',
+ },
+}));
 
+const handleClose = (event, reason) => {
+   if (reason === 'clickaway') {
+     return;
+   }
 
+   setOpen(false);
+ };
 
-
+const classes = useStyles();
   return (
 
-    <div>
+    <Container>
+    <Backdrop className={classes.backdrop} open={loading} >
+      <CircularProgress color="inherit" />
+    </Backdrop>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity}>
+          {alert}
+        </Alert>
+      </Snackbar>
     <br/>
-    <div style={{marginLeft:"20px"}}>
-      <Heading text="Welcome User!"/>
-      </div>
-      <div className="container SPAdmin-container">
-        <div className="form-row">
-          <input onChange={handleChange} name="name" className="form-control col-lg-3" type="text" placeholder="Fullname" value={EmployeeDetail.name} style={{marginRight:"10px"}}/>
-          <input onChange={handleChange} name="email" className="form-control col-lg-4" type="text" placeholder="Email" value={EmployeeDetail.email} style={{marginRight:"10px"}}/>
-          <input onChange={handleChange} name="contact" className="form-control col-lg-3" type="text" placeholder="Contact No." value={EmployeeDetail.contact} style={{marginRight:"10px"}}/>
-          <Button variant='login' onClick={addEmployee} className=" col-lg-1" type="submit" style={{marginLeft:"20px"}} >{btnName}</Button>
-        </div>
-        </div>
+      <Paper  style={{padding:'15px',height:'80px',textAlign:'center',marginBottom:'5%'}}>
+        <Grid container>
+          <Grid item xs={3} >
+              <TextField label='Full Name' style={{width:'80%'}} onChange={handleChange} name="FullName"   placeholder="Fullname" value={EmployeeDetail.FullName} />
+          </Grid>
+          <Grid item xs={4}>
+              <TextField label='Email Id' style={{width:'80%'}} onChange={handleChange} name="EmailId"  type="text" placeholder="Email" value={EmployeeDetail.EmailId} />
+          </Grid>
+          <Grid item xs={3}>
+          <TextField label='Contact No' style={{width:'80%'}} onChange={handleChange} name="ContactNo" type="text" placeholder="Contact No." value={EmployeeDetail.ContactNo} />
+
+          </Grid>
+          <Grid item xs={2}>
+                    <Button variant='login' onClick={addEmployee} className={classes.button}  type="submit"  >{btnName}</Button>
+          </Grid>
+        </Grid>
+        </Paper>
         <div style={{textAlign:"center"}}>
         <p class="lead" style={{textDecoration:"underline"}}>Employee List</p>
         <table className="table admin-table">
-          <thead style={{color:"#4B66EA"}}>
+          <thead>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
@@ -106,16 +235,23 @@ function handleEdit(id){
           <tbody>
             {
               Employee.map((emp,index) => {
-              return <EmployeeTableItem key={index} id={index+1} name={emp.name} email={emp.email} contact={emp.contact} isRemove={removeEmployee} isEdit={handleEdit} kyc="In process" />
+              return <EmployeeTableItem key={index} index={index+1} id={emp.Id} DP={emp.DPPath} name={emp.FullName} email={emp.EmailId} contact={emp.ContactNo} isRemove={removeEmployee} isEdit={handleEdit} kyc={emp.userStatus} />
             })
           }
           </tbody>
         </table>
 </div>
-      </div>
+      </Container>
   );
 }
 
+const mapStateToProps = createStructuredSelector({
+  currentUser:selectCurrentUser,
+  employeeList:selectProfessionalList
+})
 
+const mapDispatchToProps = dispatch => ({
+  setEmployeeList : value => dispatch(setProfessionalList(value))
+})
 
-export default SPAdmin;
+export default connect(mapStateToProps,mapDispatchToProps)(SPAdmin);

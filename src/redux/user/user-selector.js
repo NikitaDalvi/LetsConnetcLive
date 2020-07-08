@@ -25,9 +25,9 @@ export const selectUserType = createSelector(
   user => user.userType
 );
 
-export const selectRegisteredUserId = createSelector(
+export const selectRegisteredUser = createSelector(
   [selectUser],
-  user => user.registeredUserId
+  user => user.registeredUser
 );
 
 export const selectSubscriptionType = createSelector(
@@ -38,4 +38,19 @@ export const selectSubscriptionType = createSelector(
 export const selectIndividualSub = createSelector(
   [selectUser],
   user => user.IndividualSub
+);
+
+export const selectDashboardDetails = createSelector(
+  [selectUser],
+  user => user.DashboardDetails
+);
+
+export const selectProfessionalList = createSelector(
+  [selectUser],
+  user => user.professionalList
+);
+
+export const selectExpertId = createSelector(
+  [selectUser],
+  user => user.ExpertId
 );
