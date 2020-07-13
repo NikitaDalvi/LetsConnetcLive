@@ -1,5 +1,5 @@
 /*jshint esversion:9*/
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import {AppBar,CardHeader,Card,CardContent,Typography,makeStyles,Toolbar,Button,Grid,TextField,InputAdornment,Input} from '@material-ui/core';
 import ServiceCard from './subComponents/ServiceRequestCard-component';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
@@ -9,7 +9,9 @@ import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
-import {selectUserType} from '../redux/user/user-selector';
+import {selectUserType,selectCurrentUser} from '../redux/user/user-selector';
+import axios from 'axios';
+import {API} from '../API';
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -386,6 +388,11 @@ const data = [
 ]
 
 
+
+
+
+
+
 function ServiceRequest(props){
 
 //   function rand() {
@@ -408,6 +415,8 @@ function getModalStyle() {
   };
 }
 
+const {currentUser} = props;
+
   const classes = useStyles();
 
   const newItem = data.filter(item => item.type==='pending');
@@ -416,10 +425,50 @@ function getModalStyle() {
   const completedItem = data.filter(item => item.type==='completed');
 
 
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
-  const [rate,setRate] = React.useState('');
-  const [name,setName] = React.useState('');
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
+  const [rate,setRate] = useState('');
+  const [name,setName] = useState('');
+  const [newRequests,setNewRequests] = useState([]);
+  const [Today,setToday] = useState('');
+  const [confirmedRequests,setConfirmedRequests] = useState([]);
+  const [completedRequests,setCompletedRequests] = useState([]);
+
+  useEffect(()=>{
+    if(currentUser){
+      const request = {
+        ServiceProviderId:currentUser.Id,
+        ticket:currentUser.Ticket
+      };
+      const today = formatDate(new Date());
+      setToday(today);
+      GetRequests(request)
+      .then(res => {setNewRequests(res.NewReqest);
+setConfirmedRequests(res.OnBoardedRequest);
+      });
+    }
+  },[currentUser]);
+
+  async function GetRequests(data){
+    const result = await axios.post(`${API.URL}RequestListByServiceProviderId`,data);
+    console.log(result);
+    return result.data.output;
+  }
+
+
+  function formatDate(date) {
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2)
+          month = '0' + month;
+      if (day.length < 2)
+          day = '0' + day;
+
+      return [year, month, day].join('-');
+  }
 
 const handleRate = (event) => {
   const {value} = event.target;
@@ -433,6 +482,36 @@ const handleRate = (event) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+
+  const handleAppointmentStatus = (object) => {
+    changeAppointmentStatus(object)
+    .then(res => {
+      if(res.responseCode === 200 && object.Status === 1){
+        const appointment = newRequests.find(item => item.ServiceRequestId === object.RequestId);
+        setConfirmedRequests(prevValue =>{
+          return[...prevValue,appointment];
+        });
+        const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
+        setNewRequests(appointments);
+        alert('Appointment confirmed successfully!');
+        return;
+      }
+      if(res.responseCode === 200 && object.Status === 2){
+        const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
+        setNewRequests(appointments);
+        alert('Appointment rejected successfully!');
+        return;
+      }
+      alert('Unexpected error occured!');
+    });
+  };
+
+  const changeAppointmentStatus = async(data) => {
+    const result = await axios.post(`${API.URL}ApproveRejectRequest`,data);
+    console.log(result);
+    return result.data;
   };
 
   const body = (
@@ -485,7 +564,7 @@ const handleRate = (event) => {
       <CardContent className={classes.CardContent}>
 
     <div>
-    {newItem.map((item,index)=>(  <ServiceCard key={index} data={item}/>))}
+        {newRequests.map((item,index)=>(  <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} />))}
   </div>
       </CardContent>
     </Card>
@@ -500,7 +579,7 @@ const handleRate = (event) => {
       <CardContent className={classes.CardContent}>
 
     <div>
-    {todayItem.map((item,index)=>(  <ServiceCard key={index} data={item}/>))}
+    {confirmedRequests.map((item,index)=>(item.TimeList[0].StartDate === Today?  <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket}  Id={item.ServiceRequestId} name={item.RequestedBy} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} />:''))}
   </div>
       </CardContent>
     </Card>
@@ -515,7 +594,7 @@ const handleRate = (event) => {
       <CardContent className={classes.CardContent}>
 
     <div>
-    {onBoardItem.map((item,index)=>(  <ServiceCard key={index} data={item}/>))}
+    {confirmedRequests.map((item,index)=>(item.TimeList[0].StartDate !== Today?  <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket}  name={item.RequestedBy} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} />:''))}
   </div>
       </CardContent>
     </Card>
@@ -530,7 +609,7 @@ const handleRate = (event) => {
       <CardContent className={classes.CardContent}>
 
     <div>
-    {completedItem.map((item,index)=>(  <ServiceCard key={index} handleModal={handleOpen} data={item}/>))}
+    {newRequests.map((item,index)=>(  <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket}  name={item.RequestedBy} amount={item.Amount} status={4} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen}/>))}
   </div>
       </CardContent>
     </Card>
@@ -551,6 +630,7 @@ const handleRate = (event) => {
 }
 
 const mapStateToProps = createStructuredSelector({
+  currentUser:selectCurrentUser,
   userType: selectUserType
 })
 
