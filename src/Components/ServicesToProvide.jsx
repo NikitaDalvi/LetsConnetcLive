@@ -39,7 +39,8 @@ function ServicesProvide(props){
     service:'',
     fees:localStorage.getItem('fees') || '',
     type:localStorage.getItem('type') || null,
-    workingDays: localStorage.getItem('workingDays') || null
+    workingDays: localStorage.getItem('workingDays') || null,
+    otherService:''
   });
 
 const {currentUser,AddToDropdown,clearDropdown,SetServiceType,setUserStatus,setSavedServices,savedServices} = props;
@@ -612,6 +613,9 @@ if(SavedServices.length === 0){
    </FormControl>
             </Grid>
             <Grid item xs={8}>
+              <TextField className={classes.text} error={feesError} style={{marginBottom:'10px',marginLeft:'8px',display:data.service === 'Others'?'':'none'}} id="outlined-basic" name='otherService' onChange={handleChange} value={data.otherService} label='Other Service' variant="outlined" />
+            </Grid>
+            <Grid item xs={8}>
               <TextField className={classes.text} error={feesError} style={{marginBottom:'10px',marginLeft:'8px',display:data.type==='Full-Time'?'none':''}} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label={`Fees/${data.type}`} variant="outlined" />
             </Grid>
 
@@ -678,7 +682,9 @@ Apply & Save
 </Select>
 </FormControl>
       </Grid>
-
+      <Grid item xs={8}>
+        <TextField className={classes.text} error={feesError} style={{width:'80%',marginRight:'40px',marginBottom:'10px',display:data.service === 'Others'?'':'none'}} id="outlined-basic" name='otherService' onChange={handleChange} value={data.otherService} label='Other Service' variant="outlined" />
+      </Grid>
       <Grid item xs={12}>
         <TextField className={classes.text} error={feesError} style={{width:'80%',marginRight:'55px',marginBottom:'10px',display:data.type === 'Full-Time'?'none':''}}  id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label={`Fees/${data.type === 'Full-Time'? 'day' : data.type}`} variant="outlined" />
       </Grid>

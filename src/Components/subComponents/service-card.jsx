@@ -14,20 +14,18 @@ function ServiceCard(props){
       <div style={{display:"grid",gridTemplateColumns:"0.5fr 1fr",gridGap:"5px"}}>
       <h6 className="card-subtitle mb-2 text-muted">Services</h6>
       <ul >
-        <li className="card-text">{props.service1}</li>
-        <li className="card-text">{props.service2}</li>
+        <li className="card-text">{props.service}</li>
       </ul>
       </div>
       <hr/>
       <div style={{display:"grid",gridTemplateColumns:"0.5fr 1fr",gridGap:"5px"}}>
       <h6 className="card-subtitle mb-2 text-muted">Time slots</h6>
       <ul style={{marginTop:"5px"}}>
-        <li className="card-text">{props.time1}</li>
-        <li className="card-text">{props.time2}</li>
+        {props.timeslots.map(item => <li className="card-text">{item.StartTime} - {item.EndTime}</li>)}
       </ul>
 
     </div>
-    <div style={{display:props.type==="new"?"":"none", textAlign:"center"}}>
+    <div style={{display:props.status===3?"":"none", textAlign:"center"}}>
         <a href="#" className="card-link btn btn-success">Accept</a>
         <a href="#" className="card-link btn btn-danger">Decline</a>
     </div>

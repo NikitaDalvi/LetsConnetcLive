@@ -70,12 +70,13 @@ const {currentUser,setUserStatus,addLocation,clearLocation,setProgress} = props;
     debugger
     data.Address = `${detailedAddress},${data.Address}`
     setDetailsLength(detailedAddress.length);
-    console.log(data);
-    const existing = props.locationList.find(item => item.ID === data.ID);
+    console.log(props.locationList.length);
+    const existing = props.locationList.find(item => item.entryId === data.entryId);
     console.log(data);
     if(existing){
       addLocation(data);
     }else{
+      debugger
       if(props.locationList.length === 2){
         setSeverity('warning');
         setAlert('Only 2 locatons can be added by a user');
@@ -258,7 +259,12 @@ useEffect(()=>{
 function addingSavedLocations(response){
   if(response.length !== 0){
     clearLocation();
-    response.data.output.map(item => addLocation(item))
+    response.data.output.map(item => {
+      const object = {
+        ...item,
+        entryId:item.Id
+      };
+      addLocation(object)})
   }
 }
 

@@ -11,6 +11,7 @@ import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from '../redux/user/user-selector';
 import {selectNearbySPList} from '../redux/service/service-selector';
 import {setNearbySPList} from '../redux/service/service-actions';
+import {API} from '../API';
 import clsx from 'clsx';
 
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme =>({
    fontWeight: theme.typography.fontWeightRegular,
  },
  panel:{
-   width:'20%',
+   width:'15%',
    margin:theme.spacing(1),
    zIndex: '500',
    position:'fixed'
@@ -103,9 +104,11 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
   const [selectedRatings,setSelectedRatings] = useState([]);
   const [loading,setLoading] = useState(false);
   const [ratingFilter,setRatingFilter] = useState('');
+  const [radius,setRadius] = useState('5');
 
   useEffect(()=>{
     setLoading(true);
+    console.log(radius);
     const getLocation = () => {
       if(navigator.geolocation){
          navigator.geolocation.getCurrentPosition(showPosition,showError);
@@ -116,7 +119,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
 
     const showPosition = async(position) => {
       const request = {
-        Radius: 5,
+        Radius: parseInt(radius),
         Latitude: position.coords.latitude.toString(),
         Longitude: position.coords.longitude.toString()
       }
@@ -124,15 +127,19 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
         Latitude:position.coords.latitude.toString(),
         Longitude: position.coords.longitude.toString()
       });
-      const res = await axios.post('https://localhost:44327/api/getNearbyServiceProviders',request);
-      if(res){
-        console.log(res.data);
-        if(res.data.output){
-          setLoading(false);
-          setNearbyList(res.data.output);
-          setFilteredList(res.data.output);
+      // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
+      getNearbyExperts(request)
+      .then(res => {
+        if(res){
+          console.log(res.data);
+          if(res.data.output){
+            setLoading(false);
+            setNearbyList(res.data.output);
+            setFilteredList(res.data.output);
+          }
         }
-      }
+      });
+
     };
 
 
@@ -140,14 +147,14 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
         getLocation();
         getServiceTypes();
     }
-  },[currentUser]);
+  },[currentUser,radius]);
 
 
   // async function getNearbyExperts(){
   //
   // }
   async function getServiceTypes(){
-    const res = await axios.get('https://localhost:44327/api/getServiceTypes');
+    const res = await axios.get(`${API.URL}getServiceTypes`);
     return setServiceTypes(res.data.output);
   }
 
@@ -159,6 +166,15 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
 
     }
   },[selectedServices]);
+
+  // useEffect(()=>{
+  //
+  // },[radius])
+
+  const getNearbyExperts = async(data) => {
+    const res = await axios.post(`${API.URL}getNearbyServiceProviders`,data);
+    return res;
+  }
 
   useEffect(()=>{
     debugger
@@ -244,13 +260,14 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
       setSelectedServices(filters);
   };
 
+
   return(
     <Container>
     <Backdrop className={classes.backdrop} open={loading} >
        <CircularProgress color="inherit" />
      </Backdrop>
       <Grid container>
-      <Grid item xs='4' className={classes.gridItem} >
+      <Grid item xs='3' className={classes.gridItem} >
       <ExpansionPanel className={classes.panel}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
@@ -272,7 +289,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
       </ExpansionPanelDetails>
     </ExpansionPanel>
       </Grid>
-      <Grid item xs='4' className={classes.gridItem} >
+      <Grid item xs='3' className={classes.gridItem} >
       <ExpansionPanel className={classes.panel}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
@@ -299,7 +316,29 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
     </ExpansionPanel>
       </Grid>
 
-      <Grid item xs='4' style={{textAlign:'right'}}>
+      <Grid item xs='3' className={classes.gridItem} >
+      <ExpansionPanel className={classes.panel}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography className={classes.heading}>Filter by Distance</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+      <FormControl component="fieldset">
+       <RadioGroup aria-label="gender" name="gender1" value={radius} onChange={event=>{setRadius(event.target.value);}}>
+         <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
+         <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
+         <FormControlLabel value='10' control={<Radio />} label="Under 10Km" />
+         <FormControlLabel value='' control={<Radio />} label="All" />
+       </RadioGroup>
+     </FormControl>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+      </Grid>
+
+      <Grid item xs='3' style={{textAlign:'right'}}>
       <FormControl className={clsx(classes.margin, classes.textField)} variant="filled">
         <InputLabel htmlFor="filled-adornment-password">Search</InputLabel>
         <FilledInput
