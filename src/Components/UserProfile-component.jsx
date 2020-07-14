@@ -381,7 +381,7 @@ if(result!=null){
       </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{width:'50%',marginBottom:'10px'}} label="Full Name" />
-          <TextField id="standard-basic" name='EmailId' value={data.EmailId} onChange={handleChange} style={{width:'60%',marginBottom:'10px'}} label="Email Address" />
+          <TextField id="standard-basic" name='EmailId' value={data.EmailId} onChange={handleChange} style={{width:'51%',marginBottom:'10px'}} label="Email Address" />
           <TextField id="standard-basic" name='ContactNo' value={data.ContactNo} onChange={handleChange} style={{width:'50%',marginBottom:'10px'}} label="Mobile No." />
           <br/>
 
@@ -487,7 +487,7 @@ onSelect={handleSelect2}
 
 {({getInputProps, suggestions, getSuggestionItemProps, loading})=>(
 <div>
-<TextField id="standard-basic" multiline rows={3}   style={{width:'60%',marginBottom:'10px',display:userType==='Customer'?'':'none'}} label="Address 2"
+ <TextField id="standard-basic" multiline rows={3}   style={{width:'60%',marginBottom:'10px',display:userType==='Customer'?'':'none'}} label="Address 2"
       {...getInputProps({
         placeholder: 'Search Places ...',
         className: 'location-search-input',

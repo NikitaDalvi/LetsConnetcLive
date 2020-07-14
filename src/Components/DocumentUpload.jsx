@@ -13,9 +13,9 @@ import {setRegisteredUser,setProgress,setCurrentUser,setUserStatus,setUserType} 
 function DocumentUpload({userType,history,subsType,user,setRegisteredUserId,setProgress,setUser,setUserStatus,setUserType}){
 var SPitem=[];
       if(subsType === 'Individual'){
-        SPitem = [ "Pan Card", "Adhaar Card","CA Certificate"];
+        SPitem = [ "Udhyog Adhaar","Pan Card", "CA Certificate"];
       }else{
-        SPitem = [ "Company PAN Card","Incorporation Certificate/Incorporation proof","Udhyog Adhaar","CA Certificate"];
+        SPitem = [ "Udhyog Adhaar","Company PAN Card","Incorporation Certificate/Incorporation proof","CA Certificate"];
       }
 
 var Items;
@@ -171,6 +171,8 @@ const [AdhaarCard,setAdhaarCard] = React.useState({
               });
             }
 
+           
+
             break;
       default:
 
@@ -189,17 +191,17 @@ React.useEffect(()=>{
 
 
   const uploadDocuments = () => {
-    if(panCard.file === null || panCard.number === ''){
-      alert('Pan Card document and Pan Card number is mandatory!')
+    if(udyogAdhar.file === null || udyogAdhar.number === ''){
+      alert('AdhaarCard Card document and AdhaarCard number is mandatory!')
       return;
     }
     debugger
     const allDocuments = [];
     let result = null;
     if(subsType === 'Individual'){
-          allDocuments.push(panCard,AdhaarCard,CACertificate);
+          allDocuments.push(panCard,udyogAdhar,AdhaarCard,CACertificate);
     }else{
-          allDocuments.push(incorporationCertificate,panCard,udyogAdhar,CACertificate);
+          allDocuments.push(incorporationCertificate,AdhaarCard,panCard,udyogAdhar,CACertificate);
     }
 
     console.log(allDocuments);
