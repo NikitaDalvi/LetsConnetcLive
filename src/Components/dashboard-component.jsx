@@ -31,7 +31,8 @@ const Dashboard = (props) => {
       };
       if(userType==='Service-Provider'){
         axios.post('https://localhost:44327/api/getSPDashboardDetails',data)
-        .then(res => setDashboardDetails(res.data.output));
+        .then(res => setDashboardDetails(res.data.output))
+        .catch(error => alert('Error from Dashboard details api'));
       }
     }
 
