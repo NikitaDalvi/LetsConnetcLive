@@ -27,8 +27,8 @@ function SubscriptionCard(props) {
         <br />
         <br />
         <Typography variant='h5' style={{ fontWeight: 'bold' }}>{props.type}</Typography>
-        <Typography variant="subtitle1" gutterBottom><span style={{ fontSize: "16px",fontWeight: 'bold',textDecoration: 'line-through'}}></span>At Rs {props.price}<span style={{ fontSize: "16px", fontWeight: 'bold'}}>&nbsp;&nbsp;{props.discount}&nbsp;%Off&nbsp;&nbsp; {calculatediscount()}</span></Typography>
-        <Typography variant='subtitle3'><span style={{ fontSize: "16px", fontWeight: 'bold'}}>&nbsp;&nbsp;{props.discount}&nbsp;%Off&nbsp;&nbsp; {calculatediscount()}</span></Typography>
+        <Typography variant="subtitle1" gutterBottom><span style={{ fontSize: "16px",fontWeight: 'bold',textDecoration: 'line-through'}}>At ₹ {props.price}</span><span style={{ fontSize: "16px", fontWeight: 'bold'}}>&nbsp;&nbsp;{props.discount}&nbsp;%Off&nbsp;&nbsp; ₹{calculatediscount()}</span></Typography>
+        
         <br />
         <Typography variant='subtitle2'>{props.description}</Typography>
         <br />

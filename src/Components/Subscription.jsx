@@ -351,7 +351,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   setProgress: value => dispatch(setProgress(value)),
   setIsHome: value => dispatch(setIsHome(value)),
-  setSubscriptionType: value => dispatch(setSubscriptionType(value)),
+  //setSubscriptionType: value => dispatch(setonType(value)),
   setIndividualSub: value => dispatch(setIndividualSub(value)),
   setRegisteredUser: value => dispatch(setRegisteredUser(value)),
   setUserStatus: value => dispatch(setUserStatus(value)),
