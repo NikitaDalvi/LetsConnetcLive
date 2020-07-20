@@ -294,11 +294,11 @@ async function saveSubscription(data){
 <br/>
     <Grid container style={{textAlign:'center',paddingLeft:isMobile?'':'180px'}} >
       <Grid itemn xs={isMobile?12:5}>
-      <SubscriptionCard type='Individual' img={`http://letnetworkdev.obtainbpm.com${initialData.ImagePath}`} price={initialData.Price} link="/DocumentUpload=Individual" description={initialData.Description}/>
+      <SubscriptionCard type='Individual' img={`http://letnetworkdev.obtainbpm.com${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description}/>
       <a><Button className={classes.btnSelect} onClick={()=>{displayRazorPay("Individual");}}>SELECT</Button></a>
       </Grid>
       <Grid item xs={isMobile?12:5}>
-      <SubscriptionCard type='Corporate' img={`http://letnetworkdev.obtainbpm.com${company.ImagePath}`} price={company.Price} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick}/>
+      <SubscriptionCard type='Corporate' img={`http://letnetworkdev.obtainbpm.com${company.ImagePath}`} price={company.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick}/>
           <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
       </Grid>
     </Grid>

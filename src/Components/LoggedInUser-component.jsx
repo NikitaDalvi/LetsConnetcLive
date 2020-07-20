@@ -229,7 +229,7 @@ function LoggedIn(props) {
               horizontal: 'center',
             }}
           >
-            {notifications.map((item, index) => (<div><Typography key={index} className={classes.typography}><ErrorOutlineIcon style={{ color: 'red' }} />  {item}</Typography><Divider /></div>))}
+            {notifications.map((item, index) => (<div><Typography key={index} className={classes.typography}><ErrorOutlineIcon style={{ color: 'red' }} /> Test- {item}</Typography><Divider /></div>))}
 
           </Popover>
         </Toolbar>

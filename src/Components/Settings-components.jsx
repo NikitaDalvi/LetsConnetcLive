@@ -30,6 +30,9 @@ function Settings(){
   <Link  color="inherit" className={classes.link} href='/UserPage/Settings/Deactivation' >
     Deactivation
   </Link>
+  <Link color="inherit" className={classes.link} href='/UserPage/Settings/Notification'>
+    Notification
+  </Link>
 </Typography>
 <br/>
 <br/>
