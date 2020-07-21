@@ -8,6 +8,7 @@ import {selectCurrentUser} from '../redux/user/user-selector';
 import {setCurrentUser} from '../redux/user/user-actions';
 import MuiAlert from '@material-ui/lab/Alert';
 import {withRouter} from 'react-router-dom';
+import { API } from '../API';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -69,7 +70,7 @@ const handleAlertClose = (event, reason) => {
 
   const deactivateUser = async()=>{
     setLoading(true);
-    const result = await axios.post('https://localhost:44327/api/DeActivateAccount',request);
+    const result = await axios.post(`${API.URL}DeActivateAccount`,request);
     if(result){
       if(result.data.output === true){
         setCurrentUser(null);

@@ -244,7 +244,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
   }
 
   async function search(data){
-    const result = await axios.post('https://localhost:44327/api/searchServiceProviders',data);
+    const result = await axios.post(`${API.URL}searchServiceProviders`,data);
     return result.data.output;
   }
 
@@ -363,7 +363,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
       </Grid>
       <Grid container>
       {filteredList.map(item => <Grid item xs='3' className={classes.gridItem}>
-        <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`https://localhost:44327${item.DPPath}`} address={item.Address}/>
+        <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`${API.URL}${item.DPPath}`} address={item.Address}/>
       </Grid>)}
       </Grid>
     </Container>

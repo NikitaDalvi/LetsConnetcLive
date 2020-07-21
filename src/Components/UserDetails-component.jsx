@@ -102,7 +102,7 @@ const [Slots,setSlots] = useState([]);
       UserId:expertId,
       ticket:currentUser.Ticket
     };
-    const result = await axios.post('https://localhost:44327/api/GetServiceProviderBasicDetails',data);
+    const result = await axios.post(`${API.URL}GetServiceProviderBasicDetails`,data);
     return result.data.output;
   }
 
@@ -143,7 +143,7 @@ const [Slots,setSlots] = useState([]);
        ServiceProviderId:expertId,
        RequestingDate: Date
      };
-     const result = await axios.post(`https://localhost:44327/api/GetAvailableSlot`,request);
+     const result = await axios.post(`${API.URL}GetAvailableSlot`,request);
      return result.data.output;
    };
 

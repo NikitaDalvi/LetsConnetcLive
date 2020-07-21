@@ -21,6 +21,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import MuiAlert from '@material-ui/lab/Alert';
+import { API } from "../API";
 
 
 function Alert(props) {
@@ -130,7 +131,7 @@ const {currentUser,setUserStatus,addLocation,clearLocation,setProgress} = props;
       ticket: currentUser.Ticket
     }
 
-    const result = await axios.post('https://localhost:44327/api/SaveServiceProviderLocation',request);
+    const result = await axios.post(`${API.URL}SaveServiceProviderLocation`,request);
     if(result){
       if(result.data.responseCode === 200){
         setLoading(false);
@@ -269,7 +270,7 @@ function addingSavedLocations(response){
 }
 
 async function gettingLocations(data){
-  const result = await axios.post('https://localhost:44327/api/GetLocationListByServiceProviderId',data);
+  const result = await axios.post(`${API.URL}GetLocationListByServiceProviderId`,data);
   return result;
 }
 

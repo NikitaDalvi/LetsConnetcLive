@@ -11,6 +11,7 @@ import {selectCurrentUser,selectUserType} from '../redux/user/user-selector';
 import {Snackbar,Typography,makeStyles,TextField,Grid,Button,Container,Backdrop,CircularProgress} from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useMediaQuery } from 'react-responsive';
+import { API } from "../API";
 
 function Login(props){
 
@@ -48,7 +49,7 @@ async  function checkValidation(){
   // props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
   setLoading(true);
  const{setCurrentUser,setUserType,setRegisteredUser} = props;
-const result = await axios.post('https://localhost:44327/api/login/loginUser',input);
+const result = await axios.post(`${API.URL}login/loginUser`,input);
 const res = result.data.output;
 console.log(res);
 if(res !== null){

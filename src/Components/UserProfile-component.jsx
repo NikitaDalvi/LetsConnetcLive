@@ -20,6 +20,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import EditIcon from '@material-ui/icons/Edit';
+import { API } from '../API';
 
 
 
@@ -147,7 +148,7 @@ const handleChange = (event) => {
 
 const handleClick = async() => {
   setLoading(true);
-  const res = await axios.post('https://localhost:44327/api/UpdateProfile',data);
+  const res = await axios.post(`${API.URL}UpdateProfile`,data);
   if(res!=null){
     console.log(res);
     if(res.data.responseCode === 200){
@@ -164,7 +165,7 @@ const handleClick = async() => {
           if(address2.Address!=''){
             request.LocationDetails.push(address2);
           }
-          const result = await axios.post('https://localhost:44327/api/UpdateServiceProviderDescription',request);
+          const result = await axios.post(`${API.URL}UpdateServiceProviderDescription`,request);
           if(result){
             if(result.data.output === true){
               const editData = {FullName:data.FullName,EmailId:data.EmailId,ContactNo:data.ContactNo,Gender:data.Gender==='Male'?1:data.Gender==='Female'?2:3,DOB:data.DOB,Description:data.Description};
@@ -261,7 +262,7 @@ const dpChange = async (event) => {
 //   }
 // );
 
-const result = await axios.post(`https://localhost:44327/api/UploadProfilePicture/${currentUser.Id}/6`,formdata)
+const result = await axios.post(`${API.URL}UploadProfilePicture/${currentUser.Id}/6`,formdata)
 
 
 if(result!=null){
@@ -326,7 +327,7 @@ if(result!=null){
   },[currentUser])
 
   async function getProfileDetails(data){
-    const result = await axios.post('https://localhost:44327/api/getProfileDetails',data);
+    const result = await axios.post(`${API.URL}getProfileDetails`,data);
     return result;
   }
 

@@ -11,6 +11,7 @@ import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from '../redux/user/user-selector';
 import {selectRatingAndReviews} from '../redux/service/service-selector';
 import {addRatingAndReviews} from '../redux/service/service-actions';
+import { API } from "../API";
 
 function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
 
@@ -31,7 +32,7 @@ function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
     },[currentUser]);
 
     function getRatings(data){
-      return  axios.post('https://localhost:44327/api/GetRatings',data);
+      return  axios.post(`${API.URL}GetRatings`,data);
     }
 
     return(

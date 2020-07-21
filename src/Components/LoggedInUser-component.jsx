@@ -56,6 +56,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
+import { API } from "../API";
 
 
 const drawerWidth = 280;
@@ -154,7 +155,7 @@ function LoggedIn(props) {
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.FullName);
-      const Path = `https://localhost:44327/${currentUser.DPPath}`
+      const Path = `${API.URL}${currentUser.DPPath}`
       console.log(Path);
       setPath(Path);
       setType(currentUser.UserRole);
@@ -172,7 +173,7 @@ function LoggedIn(props) {
   }, []);
 
   function GetServiceType() {
-    return axios.get('https://localhost:44327/api/getServiceTypes');
+    return axios.get(`${API.URL}getServiceTypes`);
   }
 
   const handleClick = (event) => {

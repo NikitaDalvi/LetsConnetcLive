@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser,selectProfessionalList} from '../redux/user/user-selector';
 import {setProfessionalList} from '../redux/user/user-actions';
+import { API } from "../API";
 
 
 function Alert(props) {
@@ -69,7 +70,7 @@ function SPAdmin(props){
   },[currentUser]);
 
   async function getEmployeeList(data){
-    const result = await axios.post('https://localhost:44327/api/GetServiceProviderListByCorporateAdmin',data);
+    const result = await axios.post(`${API.URL}GetServiceProviderListByCorporateAdmin`,data);
     return result.data.output;
   }
 
@@ -78,7 +79,7 @@ function SPAdmin(props){
     //   return [ ...prevValue,EmployeeDetail];
     // });
     setLoading(true);
-    const res = await axios.post('https://localhost:44327/api/addServiceProvider',EmployeeDetail);
+    const res = await axios.post(`${API.URL}addServiceProvider`,EmployeeDetail);
     if(res){
       if(res.data.output){
         if(res.data.output === 'Email Id Already Exist'){
@@ -151,7 +152,7 @@ setLoading(true);
 }
 
 async function deactivatingUser(data){
-  const result = await axios.post('https://localhost:44327/api/DeActivateAccount',data);
+  const result = await axios.post(`${API.URL}DeActivateAccount`,data);
   return result.data.output;
 }
 

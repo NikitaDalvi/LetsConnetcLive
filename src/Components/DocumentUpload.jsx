@@ -8,6 +8,7 @@ import {withRouter} from 'react-router-dom';
 import {createStructuredSelector} from 'reselect';
 import {selectUserType,selectRegisteredUser,selectSubscriptionType} from '../redux/user/user-selector';
 import {setRegisteredUser,setProgress,setCurrentUser,setUserStatus,setUserType} from '../redux/user/user-actions';
+import { API } from "../API";
 
 
 function DocumentUpload({userType,history,subsType,user,setRegisteredUserId,setProgress,setUser,setUserStatus,setUserType}){
@@ -211,7 +212,7 @@ React.useEffect(()=>{
                         formdata.append('AddedById',user.Id);
                         formdata.append('DocumentType',document.type);
                         formdata.append('DocumentNumber',document.number);
-      result = await fetch(`https://localhost:44327/api/UploadDocuments/${user.Id}/${document.type}/${document.number}`,
+      result = await fetch(`${API.URL}UploadDocuments/${user.Id}/${document.type}/${document.number}`,
       {
         method:'POST',
         body:formdata

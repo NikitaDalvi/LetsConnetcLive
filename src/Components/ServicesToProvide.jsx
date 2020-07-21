@@ -18,6 +18,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import MuiAlert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { API } from "../API";
 
 
 function ServicesProvide(props) {
@@ -277,7 +278,7 @@ function ServicesProvide(props) {
   async function saveServices(postData) {
 
 
-    const res = await axios.post('https://localhost:44327/api/AddService', postData);
+    const res = await axios.post('AddService', postData);
     if (res) {
       if (res.data) {
         if (res.data.responseCode === 200) {
@@ -292,7 +293,7 @@ function ServicesProvide(props) {
   }
 
   async function saveWorkingHours(workingHours) {
-    const res = await axios.post('https://localhost:44327/api/AddWorkingHours', workingHours);
+    const res = await axios.post(`${API.URL}AddWorkingHours`, workingHours);
     if (res) {
       if (res.data) {
         if (res.data.responseCode === 200) {
@@ -355,7 +356,7 @@ function ServicesProvide(props) {
           ServiceProviderId: currentUser.Id,
           ticket: currentUser.Ticket
         };
-        axios.post('https://localhost:44327/api/GetServiceTypesByUserId', data)
+        axios.post(`${API.URL}GetServiceTypesByUserId`, data)
           .then((res) => {
             if (res.data.output && res.data.output[0]) {
 
@@ -366,7 +367,7 @@ function ServicesProvide(props) {
                 ServiceTypeId: serviceTypeId,
                 ticket: currentUser.Ticket
               };
-              axios.post('https://localhost:44327/api/GetServices', typeId)
+              axios.post(`${API.URL}GetServices`, typeId)
                 .then((res) => {
                   console.log(res);
                   res.data.output.map(item => (AddToDropdown(item)));
@@ -374,7 +375,7 @@ function ServicesProvide(props) {
                     ServiceProviderId: currentUser.Id,
                     ticket: currentUser.Ticket
                   };
-                  axios.post('https://localhost:44327/api/GetServiceListByServiceProviderId', savedServicesRequest)
+                  axios.post(`${API.URL}GetServiceListByServiceProviderId`, savedServicesRequest)
                     .then((res) => setSavedServices(res.data.output))
 
                 });

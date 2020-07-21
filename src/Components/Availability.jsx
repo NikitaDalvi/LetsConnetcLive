@@ -138,7 +138,7 @@ setWorkingHours(res);
   },[currentUser,setWorkingHours]);
 
 const getWorkingHours = async(data) => {
-  const res = await axios.post('https://localhost:44327/api/GetWorkingHourListByServiceProviderId',data);
+  const res = await axios.post(`${API.URL}GetWorkingHourListByServiceProviderId`,data);
   return res.data.output;
 };
 
