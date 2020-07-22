@@ -174,6 +174,7 @@ this.props.setProgress(0);
          borderRadius:'8px'
      });
 
+     console.log('Registration Component:', this.props.userType)
 return(
   <div>
   <br/>
