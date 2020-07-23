@@ -13,11 +13,13 @@ import { addServiceTypes, removeServiceTypes } from '../redux/service/service-ac
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
 import { API } from "../API";
+import getStoredState from "redux-persist/es/getStoredState";
 
 
 function RegistrationForm(props) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const { userType, serviceTypes, setProgress, setRegisteredUser, addServiceTypes, removeServiceTypes, registeredUser, history } = props;
+ 
   const [inputText, setInput] = useState({
     serviceTypeId: '',
     serviceType: '',
@@ -25,28 +27,26 @@ function RegistrationForm(props) {
     email: '',
     password: '',
     confirmPassword: '',
-    mobile: ''
+    mobile: '',
+    termsNConditionCheckbox: false
   });
 
-  React.useEffect(() => {
-    // if(registeredUser !== null){
-    //     history.push('/Registration/Subscription');
-    // }
+  
+  /*React.useEffect(() => {
     GetServiceType().then(result => result.data.output.map(value => addServiceTypes(value)));
     setProgress(0);
-  }, [addServiceTypes, registeredUser, history, setProgress]);
+  }, [addServiceTypes, registeredUser, history, setProgress]);*/
+  React.useEffect(() => {
+    GetServiceType().then(result => result.data.output.map(value => addServiceTypes(value)))
+    setProgress(0)
+  }, [])
 
   function GetServiceType() {
     return axios.get(`${API.URL}getServiceTypes`);
   }
 
   async function handleClick() {
-    // console.log('hit');
-    // if(props.userType==='Service-Provider'){
-    //    setProgress(50);
-    // }else{
-    //   setProgress(100);
-    // }
+  
     const { name, email, password, confirmPassword, mobile, serviceTypeId } = inputText;
     debugger
 
@@ -60,6 +60,8 @@ function RegistrationForm(props) {
         isCustomer: userType === 'Service-Provider' ? false : true,
         UserRole: userType === 'Service-Provider' ? 2 : 4
       };
+
+      return
 
       const userData = await axios.post(`${API.URL}registerUser`, registrationData);
       if (userData.data.output !== null) {
@@ -75,6 +77,25 @@ function RegistrationForm(props) {
     }
   }
 
+  const checkForValidation = () => {
+    const { name, email, password, mobile, confirmPassword, serviceType, termsNConditionCheckbox} = inputText
+    return name 
+            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) 
+            && /^\d{10}$/.test(mobile)
+            && password 
+            && (confirmPassword === password) 
+            && serviceType 
+            && termsNConditionCheckbox
+  }
+
+  const handleCheckboxChange = (event) => {
+    setInput(previousValue => {
+      return{
+        ...previousValue,
+        termsNConditionCheckbox: event.target.checked
+      }
+    })
+  }
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -141,7 +162,7 @@ function RegistrationForm(props) {
   }));
 
   const classes = useStyles();
-  const { name, email, password, confirmPassword, mobile, serviceType } = inputText;
+  const { name, email, password, confirmPassword, mobile, serviceType, termsNConditionCheckbox } = inputText;
 
   return (
     <div>
@@ -170,7 +191,7 @@ function RegistrationForm(props) {
                 labelId="demo-simple-select-outlined-label-2"
                 id="demo-simple-select-outlined-2"
                 value={serviceType}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 label="Select Service Type"
                 name='serviceType'
               >
@@ -182,29 +203,30 @@ function RegistrationForm(props) {
             </FormControl>
 
             <FormControl className={classes.fromControl}  >
-              <TextField className={classes.textField} id="outlined-basic" value={name} name='name' onChange={handleChange} label="Full Name" variant="outlined" />
+              <TextField className={classes.textField} id="outlined-basic" value={name} name='name' onChange={(e) => handleChange(e)} label="Full Name" variant="outlined" />
             </FormControl>
 
             <FormControl className={classes.fromControl}  >
-              <TextField className={classes.textField} id="outlined-basic" value={email} name='email' onChange={handleChange} label="Email Address" variant="outlined" />
+              <TextField className={classes.textField} id="outlined-basic" value={email} name='email' onChange={(e) => handleChange(e)} label="Email Address" variant="outlined" />
             </FormControl>
 
             <FormControl className={classes.fromControl}  >
-              <TextField className={classes.textField} id="outlined-basic" value={mobile} name='mobile' onChange={handleChange} label="Mobile Number" variant="outlined" />
+              <TextField className={classes.textField} type="number" id="outlined-basic" value={mobile} name='mobile' onChange={(e) => handleChange(e)} label="Mobile Number" variant="outlined" />
             </FormControl>
 
             <FormControl className={classes.fromControl}  >
-              <TextField className={classes.textField} id="outlined-basic" value={password} name='password' onChange={handleChange} type='password' label="Password" variant="outlined" />
+              <TextField className={classes.textField} id="outlined-basic" value={password} name='password' onChange={(e) => handleChange(e)} type='password' label="Password" variant="outlined" />
             </FormControl>
 
             <FormControl className={classes.fromControl}  >
-              <TextField className={classes.textField} id="outlined-basic" value={confirmPassword} name='confirmPassword' onChange={handleChange} type='password' label="Confirm Password" variant="outlined" />
+              <TextField className={classes.textField} id="outlined-basic" value={confirmPassword} name='confirmPassword' onChange={(e) => handleChange(e)} type='password' label="Confirm Password" variant="outlined" />
             </FormControl>
             <Grid container>
               <Grid item xs={isMobile ? 12 : 1}>
                 <Checkbox
-                  defaultChecked
+                  checked={termsNConditionCheckbox}
                   color="default"
+                  onChange={(e) => handleCheckboxChange(e)}
                   inputProps={{ 'aria-label': 'checkbox with default color' }}
                 />
               </Grid>
@@ -212,7 +234,7 @@ function RegistrationForm(props) {
                 <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '15px', fontWeight: 'bold', textDecoration: 'underline' }}>Terms and Conditions.</span></p>
               </Grid>
             </Grid>
-            <Button type='button' onClick={() => { handleClick(); }} className={classes.btnSignUp}>Sign Up</Button>
+            <Button type='button' disabled={!checkForValidation()} onClick={() => { handleClick(); }} className={classes.btnSignUp}>Sign Up</Button>
           </form>
         </Grid>
       </Grid>
@@ -240,62 +262,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationForm));
-
-// <div className=" professional-container">
-//
-//   <h1 className="login-title">Registration</h1>
-//     <p style={{fontWeight:"bold", textAlign:"center", color:"#4B66EA"}}>{props.type}</p>
-//  <br/>
-//  <div className="form-group" >
-//    <div className="row prof-reg-row" style={{paddingLeft:"70px"}}>
-//      <label className="col-lg-3"> Name</label>
-//      <div className="col-lg-7">
-//        <input name='name' className="form-control" type="text" value={inputText.name} onChange={handleChange} placeholder="Full Name"/>
-//      </div>
-//    </div>
-//    <div className="row prof-reg-row" style={{paddingLeft:"70px"}}>
-//      <label className="col-lg-3"> Email</label>
-//      <div className="col-lg-8">
-//        <input name='email' className="form-control" type="text" value={inputText.email} onChange={handleChange} placeholder="Email Id"/>
-//      </div>
-//    </div>
-//    <div className="row prof-reg-row" style={{paddingLeft:"70px"}}>
-//      <label className="col-lg-3"> Password</label>
-//      <div className="col-lg-7">
-//        <input name='password' className="form-control" type="password" value={inputText.password} onChange={handleChange} placeholder="Password"/>
-//      </div>
-//    </div>
-//    <div className="row prof-reg-row" style={{paddingLeft:"70px"}}>
-//      <label className="col-lg-3"> </label>
-//      <div className="col-lg-7">
-//        <input name='confirmPassword' className="form-control" type="password" value={inputText.confirmPassword} onChange={handleChange} placeholder="Confirm Password"/>
-//      </div>
-//    </div>
-//    <br/>
-//    <div style={{textAlign: "center",marginTop:"30px"}}>
-//    <a><Button  variant='login' onClick={()=>{props.handleClick(name,email,password,confirmPassword)}}>REGISTER</Button></a>
-//  </div>
-//  </div>
-// </div>
-
-
-
-
-// <FormControl className={classes.fromControl} variant="outlined" >
-// <InputLabel className={classes.label} id="demo-simple-select-outlined-label">I want a account to ?</InputLabel>
-// <Select
-// className={classes.select}
-// labelId="demo-simple-select-outlined-label"
-// id="demo-simple-select-outlined"
-// value={inputText.accountType}
-// onChange={handleChange}
-// label="I want a account to ?"
-// name='accountType'
-// >
-// <MenuItem value="">
-// <em>None</em>
-// </MenuItem>
-// <MenuItem value='service-provider'>To work</MenuItem>
-// <MenuItem value='customer'>To hire</MenuItem>
-// </Select>
-// </FormControl>
