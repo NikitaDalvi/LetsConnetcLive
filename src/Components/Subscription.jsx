@@ -217,7 +217,8 @@ function Subscription(props) {
     const __DEV__ = document.domain === 'localhost';
     console.log(data);
     const options = {
-      "key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
+      //"key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
+      "key": 'rzp_test_4WUuA0rfz1EeJX',
       "amount": result.amount,
       "currency": result.currency,
       "name": "Subscription Purchase",
