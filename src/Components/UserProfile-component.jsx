@@ -419,7 +419,7 @@ if(result!=null){
               />
             </Grid>
           </Grid>
-          <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{shrink: true,}} onChange={handleChange} style={{width:'60%',marginBottom:'10px',display:userType==='Service-Provider'?'':'none'}} label="Description" />
+          <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{shrink: true,}} onChange={handleChange} style={{width:'60%',marginBottom:'10px',display:'SERVICE-PROVIDER'===userType.toUpperCase()?'':'none'}} label="Description" />
 {
   editable1?
           (<Paper elevation={1} style={{padding:'10px 10px',width:'400px',textAlign:'left',margin:'8px 80px'}}>
@@ -475,7 +475,7 @@ if(result!=null){
   </Grid>
 </Grid>
 
-</Paper>):(<Typography style={{margin:'10px 0'}} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={()=>{setEditable1(true);}}/></Typography>)}
+</Paper>):(/*<Typography style={{margin:'10px 0'}} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={()=>{setEditable1(true);}}/></Typography>)}
 
   {
 editable2?
@@ -530,7 +530,7 @@ onSelect={handleSelect2}
   <Button variant='contained' onClick={()=>{handleAddressEdit(2)}}>Done</Button>
   </Grid>
 </Grid>
-</Paper>):(<Typography style={{margin:'10px 0'}}variant='body1'>Address 2:  {address2.Address}  <EditIcon onClick={()=>{setEditable2(true);}}/></Typography>)}
+</Paper>):(/*<Typography style={{margin:'10px 0'}}variant='body1'>Address 2:  {address2.Address}  <EditIcon onClick={()=>{setEditable2(true);}}/></Typography>*/ null)}
 
           <br/>
                </MuiPickersUtilsProvider>

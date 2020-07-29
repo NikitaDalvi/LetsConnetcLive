@@ -32,7 +32,7 @@ const Dashboard = (props) => {
       };
       if (userType === 'Service-Provider') {
         axios.post(`${API.URL}getSPDashboardDetails`, data)
-          .then(res => setDashboardDetails(res.data.output))
+          .then(res => {console.log(res.data.output); setDashboardDetails(res.data.output)})
           .catch(error => alert('Error from Dashboard details api'));
       }
     }

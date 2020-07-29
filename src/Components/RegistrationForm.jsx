@@ -46,7 +46,7 @@ function RegistrationForm(props) {
   }
 
   async function handleClick() {
-  
+    console.log('hit');
     const { name, email, password, confirmPassword, mobile, serviceTypeId } = inputText;
     debugger
 
@@ -61,7 +61,7 @@ function RegistrationForm(props) {
         UserRole: userType === 'Service-Provider' ? 2 : 4
       };
 
-      return
+     
 
       const userData = await axios.post(`${API.URL}registerUser`, registrationData);
       if (userData.data.output !== null) {
@@ -234,7 +234,7 @@ function RegistrationForm(props) {
                 <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '15px', fontWeight: 'bold', textDecoration: 'underline' }}>Terms and Conditions.</span></p>
               </Grid>
             </Grid>
-            <Button type='button' disabled={!checkForValidation()} onClick={() => { handleClick(); }} className={classes.btnSignUp}>Sign Up</Button>
+            <Button type='button' disabled={!checkForValidation()} onClick={handleClick} className={classes.btnSignUp}>Sign Up</Button>
           </form>
         </Grid>
       </Grid>

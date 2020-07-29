@@ -169,7 +169,7 @@ function ServicesProvide(props) {
       default:
         type = '';
     }
-    debugger
+  
     const postData = {
       UserId: currentUser.Id,
       ServiceCharge: type,
@@ -189,7 +189,7 @@ function ServicesProvide(props) {
 
       postData.services.push(entry);
     });
-    debugger
+  
     if (type === 'Full_Time') {
       var days = 0;
       const modelData = {
@@ -278,7 +278,7 @@ function ServicesProvide(props) {
   async function saveServices(postData) {
 
 
-    const res = await axios.post('AddService', postData);
+    const res = await axios.post(`${API.URL}AddService`, postData);
     if (res) {
       if (res.data) {
         if (res.data.responseCode === 200) {

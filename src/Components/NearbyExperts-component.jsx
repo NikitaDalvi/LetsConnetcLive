@@ -177,7 +177,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
   }
 
   useEffect(()=>{
-    debugger
+    
     if(ratingFilter){
       var filteredResult = [];
       filteredResult.push(nearbyList.find(service=>service.Rating >= ratingFilter));
