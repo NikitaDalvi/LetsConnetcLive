@@ -78,13 +78,12 @@ function RegistrationForm(props) {
   }
 
   const checkForValidation = () => {
-    const { name, email, password, mobile, confirmPassword, serviceType, termsNConditionCheckbox} = inputText
+    const { name, email, password, mobile, confirmPassword, termsNConditionCheckbox} = inputText
     return name 
             && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) 
             && /^\d{10}$/.test(mobile)
             && password 
             && (confirmPassword === password) 
-            && serviceType 
             && termsNConditionCheckbox
   }
 

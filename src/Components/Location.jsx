@@ -68,7 +68,7 @@ const {currentUser,setUserStatus,addLocation,clearLocation,setProgress} = props;
 
   function addToList(){
     // setRow(prevValue => [...prevValue, data]);
-    debugger
+    
     data.Address = `${detailedAddress},${data.Address}`
     setDetailsLength(detailedAddress.length);
     console.log(props.locationList.length);
@@ -77,7 +77,7 @@ const {currentUser,setUserStatus,addLocation,clearLocation,setProgress} = props;
     if(existing){
       addLocation(data);
     }else{
-      debugger
+     
       if(props.locationList.length === 2){
         setSeverity('warning');
         setAlert('Only 2 locatons can be added by a user');

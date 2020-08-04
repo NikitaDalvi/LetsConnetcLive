@@ -196,7 +196,7 @@ React.useEffect(()=>{
       alert('AdhaarCard Card document and AdhaarCard number is mandatory!')
       return;
     }
-    debugger
+   
     const allDocuments = [];
     let result = null;
     if(subsType === 'Individual'){

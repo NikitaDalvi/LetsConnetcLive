@@ -69,7 +69,7 @@ function Login(props) {
       console.log(res.Status);
 
       if (props.userType === 'Service-Provider') {
-        debugger
+       
         if (res.UserRole === 4 || res.UserRole === 5) {
           setSeverity('info');
           setAlert('These credentials belong to a Customer account. Please Login again !');
@@ -97,6 +97,7 @@ function Login(props) {
             setLoading(false);
             if (res.UserRole !== 6) {
               props.history.push('/UserPage/ServiceProvider/Dashboard');
+              //props.history.push('/UserPage/ServiceProvider/UserProfile');
             } else {
               props.history.push('/UserPage/SPAdmin/MyEmployees');
             }
@@ -106,7 +107,7 @@ function Login(props) {
             return;
         }
       } else {
-        debugger
+      
         if (res.UserRole === 2 || res.UserRole === 3 || res.UserRole === 6) {
           setSeverity('info');
           setAlert('These credentials belong to a Service-Provider account. Please Login again !');
@@ -130,6 +131,7 @@ function Login(props) {
             setCurrentUser(res);
             setLoading(false);
             props.history.push('/UserPage/Customer/Dashboard');
+            //props.history.push('/UserPage/Customer/UserProfile');
             break;
           default:
             return;

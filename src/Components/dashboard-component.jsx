@@ -1,13 +1,14 @@
 /*jshint esversion:9*/
 import React, { useEffect, useState } from 'react';
 import DashboardCard from "./subComponents/Dashboard-card";
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, makeStyles, Box } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUserType, selectCurrentUser, selectDashboardDetails } from '../redux/user/user-selector';
 import { setDashboardDetails } from '../redux/user/user-actions';
 import axios from 'axios';
 import { API } from '../API';
+import { red, green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -53,6 +54,8 @@ const Dashboard = (props) => {
     return (
       <div>
         <Container>
+          {currentUser && currentUser.Status=== 6 && <Box p={2} bgcolor={green} style={{color: '#ffffff'}}>USER ACTIVE</Box>}
+          {currentUser && currentUser.Status!== 6 && <Box p={2} bgcolor={red} style={{color: '#ffffff'}}>User is not Active</Box>}
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
               <DashboardCard color='#EA4335' caption="Service Request" name="NEW" quantity={dashboardDetails !== null ? dashboardDetails.NewRequests : '50'} />
