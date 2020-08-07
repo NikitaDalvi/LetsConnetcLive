@@ -205,7 +205,7 @@ function LoggedIn(props) {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            disabled={currentUser && currentUser.Status!==6}
+            /*disabled={currentUser && currentUser.Status!==6}*/
             className={clsx(classes.menuButton, drawerOpen && classes.hide)}
           >
             <MenuIcon />

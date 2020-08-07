@@ -281,7 +281,7 @@ function Subscription(props) {
 
 
 
-
+  console.log(initialData)
   return (
     <div>
       <Backdrop className={classes.backdrop} open={loading} >
@@ -300,7 +300,7 @@ function Subscription(props) {
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>
             <Grid item xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Corporate' img={`${API.BASE_URL}${company.ImagePath}`} price={company.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
+              <SubscriptionCard type='Corporate' img={`${API.BASE_URL}${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
               <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
             </Grid>
           </Grid>
@@ -353,7 +353,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   setProgress: value => dispatch(setProgress(value)),
   setIsHome: value => dispatch(setIsHome(value)),
-  //setSubscriptionType: value => dispatch(setonType(value)),
+  setSubscriptionType: value => dispatch(setSubscriptionType(value)),
   setIndividualSub: value => dispatch(setIndividualSub(value)),
   setRegisteredUser: value => dispatch(setRegisteredUser(value)),
   setUserStatus: value => dispatch(setUserStatus(value)),

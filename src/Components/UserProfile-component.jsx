@@ -332,18 +332,34 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
   }
 
   function checkvalidation() {
-    console.log(data.Description)
-    console.log(data.Gender)
-    console.log(data.EmailId)
-    console.log(data.ContactNo)
-    console.log(data.DOB)
-    return data.Description.length > 0
+   
+    if(data){
+      return data.Description 
+      &&data.Description.length > 0
+      && data.FullName
       && data.FullName.length > 0
+      && data.Gender
       && data.Gender.length > 0
+      && data.EmailId
       && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
+      && data.ContactNo
       && /^\d{10}$/.test(data.ContactNo)
+      && data.DOB
       && data.DOB.length > 0
+    }
+    else{
+      return false
+    }
   }
+
+  /*const checkvalidation = () =>{
+    const{FullName,Gender,Description,EmailId,ContactNo,DOB} = inputText
+    return Description
+    &&/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
+    &&FullName
+    && /^\d{10}$/.test(data.ContactNo)
+    && DOB
+  }*/
 
   function handleAddressEdit(type) {
 

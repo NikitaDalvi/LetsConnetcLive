@@ -12,8 +12,8 @@ import { red, green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   grid: {
-    width: '100%'
-
+    width: '100%',
+    marginTop: "2%"
   }
 }));
 
@@ -33,7 +33,7 @@ const Dashboard = (props) => {
       };
       if (userType === 'Service-Provider') {
         axios.post(`${API.URL}getSPDashboardDetails`, data)
-          .then(res => {console.log(res.data.output); setDashboardDetails(res.data.output)})
+          .then(res => { console.log(res.data.output); setDashboardDetails(res.data.output) })
           .catch(error => alert('Error from Dashboard details api'));
       }
     }
@@ -54,8 +54,9 @@ const Dashboard = (props) => {
     return (
       <div>
         <Container>
-          {currentUser && currentUser.Status=== 6 && <Box p={2} bgcolor={green} style={{color: '#ffffff'}}>USER ACTIVE</Box>}
-          {currentUser && currentUser.Status!== 6 && <Box p={2} bgcolor={red} style={{color: '#ffffff'}}>User is not Active</Box>}
+          <center>{currentUser && currentUser.Status === 6 && <Box width="50%" p={2} bgcolor={green} style={{ color: '#ffffff' }}>USER ACTIVE</Box>}</center>
+          <center>{currentUser && currentUser.Status !== 6 && <Box width="50%" p={2} bgcolor={red} style={{ color: '#ffffff' }}>User is not Active</Box>}</center>
+
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
               <DashboardCard color='#EA4335' caption="Service Request" name="NEW" quantity={dashboardDetails !== null ? dashboardDetails.NewRequests : '50'} />
