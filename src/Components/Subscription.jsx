@@ -47,7 +47,7 @@ function Subscription(props) {
     setCompanyName(event.target.value);
   };
 
-  const { userType, setProgress, registeredUser, setCurrentUser } = props;
+  const { userType, setProgress, registeredUser, setCurrentUser,setSubscriptionType } = props;
 
   useEffect(() => {
     setLoading(true);
@@ -132,6 +132,7 @@ function Subscription(props) {
 
   const SubsSelectionClick = (type, companyName) => {
     var updatedData;
+    setSubscriptionType(type);
     debugger
     if (props.userType === 'Service-Provider') {
       updatedData = {
@@ -181,16 +182,7 @@ function Subscription(props) {
       setCurrentUser(registeredUser);
       props.history.push('/UserPage/Customer/Dashboard');
     }
-    // console.log(companyName);
-    //   props.setProgress(100);
-    // props.setSubscriptionType(type);
-    //   if(props.userType==='Service-Provider'){
-    //     props.history.push('/Registration/KYC');
-    //   }else{
-    //     props.setRegisteredUser(null);
-    //     props.setIsHome(true);
-    //     props.history.push('/');
-    //   }
+    
   }
 
   async function updateUserRole(data) {
@@ -296,11 +288,11 @@ function Subscription(props) {
           <br />
           <Grid container style={{ textAlign: 'center', paddingLeft: isMobile ? '' : '180px' }} >
             <Grid itemn xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Individual' img={`${API.BASE_URL}${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
+              <SubscriptionCard type='Individual' img={`http://letnetworkdev.obtainbpm.com/${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>
             <Grid item xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Corporate' img={`${API.BASE_URL}${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
+              <SubscriptionCard type='Corporate' img={`http://letnetworkdev.obtainbpm.com/${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
               <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
             </Grid>
           </Grid>
@@ -364,24 +356,3 @@ const mapDispatchToProps = dispatch => ({
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Subscription));
 
-//onClick={()=>{SubsSelectionClick("Individual",null);}}
-
-// <div className="row" style={{textAlign:"center", width:"90%"}}>
-// <div className="col-lg-4" style={{marginLeft:"320px"}}>
-// <div className="container subs-container">
-//   <SubscriptionCard type="Individual" img={subsIcon} price="199" link="/DocumentUpload=Individual" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-//   des2="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. "/>
-//       <a><Button variant='login' onClick={()=>{props.subClick("Individual",null)}}>SELECT</Button></a>
-// </div>
-// </div>
-// <div className="col-lg-4">
-// <div className="container subs-container">
-// <SubscriptionCard type="Company" img={subsCompanyIcon} price="10,000" link="/DocumentUpload=Company" des1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-// des2="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." handleClick={props.SubsSelectionClick}/>
-//     <a><Button variant='login' onClick={() => setModalShow(true)}>SELECT</Button></a>
-// </div>
-// </div>
-//
-// </div>
-
-//onClick={()=>{props.subClick("Company");}}
