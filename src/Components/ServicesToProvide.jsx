@@ -26,11 +26,11 @@ function ServicesProvide(props) {
   const [data, setData] = useState({
     Id: '',
     location: localStorage.getItem('location') || null,
-    service: '',
-    fees: localStorage.getItem('fees') || '',
+    service: null,
+    fees: localStorage.getItem('fees') || null,
     type: localStorage.getItem('type') || null,
     workingDays: localStorage.getItem('workingDays') || null,
-    otherService: ''
+    otherService: null
   });
 
   const { currentUser, AddToDropdown, clearDropdown, SetServiceType, setUserStatus, setSavedServices, savedServices } = props;
@@ -41,9 +41,34 @@ function ServicesProvide(props) {
   const [feesError, setFeesError] = useState(false);
   const [typeError, setTypeError] = useState(false);
   const [SavedServices, setSaveServices] = useState([]);
+  const [saveButtonEnable, setSaveButtonEnable] = useState(false)
 
   function handleChange(event) {
     const { name, value } = event.target;
+    const {type , location, fees, workingDays} = data
+
+    setData(prevValue => {
+      return {
+        ...prevValue,
+        [name]: value
+      };
+    });
+
+    if (name === 'type' && value === 'Full-Time') {
+      setOpen(true);
+      console.log(fees)
+      setSaveButtonEnable(location && fees && fees !== 'null' && workingDays)
+    }
+    else if(name === 'type' && value !== 'Full-Time'){
+      console.log('Location:', location)
+      console.log('Type:', type)
+      console.log('Disable:', location && !type)
+      setSaveButtonEnable(location && type)
+    }
+    else{
+      setSaveButtonEnable(type && type !== 'Full-Time' ? location : location && fees && fees !== 'null' && workingDays)
+    }
+
     if (name === 'service') {
       const service = props.dropdownList.find(service => service.Services === value);
       setData(prevValue => {
@@ -53,16 +78,8 @@ function ServicesProvide(props) {
         };
       });
     }
-    setData(prevValue => {
-      return {
-        ...prevValue,
-        [name]: value
-      };
-    });
-    debugger
-    if (name === 'type' && value === 'Full-Time') {
-      setOpen(true);
-    }
+
+
     console.log(data);
   }
 
@@ -115,6 +132,9 @@ function ServicesProvide(props) {
       });
     }
 
+  }
+  function saveDetails() {
+    saveToDatabase()
   }
 
   function editService(row) {
@@ -371,7 +391,7 @@ function ServicesProvide(props) {
     },
     button: {
       width: '100%',
-      height: '50px',
+      //height: '50px',
       background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
       color: 'white'
     },
@@ -427,6 +447,7 @@ function ServicesProvide(props) {
 
     setOpen(false);
   };
+  
 
   const classes = useStyles();
 
@@ -465,7 +486,7 @@ function ServicesProvide(props) {
 
           <Grid item xs='2' style={{ marginLeft: '15px' }}>
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-outlined-label">Select Location</InputLabel>
+              <InputLabel id="demo-simple-select-outlined-label">Select Preferance</InputLabel>
               <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
@@ -485,11 +506,11 @@ function ServicesProvide(props) {
             </FormControl>
           </Grid>
 
-          <Grid item xs='2' style={{ display: data.type === 'Full-Time' ? '' : 'none' }}>
+          <Grid item xs='2' style={{ marginLeft: '15px', display: data.type === 'Full-Time' ? '' : 'none' }}>
             <TextField className={classes.text} error={feesError} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label="Fees/day" variant="outlined" />
           </Grid>
 
-          <Grid item xs='2' style={{ marginRight: '8px', display: data.type === 'Full-Time' ? '' : 'none' }}>
+          <Grid item xs='2' style={{ marginLeft: '8px', display: data.type === 'Full-Time' ? '' : 'none' }}>
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="demo-simple-select-outlined-label">Working Days</InputLabel>
               <Select
@@ -510,7 +531,13 @@ function ServicesProvide(props) {
             </FormControl>
           </Grid>
 
+          <Grid item xs={2} style={{ margin: 'auto', marginLeft: '15px' }}>
+            <Button className={classes.button} disabled={!saveButtonEnable} onClick={(e) => saveDetails()} variant="contained" >
+              Save
+            </Button>
+          </Grid>
         </Grid>
+
         <Grid container >
           <Grid item xs={3} className={classes.grid}>
             <Grid container>
@@ -621,7 +648,7 @@ function ServicesProvide(props) {
 
 
           </Grid>
-          <Grid item xs='8'>
+          <Grid item xs={8} className={classes.grid}>
             <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
               <Table className={classes.table} aria-label="customized table">
                 <TableHead>

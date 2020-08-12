@@ -193,7 +193,7 @@ function LoggedIn(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
+  console.log('Path is:', path)
   return (
     <div className={classes.root}>
       <CssBaseline />
