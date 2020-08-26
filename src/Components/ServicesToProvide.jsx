@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../redux/user/user-selector';
 import { selectDropdownItems, selectServices, selectServiceType, selectSavedServices } from '../redux/service/service-selector';
-import { setServiceType, addService, setDropdown, removeService, clearDropdown, setSavedServices, setServicesProgress } from '../redux/service/service-actions';
+import { setServiceType, addService, setDropdown, removeService, clearDropdown, setSavedServices, setServicesProgress, clearService } from '../redux/service/service-actions';
 import { setCurrentUser, setUserServiceStatus } from '../redux/user/user-actions';
 import { Snackbar, withStyles, TableContainer, Paper, Table, TableHead, TableBody, TableCell, TableRow, TextField, Grid, FormControl, InputLabel, Select, MenuItem, makeStyles, Button, Typography } from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
@@ -19,21 +19,22 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import MuiAlert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { API } from "../API";
+import { setDate } from "date-fns/esm";
 
 
 function ServicesProvide(props) {
 
   const [data, setData] = useState({
     Id: '',
-    location: localStorage.getItem('location') || null,
-    service: null,
-    fees: localStorage.getItem('fees') || null,
-    type: localStorage.getItem('type') || null,
-    workingDays: localStorage.getItem('workingDays') || null,
+    location: localStorage.getItem('location') || '',
+    service: '',
+    fees: localStorage.getItem('fees') || '',
+    type: localStorage.getItem('type') || '',
+    workingDays: localStorage.getItem('workingDays') || '',
     otherService: null
   });
 
-  const { currentUser, AddToDropdown, clearDropdown, SetServiceType, setUserStatus, setSavedServices, savedServices } = props;
+  const { currentUser, AddToDropdown, clearDropdown, SetServiceType, setUserStatus, setSavedServices, savedServices, clearService } = props;
 
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(false);
@@ -45,8 +46,8 @@ function ServicesProvide(props) {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    const {type , location, fees, workingDays} = data
-
+    const { type, location, fees, workingDays } = data
+    
     setData(prevValue => {
       return {
         ...prevValue,
@@ -54,19 +55,20 @@ function ServicesProvide(props) {
       };
     });
 
-    if (name === 'type' && value === 'Full-Time') {
+    if (!type || !location || !fees || !workingDays) {
+      console.log('ssddsd')
+      setSaveButtonEnable(false)
+    }
+    else if (name === 'type' && value === 'Full-Time') {
       setOpen(true);
-      console.log(fees)
       setSaveButtonEnable(location && fees && fees !== 'null' && workingDays)
     }
-    else if(name === 'type' && value !== 'Full-Time'){
-      console.log('Location:', location)
-      console.log('Type:', type)
-      console.log('Disable:', location && !type)
+    else if (name === 'type' && value !== 'Full-Time') {
       setSaveButtonEnable(location && type)
     }
-    else{
-      setSaveButtonEnable(type && type !== 'Full-Time' ? location : location && fees && fees !== 'null' && workingDays)
+    else {
+      console.log('Save condition exeuted')
+      setSaveButtonEnable(type && type !== 'Full-Time' ? location : location && fees && workingDays)
     }
 
     if (name === 'service') {
@@ -132,12 +134,16 @@ function ServicesProvide(props) {
       });
     }
 
+    //clearService()
+
+
   }
   function saveDetails() {
-    saveToDatabase()
+    saveToDatabase(false)
   }
 
   function editService(row) {
+    
     if (row.type === 'Full-Time') {
       setData({
         Id: row.Id,
@@ -163,7 +169,7 @@ function ServicesProvide(props) {
     props.removeService(service);
   }
 
-  async function saveToDatabase() {
+  async function saveToDatabase(clearData) {
     var type = '';
     switch (data.type) {
       case 'hour':
@@ -257,6 +263,18 @@ function ServicesProvide(props) {
             props.setProgress(100);
           } else {
             props.setProgress(66);
+          }
+          clearService()
+          if(clearData){
+            setData({
+              Id: '',
+              service: '',
+              fees: '',
+              type: '',
+              location: '',
+              workingDays: ''
+        
+            })
           }
         } else {
           alert('unexpected error occured !');
@@ -447,241 +465,194 @@ function ServicesProvide(props) {
 
     setOpen(false);
   };
-  
+
 
   const classes = useStyles();
+  console.log(SavedServices)
+  return (
 
-  if (SavedServices.length === 0) {
-    return (
-
-      <div>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="info">
-            Note: Full-Time Service-Providers will have preferred working hours of 9:00 am to 6:30 pm .
+    <div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="info">
+          Note: Full-Time Service-Providers will have preferred working hours of 9:00 am to 6:30 pm .
         </Alert>
-        </Snackbar>
+      </Snackbar>
 
-        <Grid container>
-          <Grid item xs='2'>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-outlined-label">Select fees as per</InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                label="Select fees as per"
-                value={data.type}
-                name='type'
-                onChange={handleChange}
-                error={typeError}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value='hour'>hour</MenuItem>
-                <MenuItem value='assignment'>assignment</MenuItem>
-                <MenuItem value='Full-Time'>Full-Time</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs='2' style={{ marginLeft: '15px' }}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-outlined-label">Select Preferance</InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                label="Select Location"
-                value={data.location}
-                onChange={handleChange}
-                name='location'
-                error={locationError}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value='OffShore'>Any</MenuItem>
-                <MenuItem value='OnSite'>Onsite</MenuItem>
-                <MenuItem value='Remote'>Remote</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs='2' style={{ marginLeft: '15px', display: data.type === 'Full-Time' ? '' : 'none' }}>
-            <TextField className={classes.text} error={feesError} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label="Fees/day" variant="outlined" />
-          </Grid>
-
-          <Grid item xs='2' style={{ marginLeft: '8px', display: data.type === 'Full-Time' ? '' : 'none' }}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-outlined-label">Working Days</InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                label="Working Days"
-                value={data.workingDays}
-                onChange={handleChange}
-                name='workingDays'
-                error={locationError}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value='Monday_To_Friday'>Monday_To_Friday</MenuItem>
-                <MenuItem value='Monday_To_Saturday'>Monday_To_Saturday</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={2} style={{ margin: 'auto', marginLeft: '15px' }}>
-            <Button className={classes.button} disabled={!saveButtonEnable} onClick={(e) => saveDetails()} variant="contained" >
-              Save
-            </Button>
-          </Grid>
+      <Grid container>
+        <Grid item xs='2'>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">Select fees as per</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              label="Select fees as per"
+              value={data.type}
+              name='type'
+              onChange={handleChange}
+              error={typeError}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value='hour'>hour</MenuItem>
+              <MenuItem value='assignment'>assignment</MenuItem>
+              <MenuItem value='Full-Time'>Full-Time</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
 
-        <Grid container >
-          <Grid item xs={3} className={classes.grid}>
-            <Grid container>
+        <Grid item xs='2' style={{ marginLeft: '15px' }}>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">Select Preference</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              label="Select Location"
+              value={data.location}
+              onChange={handleChange}
+              name='location'
+              error={locationError}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value='OffShore'>Any</MenuItem>
+              <MenuItem value='OnSite'>Onsite</MenuItem>
+              <MenuItem value='Remote'>Remote</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
+        <Grid item xs='2' style={{ marginLeft: '15px', display: data.type === 'Full-Time' ? '' : 'none' }}>
+          <TextField className={classes.text} error={feesError} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label="Fees/day" variant="outlined" />
+        </Grid>
 
-              <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-outlined-label">Select Service</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    label="Select Service"
-                    value={data.service}
-                    onChange={handleChange}
-                    name='service'
-                    error={serviceError}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {props.dropdownList.map(item => (<MenuItem key={item.Id} value={item.Services}>{item.Services}</MenuItem>))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField className={classes.text} error={feesError} style={{ marginBottom: '10px', marginLeft: '8px', display: data.service === 'Others' ? '' : 'none' }} id="outlined-basic" name='otherService' onChange={handleChange} value={data.otherService} label='Other Service' variant="outlined" />
-              </Grid>
-              <Grid item xs={8}>
-                <TextField className={classes.text} error={feesError} style={{ marginBottom: '10px', marginLeft: '8px', display: data.type === 'Full-Time' ? 'none' : '' }} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label={`Fees/${data.type}`} variant="outlined" />
-              </Grid>
+        <Grid item xs='2' style={{ marginLeft: '8px', display: data.type === 'Full-Time' ? '' : 'none' }}>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">Working Days</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              label="Working Days"
+              value={data.workingDays}
+              onChange={handleChange}
+              name='workingDays'
+              error={locationError}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value='Monday_To_Friday'>Monday_To_Friday</MenuItem>
+              <MenuItem value='Monday_To_Saturday'>Monday_To_Saturday</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
-              <Grid item xs={12}>
-                <Button className={classes.button} style={{ width: '98%', marginLeft: '10px' }} onClick={addToList} variant="contained" >
-                  ADD TO LIST &#10095;
+        <Grid item xs={2} style={{ margin: 'auto', marginLeft: '15px' }}>
+          <Button className={classes.button} disabled={!saveButtonEnable} onClick={(e) => saveDetails()} variant="contained" >
+            Save
             </Button>
-              </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid container >
+        <Grid item xs={3} className={classes.grid}>
+          <Grid container>
+
+
+            <Grid item xs={12}>
+              <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">Select Service</InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  label="Select Service"
+                  value={data.service}
+                  onChange={handleChange}
+                  name='service'
+                  error={serviceError}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {props.dropdownList.map(item => (<MenuItem key={item.Id} value={item.Services}>{item.Services}</MenuItem>))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={8}>
+              <TextField className={classes.text} error={feesError} style={{ marginBottom: '10px', marginLeft: '8px', display: data.service === 'Others' ? '' : 'none' }} id="outlined-basic" name='otherService' onChange={handleChange} value={data.otherService} label='Other Service' variant="outlined" />
+            </Grid>
+            <Grid item xs={8}>
+              <TextField className={classes.text} error={feesError} style={{ marginBottom: '10px', marginLeft: '8px', display: data.type === 'Full-Time' ? 'none' : '' }} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label={`Fees/${data.type}`} variant="outlined" />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Button className={classes.button} style={{ width: '98%', marginLeft: '10px' }} onClick={addToList} variant="contained" >
+                ADD TO LIST &#10095;
+            </Button>
             </Grid>
           </Grid>
-          <Grid item xs={8} className={classes.grid}>
-            <Grid container>
-              {props.serviceList.map((item, index) => (
-                <Grid item xs='12' className={classes.grid} key={index}>
-                  <Paper className={classes.paper}>
-                    <Grid container>
-                      <Grid item xs='8'>
-                        <Typography variant='h6'>{item.service}</Typography>
-                        <Typography variant='body1'>Rs{item.fees} /{item.type === 'Full-Time' ? 'day' : item.type}</Typography>
-                      </Grid>
-                      <Grid item xs='4' style={{ textAlign: 'right', padding: '20px' }}>
-                        <EditIcon onClick={() => editService(item)} className={classes.icon} color='secondary' style={{ marginRight: '10px' }} />
-                        <DeleteIcon className={classes.icon} onClick={() => removeService(item)} />
-                      </Grid>
+        </Grid>
+        <Grid item xs={8} className={classes.grid}>
+          <Grid container>
+            {props.serviceList.map((item, index) => (
+              <Grid item xs='12' className={classes.grid} key={index}>
+                <Paper className={classes.paper}>
+                  <Grid container>
+                    <Grid item xs='8'>
+                      <Typography variant='h6'>{item.service}</Typography>
+                      <Typography variant='body1'>Rs{item.fees} /{item.type === 'Full-Time' ? 'day' : item.type}</Typography>
                     </Grid>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-            {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '100%', textAlign: 'right', paddingRight: '150px' }}>
-              <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { saveToDatabase(); }} variant="contained" startIcon={<SaveAltIcon />}>
-                Apply & Save
+                    <Grid item xs='4' style={{ textAlign: 'right', padding: '20px' }}>
+                      <EditIcon onClick={() => editService(item)} className={classes.icon} color='secondary' style={{ marginRight: '10px' }} />
+                      <DeleteIcon className={classes.icon} onClick={() => removeService(item)} />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+          {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '100%', textAlign: 'right', paddingRight: '150px' }}>
+            <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { saveToDatabase(true); }} variant="contained" startIcon={<SaveAltIcon />}>
+              Apply & Save
               </Button>
-            </div>}
-          </Grid>
+          </div>}
         </Grid>
-      </div>
+      </Grid>
 
 
-    );
-  } else {
-    return (
-      <div style={{ width: '100%', textAlign: 'center' }}>
-        <Grid container>
-          <Grid item xs='4'>
-            <Grid container>
-              <Grid item xs="12">
-                <FormControl variant="outlined" className={classes.formControl} >
-                  <InputLabel id="demo-simple-select-outlined-label">Select Service</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    label="Select Service"
-                    value={data.service}
-                    onChange={handleChange}
-                    name='service'
-                    error={serviceError}
-                    style={{ width: '80%' }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {props.dropdownList.map(item => (<MenuItem key={item.Id} value={item.Services}>{item.Services}</MenuItem>))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField className={classes.text} error={feesError} style={{ width: '80%', marginRight: '40px', marginBottom: '10px', display: data.service === 'Others' ? '' : 'none' }} id="outlined-basic" name='otherService' onChange={handleChange} value={data.otherService} label='Other Service' variant="outlined" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField className={classes.text} error={feesError} style={{ width: '80%', marginRight: '55px', marginBottom: '10px', display: data.type === 'Full-Time' ? 'none' : '' }} id="outlined-basic" name='fees' onChange={handleChange} value={data.fees} label={`Fees/${data.type === 'Full-Time' ? 'day' : data.type}`} variant="outlined" />
-              </Grid>
+      <Grid item xs={9} className={classes.grid}>
+        <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
+          <Table className={classes.table} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>#</StyledTableCell>
+                <StyledTableCell align="center">Services</StyledTableCell>
+                <StyledTableCell align="center">Fees (&#8377;)</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {SavedServices.map((row, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                    {index + 1}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.Service}</StyledTableCell>
+                  <StyledTableCell align="center">{row.Fees}</StyledTableCell>
 
-              <Grid item xs="12">
-                <Button className={classes.button} style={{ width: '80%', marginRight: '55px' }} onClick={addToList} variant="contained" >
-                  ADD TO LIST &#10095;
-      </Button>
-              </Grid>
-            </Grid>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+
+          </Table>
+
+        </TableContainer>
+      </Grid>
+
+    </div>
 
 
-          </Grid>
-          <Grid item xs={8} className={classes.grid}>
-            <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
-              <Table className={classes.table} aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>#</StyledTableCell>
-                    <StyledTableCell align="center">Services</StyledTableCell>
-                    <StyledTableCell align="center">Fees (&#8377;)</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {SavedServices.map((row, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell component="th" scope="row">
-                        {index + 1}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">{row.Service}</StyledTableCell>
-                      <StyledTableCell align="center">{row.Fees}</StyledTableCell>
-
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-
-              </Table>
-
-            </TableContainer>
-          </Grid>
-        </Grid>
-
-      </div>
-    )
-  }
-
-
+  );
 
 }
 
@@ -703,6 +674,7 @@ const mapDispatchToProps = dispatch => ({
   setUserStatus: type => dispatch(setUserServiceStatus(type)),
   setSavedServices: value => dispatch(setSavedServices(value)),
   setProgress: value => dispatch(setServicesProgress(value)),
+  clearService: () => dispatch(clearService())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicesProvide);

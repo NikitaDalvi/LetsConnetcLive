@@ -212,74 +212,6 @@ debugger
         }
     }
   }
-// if(selectedDays.length !== 0 ){
-//   switch (day) {
-//     case 'Sunday':
-//     const sundayExist=selectedDays.find(day =>  day.WorkingDays===7);
-//     if(sundayExist){
-//       setChecked(true);
-//       setExistence(true);
-//       setDisable(true);
-//     }
-//       setWeekDay('Sun');
-//       break;
-//       case 'Monday':
-//         const mondayExist=selectedDays.find(day =>  day.WorkingDays===1);
-//         if(mondayExist){
-//           setChecked(true);
-//           setExistence(true);
-//           setDisable(true);
-//         }
-//         setWeekDay('Mon');
-//         break;
-//       case 'Tuesday':
-//       const tuesdayExist=selectedDays.find(day =>  day.WorkingDays===2);
-//       if(tuesdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Tue');
-//         break;
-//       case 'Wednesday':
-//       const wednesdayExist=selectedDays.find(day =>  day.WorkingDays===3);
-//       if(wednesdayExist){
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Wed');
-//         break;
-//       case 'Thursday':
-//       const thursdayExist=selectedDays.find(day =>  day.WorkingDays===4);
-//       if(thursdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Thu');
-//         break;
-//       case 'Friday':
-//       const fridayExist=selectedDays.find(day =>  day.WorkingDays===5);
-//       if(fridayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Fri');
-//         break;
-//       case 'Saturday':
-//       const saturdayExist=selectedDays.find(day =>  day.WorkingDays===6);
-//       if(saturdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Sat');
-//         break;
-//     default:
-//
-//   }
-// }
 
 }
 
@@ -430,31 +362,3 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps,mapDispatchToProps)(DayTime);
 
 
-
-// <div className="form-row ml-4">
-// <div className="col-lg-3 ml-2" >
-//   <input name={this.props.day}  onClick={this.handleCheck} type="checkbox" className=" col-lg-1" style={{cursor:'pointer'}}/>
-//   <label className=" col-lg-3"  style={{fontSize:"20px", textAlign:"left", color:"#4B66EA"}}>{this.props.day}</label>
-// </div>
-// <div className="col-lg-8 form-row ml-5" id={this.props.day} >
-//   <div className="col-lg-5" style={{marginLeft:"20px"}}>
-//   <TimePicker
-//       name="startTime"
-//       onChange={this.onStartChange}
-//       value={this.state.startTime}
-//       disabled={this.state.checked===this.props.day? false:true}
-//     />
-//     </div>
-//     <span>:</span>
-//     <div className="col-lg-5">
-//     <TimePicker
-//     name="endTime"
-//       onChange={this.onEndChange}
-//       value={this.state.endTime}
-//       disabled={this.state.checked===this.props.day? false:true}
-//     />
-//       </div>
-//
-// </div>
-// </div>
-// <br/>

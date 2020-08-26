@@ -172,6 +172,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   // },[radius])
 
   const getNearbyExperts = async (data) => {
+    //data.Longitude = 18.499416
+    //data.Latitude =73.859024
     const res = await axios.post(`${API.URL}getNearbyServiceProviders`, data);
     return res;
   }

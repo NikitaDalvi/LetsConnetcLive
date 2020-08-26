@@ -20,7 +20,6 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import EditIcon from '@material-ui/icons/Edit';
-import { API } from '../API';
 
 
 
@@ -140,7 +139,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
     setData(prevValue => {
       return {
         ...prevValue,
-        [name]: value,
+        [name]: value
       };
     });
     console.log(data);
@@ -148,7 +147,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
   const handleClick = async () => {
     setLoading(true);
-    const res = await axios.post(`${API.URL}UpdateProfile`, data);
+    const res = await axios.post('https://localhost:44327/api/UpdateProfile', data);
     if (res != null) {
       console.log(res);
       if (res.data.responseCode === 200) {
@@ -165,7 +164,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
         if (address2.Address != '') {
           request.LocationDetails.push(address2);
         }
-        const result = await axios.post(`${API.URL}UpdateServiceProviderDescription`, request);
+        const result = await axios.post('https://localhost:44327/api/UpdateServiceProviderDescription', request);
         if (result) {
           if (result.data.output === true) {
             const editData = { FullName: data.FullName, EmailId: data.EmailId, ContactNo: data.ContactNo, Gender: data.Gender === 'Male' ? 1 : data.Gender === 'Female' ? 2 : 3, DOB: data.DOB, Description: data.Description };
@@ -262,7 +261,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
     //   }
     // );
 
-    const result = await axios.post(`${API.URL}UploadProfilePicture/${currentUser.Id}/6`, formdata)
+    const result = await axios.post(`https://localhost:44327/api/UploadProfilePicture/${currentUser.Id}/6`, formdata)
 
 
     if (result != null) {
@@ -286,7 +285,6 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
   useEffect(() => {
     if (currentUser != null) {
-      setLoading(true);
       const request = {
         UserId: currentUser.Id,
         ticket: currentUser.Ticket
@@ -294,75 +292,69 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
       getProfileDetails(request)
         .then(res => {
-          if (res.data.output) {
-            setData({
-              Id: res.data.output.UserBasicDetails.Id,
-              FullName: res.data.output.UserBasicDetails.FullName,
-              EmailId: res.data.output.UserBasicDetails.EmailId,
-              ContactNo: res.data.output.UserBasicDetails.ContactNo,
-              Gender: res.data.output.UserBasicDetails.Gender === 1 ? 'Male' : currentUser.Gender === 2 ? 'Female' : currentUser.Gender === 3 ? 'Others' : '',
-              Description: res.data.output.UserBasicDetails.Description,
-              ticket: currentUser.Ticket,
-              DOB: res.data.output.UserBasicDetails.DOB
-            });
-            if (res.data.output.LocationDetails.length !== 0) {
-              setAddress1(res.data.output.LocationDetails[0]);
-              setAdd1(res.data.output.LocationDetails[0].Address);
-              if (res.data.output.LocationDetails.length === 2) {
-                setAddress2(res.data.output.LocationDetails[1]);
-                setAdd2(res.data.output.LocationDetails[1].Address);
-              }
+          setData({
+            Id: res.data.output.UserBasicDetails.Id,
+            FullName: res.data.output.UserBasicDetails.FullName,
+            EmailId: res.data.output.UserBasicDetails.EmailId,
+            ContactNo: res.data.output.UserBasicDetails.ContactNo,
+            Gender: res.data.output.UserBasicDetails.Gender === 1 ? 'Male' : currentUser.Gender === 2 ? 'Female' : currentUser.Gender === 3 ? 'Others' : '',
+            Description: res.data.output.UserBasicDetails.Description,
+            ticket: currentUser.Ticket,
+            DOB: res.data.output.UserBasicDetails.DOB
+          });
+          if (res.data.output.LocationDetails.length !== 0) {
+            setAddress1(res.data.output.LocationDetails[0]);
+            setAdd1(res.data.output.LocationDetails[0].Address);
+            if (res.data.output.LocationDetails.length === 2) {
+              setAddress2(res.data.output.LocationDetails[1]);
+              setAdd2(res.data.output.LocationDetails[1].Address);
             }
-
-            const dateTime = new Date(res.data.output.UserBasicDetails.DOB);
-            setSelectedDate(dateTime);
-            const path = `${API.BASE_URL}${res.data.output.UserBasicDetails.DPPath}`
-            setPath(path);
-            setLoading(false);
           }
 
+          const dateTime = new Date(res.data.output.UserBasicDetails.DOB);
+          setSelectedDate(dateTime);
+          const path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
+          setPath(path);
         })
 
     }
   }, [currentUser])
 
   async function getProfileDetails(data) {
-    const result = await axios.post(`${API.URL}getProfileDetails`, data);
+    const result = await axios.post('https://localhost:44327/api/getProfileDetails', data);
     return result;
   }
 
   function checkvalidation() {
-   
-    if(data){
-      return data.Description 
-      &&data.Description.length > 0
-      && data.FullName
-      && data.FullName.length > 0
-      && data.Gender
-      && data.Gender.length > 0
-      && data.EmailId
-      && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
-      && data.ContactNo
-      && /^\d{10}$/.test(data.ContactNo)
-      && data.DOB
-      && data.DOB.length > 0
+
+    if (data) {
+      console.log('data',data)
+      console.log('UserType', userType)
+      return userType.toUpperCase() === 'SERVICE-PROVIDER' ?
+        (data.Description
+        && data.Description.length > 0) : true
+        && data.FullName
+        && data.FullName.length > 0
+        && data.Gender
+        && data.Gender.length > 0
+        && data.EmailId
+        && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
+        && data.ContactNo
+        && /^\d{10}$/.test(data.ContactNo)
+        && data.DOB
+        && data.DOB.length > 0
+        && userType ==='Customer' ?
+        (data.detailedAddress1
+        && data.detailedAddress1.length>0) : true
     }
-    else{
+    else {
+      console.log('data1')
       return false
     }
   }
 
-  /*const checkvalidation = () =>{
-    const{FullName,Gender,Description,EmailId,ContactNo,DOB} = inputText
-    return Description
-    &&/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
-    &&FullName
-    && /^\d{10}$/.test(data.ContactNo)
-    && DOB
-  }*/
 
   function handleAddressEdit(type) {
-
     debugger
     var address;
     if (type === 1) {
@@ -449,7 +441,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
                 />
               </Grid>
             </Grid>
-            <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide by giving your complete bio data ' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: 'SERVICE-PROVIDER' === userType.toUpperCase() ? '' : 'none' }} label="Description" />
+            <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: userType === 'Service-Provider' ? '' : 'none' }} label="Description" />
             {
               editable1 ?
                 (<Paper elevation={1} style={{ padding: '10px 10px', width: '400px', textAlign: 'left', margin: '8px 80px' }}>
@@ -505,62 +497,62 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
                     </Grid>
                   </Grid>
 
-                </Paper>) : (/*<Typography style={{margin:'10px 0'}} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={()=>{setEditable1(true);}}/></Typography>)}
+                </Paper>) : (<Typography style={{ margin: '10px 0',display: userType === 'Customer' ? '' : 'none' }} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={() => { setEditable1(true); }} /></Typography>)}
 
-  {
-editable2?
-    (<Paper elevation={1} style={{padding:'10px 10px',width:'400px',textAlign:'left',margin:'8px 80px'}}>
-   <PlacesAutocomplete
-value={add2}
-onChange={setAdd2}
-onSelect={handleSelect2}
->
+            {
+              editable2 ?
+                (<Paper elevation={1} style={{ padding: '10px 10px', width: '400px', textAlign: 'left', margin: '8px 80px' }}>
+                  <PlacesAutocomplete
+                    value={add2}
+                    onChange={setAdd2}
+                    onSelect={handleSelect2}
+                  >
 
-{({getInputProps, suggestions, getSuggestionItemProps, loading})=>(
-<div>
- <TextField id="standard-basic" multiline rows={3}   style={{width:'60%',marginBottom:'10px',display:userType==='Customer'?'':'none'}} label="Address 2"
-      {...getInputProps({
-        placeholder: 'Search Places ...',
-        className: 'location-search-input',
-      })}
-    />
-    <div className="autocomplete-dropdown-container">
-      {loading && <div>loading...</div>}
-      {suggestions.map(suggestion => {
-        const className = suggestion.active
-          ? 'suggestion-item--active'
-          : 'suggestion-item';
-        // inline style for demonstration purpose
-        const style = suggestion.active
-          ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-          : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                      <div>
+                        <TextField id="standard-basic" multiline rows={3} style={{ width: '60%', marginBottom: '10px' }} label="Address 2"
+                          {...getInputProps({
+                            placeholder: 'Search Places ...',
+                            className: 'location-search-input',
+                          })}
+                        />
+                        <div className="autocomplete-dropdown-container">
+                          {loading && <div>loading...</div>}
+                          {suggestions.map(suggestion => {
+                            const className = suggestion.active
+                              ? 'suggestion-item--active'
+                              : 'suggestion-item';
+                            // inline style for demonstration purpose
+                            const style = suggestion.active
+                              ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                              : { backgroundColor: '#ffffff', cursor: 'pointer' };
 
-          console.log(suggestion);
-        return (
-          <div
-            {...getSuggestionItemProps(suggestion, {
-              className,
-              style,
-            })}
-          >
-            <span>{suggestion.description}</span>
-          </div>
-        );
-      })}
-    </div>
-</div>
-)}
+                            console.log(suggestion);
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                  style,
+                                })}
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
 
-</PlacesAutocomplete>
-<Grid container>
-  <Grid item xs={8}>
-    <TextField name='detailedAddress2' value={data.detailedAddress2} onChange={handleChange} label='Flat-No./Block-No.' style={{width:'100%'}}/>
-  </Grid>
-  <Grid item xs ={4} style={{textAlign:'center',padding:"5px 0"}}>
-  <Button variant='contained' onClick={()=>{handleAddressEdit(2)}}>Done</Button>
-  </Grid>
-</Grid>
-</Paper>):(/*<Typography style={{margin:'10px 0'}}variant='body1'>Address 2:  {address2.Address}  <EditIcon onClick={()=>{setEditable2(true);}}/></Typography>*/ null)}
+                  </PlacesAutocomplete>
+                  <Grid container>
+                    <Grid item xs={8}>
+                      <TextField name='detailedAddress2' value={data.detailedAddress2} onChange={handleChange} label='Flat-No./Block-No.' style={{ width: '100%' }} />
+                    </Grid>
+                    <Grid item xs={4} style={{ textAlign: 'center', padding: "5px 0" }}>
+                      <Button variant='contained' onClick={() => { handleAddressEdit(2) }}>Done</Button>
+                    </Grid>
+                  </Grid>
+                </Paper>) : (null/*<Typography style={{ margin: '10px 0' }} variant='body1'>Address 2:  {address2.Address}  <EditIcon onClick={() => { setEditable2(true); }} /></Typography>*/)}
 
             <br />
           </MuiPickersUtilsProvider>

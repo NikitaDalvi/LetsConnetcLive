@@ -120,6 +120,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       nearbySPList:action.payload
     };
 
+    case serviceActionTypes.CLEAR_SERVICE:
+      return {
+        ...state,
+        serviceList: []
+      }
+
     default:
       return state;
   }

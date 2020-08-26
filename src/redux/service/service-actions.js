@@ -25,6 +25,10 @@ export const removeService = service => ({
   payload:service
 });
 
+export const clearService = () => ({
+  type: serviceActionTypes.CLEAR_SERVICE
+})
+
 export const addServiceTypes = type => ({
   type:serviceActionTypes.ADD_SERVICE_TYPES,
   payload:type
