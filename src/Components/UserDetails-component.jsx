@@ -109,9 +109,9 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
 
-  const [selectedDate, setSelectedDate] = React.useState(null);
-  console.log(useState)
-  console.log(setSelectedDate)
+  const [selectedDate, setSelectedDate] = React.useState(null)
+  const [selectedEndDate, setSelectedEndDate] = React.useState(null)
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
     const Date = moment(date).format('YYYY-MM-DD').toString();
@@ -121,6 +121,7 @@ function UserDetailPage({ expertId, currentUser }) {
         StartDate: Date
       };
     });
+
     if (expertDetails.BasicDetails.ServiceCharge === 1) {
       getAvailableSlots(date)
         .then(res => setTimeSlots(res.SlotList));
@@ -128,7 +129,9 @@ function UserDetailPage({ expertId, currentUser }) {
     console.log(bookAppointmentRequest);
   };
 
+
   const handleEndDateChange = (date) => {
+    setSelectedEndDate(date)
     const Date = moment(date).format('YYYY-MM-DD').toString();
     setBookAppointmentRequest(prevValue => {
       return {
@@ -136,6 +139,7 @@ function UserDetailPage({ expertId, currentUser }) {
         EndDate: Date
       };
     });
+    //console.log(bookAppointmentRequest.EndDate)
   }
 
   const getAvailableSlots = async (date) => {
@@ -209,6 +213,31 @@ function UserDetailPage({ expertId, currentUser }) {
       };
     });
   };
+
+  const handleCheckAvalibility = () => {
+    getAvailableSlotsFullTime()
+      .then(res => {
+        alert(res.Message)
+        //setTimeSlots(res.SlotList)
+      })
+      .catch(err => {
+        alert('Not Found')
+      });
+  }
+
+  const getAvailableSlotsFullTime = async () => {
+
+
+    const request = {
+      ServiceProviderId: expertId,
+      StartDate: bookAppointmentRequest.StartDate,
+      EndDate: bookAppointmentRequest.EndDate,
+      Ticket: currentUser.Ticket
+    };
+    const result = await axios.post(`${API.URL}GetAvailableFullTimeSlot`, request);
+    return result.data.output;
+  };
+
 
   const handleBooking = () => {
     if (bookAppointmentRequest.ServiceId !== null) {
@@ -363,6 +392,7 @@ function UserDetailPage({ expertId, currentUser }) {
                     <KeyboardDatePicker
                       style={{ width: '90%' }}
                       disableToolbar
+                      autoOk={true}
                       variant="inline"
                       format="dd/MM/yyyy"
                       formatDate={(date) => moment(new Date()).format('DD-MM-YYYY')}
@@ -396,10 +426,12 @@ function UserDetailPage({ expertId, currentUser }) {
                         <KeyboardDatePicker
                           style={{ width: '90%' }}
                           disableToolbar
+                          autoOk={true}
                           variant="inline"
                           format="dd/MM/yyyy"
                           onChange={handleEndDateChange}
                           formatDate={(date) => moment(new Date()).format('DD-MM-YYYY')}
+                          value={selectedEndDate}
                           margin="normal"
                           id="date-picker-inline"
                           label="Select End Date"
@@ -411,13 +443,17 @@ function UserDetailPage({ expertId, currentUser }) {
                   </Grid>
                 </Grid>
               </MuiPickersUtilsProvider>
-              <Grid item xs={6}>
-                <Button className={classes.button} onClick={handleBooking} variant="contained" >
-                  Check Avalibilty
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  {expertDetails.BasicDetails.ServiceCharge === 3 && <Button className={classes.button} onClick={handleCheckAvalibility} variant="contained" >
+                    Check Avalibilty
+                </Button>}
+                </Grid>
+                <Grid xs={6}>
+                  <Button className={classes.button} onClick={handleBooking} variant="contained" >
+                    BOOK NOW
           </Button>
-                <Button className={classes.button} onClick={handleBooking} variant="contained" >
-                  BOOK NOW
-          </Button>
+                </Grid>
 
               </Grid>
 
