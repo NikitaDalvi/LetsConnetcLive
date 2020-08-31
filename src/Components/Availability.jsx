@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 import React, { useState } from "react";
 import Heading from "./subComponents/page-headings";
 import { Link } from "react-router-dom";
@@ -20,17 +21,20 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
 
 
   const saveToDatabase = async () => {
+
     if (workingHours !== []) {
       const request = {
         BufferTiming: buffer,
         WorkingHours: workingHours,
         ticket: currentUser.Ticket
       };
-     
-      console.log(request)
-      return
+
+      console.log(request);
+      //return
       const res = await axios.post(`${API.URL}AddWorkingHours`, request);
       if (res) {
+        debugger;
+        console.log(res);
         if (res.data.responseCode === 200) {
           const requestData = {
             ServiceProviderId: currentUser.Id,
