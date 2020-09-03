@@ -355,7 +355,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
 
   function handleAddressEdit(type) {
-    debugger
+    
     var address;
     if (type === 1) {
       if (add1) {

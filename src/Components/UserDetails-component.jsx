@@ -52,7 +52,8 @@ function UserDetailPage({ expertId, currentUser }) {
     ServiceListDetails: [],
     Assignments: null,
     StartDate: null,
-    EndDate: null
+    EndDate: null,
+    WorkingDays:null
   });
 
   const [Slots, setSlots] = useState([]);
@@ -124,8 +125,9 @@ function UserDetailPage({ expertId, currentUser }) {
 
     if (expertDetails.BasicDetails.ServiceCharge === 1) {
       getAvailableSlots(date)
-        .then(res => setTimeSlots(res.SlotList));
+        .then(res => setTimeSlots(res && res.SlotList ? res.SlotList : []));
     }
+  
     console.log(bookAppointmentRequest);
   };
 
@@ -147,7 +149,8 @@ function UserDetailPage({ expertId, currentUser }) {
     const Date = moment(date).format('YYYY-MM-DD').toString();
     const request = {
       ServiceProviderId: expertId,
-      RequestingDate: Date
+      RequestingDate: Date,
+      ticket : currentUser.Ticket
     };
     const result = await axios.post(`${API.URL}GetAvailableSlotPerhr`, request);
     return result.data.output;
@@ -164,11 +167,12 @@ function UserDetailPage({ expertId, currentUser }) {
 
   const [allRequest, setAllRequest] = React.useState([]);
 
-  const onTimeSlotSelect = (startTime, endTime) => {
+  const onTimeSlotSelect = (startTime, endTime,timeslotno) => {
 
     const slot = {
       StartTime: startTime,
-      EndTime: endTime
+      EndTime: endTime,
+      TimeSlotNo:timeslotno
     };
 
     const slots = [...Slots];
@@ -218,7 +222,14 @@ function UserDetailPage({ expertId, currentUser }) {
     getAvailableSlotsFullTime()
       .then(res => {
         alert(res.Message)
+        setBookAppointmentRequest(previousValue => {
+          return {
+            ...previousValue,
+            WorkingDays : res.WorkingDays
+          }
+        })
         //setTimeSlots(res.SlotList)
+        
       })
       .catch(err => {
         alert('Not Found')
@@ -298,7 +309,7 @@ function UserDetailPage({ expertId, currentUser }) {
             Ticket: currentUser.Ticket,
             StartDate: bookAppointmentRequest.StartDate,
             WorkingDays: bookAppointmentRequest.WorkingDays,
-            EndDate: setBookAppointmentRequest.EndDate
+            EndDate: bookAppointmentRequest.EndDate
           };
           bookAppointment(request, URL)
             .then(res => {
@@ -408,7 +419,7 @@ function UserDetailPage({ expertId, currentUser }) {
                   </Grid>
                   <Grid item xs='6' style={{ padding: '30px 20px 0 0', textAlign: 'right', display: selectedDate !== null ? '' : 'none' }}>
                     {expertDetails.BasicDetails.ServiceCharge ? (expertDetails.BasicDetails.ServiceCharge === 1 ? timeSlots ? timeSlots.map((item, index) => <FormControlLabel
-                      onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime); }}
+                      onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime,item.TimeSlotNo); }}
                       key={index}
                       control={<Checkbox name="gilad" />}
                       label={`${item.StartTime} - ${item.EndTime}`}

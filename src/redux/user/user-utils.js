@@ -1,7 +1,7 @@
 /*jshint esversion:9*/
 
 export const ChangeUserServiceStatus = (currentUser,object) => {
-  debugger
+  
   const{type,ServiceCharge,ServiceGiven} = object;
   var chargeType = 0;
   var serviceType = 0;

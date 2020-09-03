@@ -197,7 +197,7 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
       alert('Adhaar Card document and Adhaar Card number is mandatory!')
       return;
     }
-    debugger
+  
     const allDocuments = [];
     let result = null;
     if (subsType === 'Individual') {

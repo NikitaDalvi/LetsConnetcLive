@@ -48,7 +48,7 @@ function RegistrationForm(props) {
   async function handleClick() {
     console.log('hit');
     const { name, email, password, confirmPassword, mobile, serviceTypeId } = inputText;
-    debugger
+    
 
     if (password === confirmPassword) {
       const registrationData = {

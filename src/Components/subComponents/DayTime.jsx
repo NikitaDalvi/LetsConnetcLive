@@ -141,7 +141,7 @@ const handleClick = () => {
       EndTime:`${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`
     }
   };
-debugger
+
   console.log(Slot);
   if(startTime === null || endTime === null){
     setError(true);
@@ -149,7 +149,7 @@ debugger
   }else{
     setError(false);
   }
-debugger
+
 if(timeslots.length < 2){
   console.log(slot);
 
@@ -191,7 +191,7 @@ useEffect(() => {
 useEffect(() => {
 
 if(day!=null){
-debugger
+
   if(workingHours.length!==0){
     const Day = workingHours.find(item => item.WorkingDays === day);
     if(Day!=null){
