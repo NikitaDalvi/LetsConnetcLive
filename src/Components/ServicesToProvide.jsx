@@ -43,6 +43,7 @@ function ServicesProvide(props) {
   const [typeError, setTypeError] = useState(false);
   const [SavedServices, setSaveServices] = useState([]);
   const [saveButtonEnable, setSaveButtonEnable] = useState(false)
+  const [showServiceAssignmentSection, setShowServiceAssignmentSection] = useState(false)
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -300,6 +301,8 @@ function ServicesProvide(props) {
         alert('unexpected error occured !');
       }
     }
+
+    setShowServiceAssignmentSection(true)
   }
 
   async function saveServices(postData) {
@@ -555,7 +558,7 @@ function ServicesProvide(props) {
         </Grid>
       </Grid>
 
-      <Grid container >
+      {showServiceAssignmentSection && <Grid container >
         <Grid item xs={3} className={classes.grid}>
           <Grid container>
 
@@ -618,10 +621,10 @@ function ServicesProvide(props) {
               </Button>
           </div>}
         </Grid>
-      </Grid>
+      </Grid>}
 
 
-      <Grid item xs={9} className={classes.grid}>
+      {/*<Grid item xs={9} className={classes.grid}>
         <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
@@ -647,8 +650,7 @@ function ServicesProvide(props) {
           </Table>
 
         </TableContainer>
-      </Grid>
-
+              </Grid>*/}
     </div>
 
 

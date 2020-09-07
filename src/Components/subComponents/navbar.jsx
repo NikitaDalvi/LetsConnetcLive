@@ -177,7 +177,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
               <div>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/'); setIsHome(true); }}>Home</Button>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/About'); setIsHome(false); }}>About</Button>
-                <Button className={classes.commonButton} color="inherit">Services</Button>
+                {/*<Button className={classes.commonButton} color="inherit">Services</Button>*/}
                 <Button aria-controls="simple-menu" name='btn-register' aria-haspopup="true" className={classes.userButton} color="inherit" onClick={(event) => { handleClick(event); }}>Register</Button>
                 <Button aria-controls="simple-menu" name='btn-login' aria-haspopup="true" className={classes.userButton} color="inherit" onClick={(event) => { handleClick(event); }}>Login</Button>
                 <Menu
@@ -233,64 +233,3 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));
 
 
 
-// <nav className="navbar navbar-expand-lg navbar-light bg-light">
-// <a className="navbar-brand" href="#">Let Network</a>
-// <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-//   <span className="navbar-toggler-icon"></span>
-// </button>
-// <div className="collapse navbar-collapse " id="navbarNav">
-// { currentUser !== null?
-// (  <ul className="navbar-nav justify-content-end">
-//
-//  <p className="h4 " style={{textAlign:"right", marginTop:"30px"}}><span className='lead'> Welcome</span>,{currentUser.FullName}</p>
-//      <li class="nav-item dropdown">
-//          <button class="btn dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-//            <img alt="user" src={userIcon} style={{width:"50px", borderRadius:"100%"}}/>
-//          </button>
-//          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-//            <a class="dropdown-item" onClick={()=>history.push("/UserPage/ServiceProvider/UserProfile")}>Profile</a>
-//            <div class="dropdown-divider"></div>
-//            <a class="dropdown-item" onClick={goToHome}>Logout</a>
-//          </div>
-//        </li>
-//      </ul>)
-// :
-//
-//
-//   (<ul className="navbar-nav justify-content-end">
-//   <Link to="/" style={{textDecoration: "none"}}>
-//   <Navitem  Id="homeBtn" name="Home" href="#"/>
-//   </Link>
-//   <Link style={{textDecoration: "none"}}>
-//   <Navitem  Id="aboutBtn" name="About" href="#"/>
-//   </Link>
-//   <Link style={{textDecoration: "none"}}>
-//   <Navitem  Id="servicesBtn" name="Services" href="#"/>
-//   </Link>
-//
-//   <li class="nav-item dropdown">
-//       <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-//         Login
-//       </a>
-//       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-//         <a class="dropdown-item" href="/Login=ServiceProvider">Service-Provider</a>
-//         <div class="dropdown-divider"></div>
-//         <a class="dropdown-item" href="/Login=Customer">Customer</a>
-//       </div>
-//     </li>
-//     <li class="nav-item dropdown">
-//         <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-//           Register
-//         </a>
-//         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-//           <a class="dropdown-item" href="/ProfessionalForm" >Service-Provider</a>
-//           <div class="dropdown-divider"></div>
-//           <a class="dropdown-item" href="/CustomerForm">Customer</a>
-//         </div>
-//
-//       </li>
-//   </ul>)
-// }
-// </div>
-//
-// </nav>

@@ -443,18 +443,19 @@ function ServiceRequest(props) {
       const today = formatDate(new Date());
       setToday(today);
       GetRequests(request)
-      .then(res => {setNewRequests(res.NewReqest);
-setConfirmedRequests(res.OnBoardedRequest);
-      });
+        .then(res => {
+          setNewRequests(res && res.NewReqest);
+          setConfirmedRequests(res && res.OnBoardedRequest);
+        });
     }
-  },[currentUser]);
+  }, [currentUser]);
 
-    async function GetRequests(data){
-      const result = await axios.post(`${API.URL}RequestListByServiceProviderId`,data);
-      console.log(result);
-      return result.data.output;
-    }
- 
+  async function GetRequests(data) {
+    const result = await axios.post(`${API.URL}RequestListByServiceProviderId`, data);
+    console.log(result);
+    return result.data.output;
+  }
+
   function formatDate(date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -598,7 +599,7 @@ setConfirmedRequests(res.OnBoardedRequest);
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={3}>
+        {/*<Grid item xs={3}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
@@ -612,7 +613,7 @@ setConfirmedRequests(res.OnBoardedRequest);
               </div>
             </CardContent>
           </Card>
-        </Grid>
+  </Grid>*/}
         <Modal
           open={open}
           onClose={handleClose}
