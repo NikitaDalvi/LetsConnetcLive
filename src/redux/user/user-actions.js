@@ -51,6 +51,7 @@ export const setDashboardDetails = object => ({
   payload:object
 });
 
+
 export const setProfessionalList = value => ({
   type:UserActionTypes.SET_PROFESSIONAL_LIST,
   payload:value

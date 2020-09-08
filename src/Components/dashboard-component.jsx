@@ -18,11 +18,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-
-
 const Dashboard = (props) => {
   const [dashboardDetails, setDashboardDetails] = useState({});
+  const [dashboardCustomerDetails,setdashboardCustomerDetails]=useState({});
   const { currentUser, dashBoardCounts, setDashBoardCounts, userType } = props;
 
   useEffect(() => {
@@ -36,18 +34,18 @@ const Dashboard = (props) => {
           .then(res => { console.log(res.data.output); setDashboardDetails(res.data.output) })
           .catch(error => alert('Error from Dashboard details api'));
       }
+      else if(userType === 'Customer') {
+        axios.post(`${API.URL}GetSEDashBoard`, data)
+          .then(res => { console.log(res.data.output); setdashboardCustomerDetails(res.data.output) })
+          .catch(error => alert('Error from Dashboard details api'));
+      }
+      
     }
 
-
-
-    // var result =  getDashboardDetails(data);
-    // console.log(result);
   }, [currentUser, setDashBoardCounts, userType]);
 
-  // async function getDashboardDetails(data){
-  //   var result = await axios.post('https://localhost:44327/api/getSPDashboardDetails',data);
-  //   return result;
-  // }
+
+ 
 
   const classes = useStyles();
   if (props.userType === 'Service-Provider') {
@@ -93,26 +91,29 @@ const Dashboard = (props) => {
 
     );
   } else {
+    console.log(dashboardCustomerDetails)
     return (
       <div>
         <Container>
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
-              <DashboardCard color='#EA4335' caption="Nearby Experts" name="NEARBY EXPERTS" quantity='10' />
+              <DashboardCard color='#EA4335' caption="Nearby Experts" name="NEARBY EXPERTS" quantity={dashboardCustomerDetails !== null ? dashboardCustomerDetails.NearByExperts:'10'} />
             </Grid>
             <Grid item xs={3}>
-              <DashboardCard color='#4285F4' caption="Service Requests" name="CONFIRMED" quantity='50' />
+              <DashboardCard color='#4285F4' caption="Service Requests" name="CONFIRMED" quantity={dashboardCustomerDetails !== null ? dashboardCustomerDetails.Confirmed:'10'} />
 
             </Grid>
             <Grid item xs={3}>
-              <DashboardCard color='#34A853' caption="Service Request" name="PENDING" quantity='999' />
+              <DashboardCard color='#34A853' caption="Service Request" name="PENDING" quantity={dashboardCustomerDetails !== null ? dashboardCustomerDetails.Pending:'10'} />
             </Grid>
 
             <Grid item xs={3}>
-              <DashboardCard color='#B887F8' caption="Service Request" name="PAST" quantity='999' />
+              <DashboardCard color='#B887F8' caption="Service Request" name="PAST" quantity={dashboardCustomerDetails !== null ? dashboardCustomerDetails.Past:'10'} />
             </Grid>
-            <Grid item xs={4}>
-              <DashboardCard color='#FFBE57' caption='Rating and Review' name="RATING AND REVIEW" rating='4.5 &#10032;' quantity='5,000' />
+            <Grid item xs={3}>
+              <DashboardCard color='#FFBE57' caption='Rating and Review' name="RATING AND REVIEW" 
+              rating={dashboardCustomerDetails !== null ? `${dashboardCustomerDetails.AvgRating}` : '5 &#10032;'} 
+              quantity={dashboardCustomerDetails !== null ? dashboardCustomerDetails.ReviewCount : '50'} />
             </Grid>
           </Grid>
         </Container>

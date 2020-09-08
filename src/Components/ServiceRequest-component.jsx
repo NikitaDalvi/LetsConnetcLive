@@ -558,7 +558,8 @@ function ServiceRequest(props) {
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
-              title={props.userType === 'Service-Provider' ? "New" : 'Pending'}
+              title={props.userType === 'Service-Provider' ? "New" : ''}
+              title={props.userType === 'Customer' ? "Pending" : ''}
               style={{ backgroundColor: '#EA4335' }}
             />
             <CardContent className={classes.CardContent}>
