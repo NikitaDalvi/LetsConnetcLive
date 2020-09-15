@@ -21,6 +21,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { API } from "../API";
 import { setDate } from "date-fns/esm";
 
+let tempAddToListData = []
 
 function ServicesProvide(props) {
 
@@ -57,18 +58,20 @@ function ServicesProvide(props) {
     });
 
     if (!type || !location || !fees || !workingDays) {
-      console.log('ssddsd')
+      console.log('AAAA')
       setSaveButtonEnable(false)
     }
     else if (name === 'type' && value === 'Full-Time') {
       setOpen(true);
+      console.log('BBBB')
       setSaveButtonEnable(location && fees && fees !== 'null' && workingDays)
     }
     else if (name === 'type' && value !== 'Full-Time') {
+      console.log('CCCC')
       setSaveButtonEnable(location && type)
     }
     else {
-      console.log('Save condition exeuted')
+      console.log('DDDD')
       setSaveButtonEnable(type && type !== 'Full-Time' ? location : location && fees && workingDays)
     }
 
@@ -115,6 +118,9 @@ function ServicesProvide(props) {
     }
 
     props.AddService(data);
+
+    tempAddToListData.push(data)
+    console.log(tempAddToListData)
 
     if (data.type === 'Full-Time') {
       setData({
@@ -194,7 +200,7 @@ function ServicesProvide(props) {
       services: [],
       ticket: currentUser.Ticket
     };
-    props.serviceList.map(service => {
+    /*props.serviceList.map(service => {
 
       const entry = {
         ServiceId: service.Id,
@@ -204,7 +210,20 @@ function ServicesProvide(props) {
       };
 
       postData.services.push(entry);
+    });*/
+    let postServicesArray = []
+    tempAddToListData.map(service => {
+
+      const entry = {
+        ServiceId: service.Id,
+        ServiceTypeId: props.serviceType,
+        ServiceProviderId: currentUser.Id,
+        Fees: service.fees
+      };
+
+      postServicesArray.push(entry);
     });
+    postData.services = postServicesArray
 
     if (type === 'Full_Time') {
       var days = 0;
@@ -212,12 +231,7 @@ function ServicesProvide(props) {
         WorkingHours: [],
         ticket: currentUser.Ticket
       }
-      // var hoursData = {
-      //   ServiceProviderId: currentUser.Id,
-      //   ServiceTypeId: props.serviceType,
-      //   WorkingDays: null,
-      //   TimeSlots: []
-      // }
+     
       const Timeslot = {
         StartTime: '9:00',
         EndTime: '18:30',
@@ -281,7 +295,7 @@ function ServicesProvide(props) {
           alert('unexpected error occured !');
         }
       } else {
-        alert('unexpected error occured !');
+        alert('unexpected error occured !!');
       }
     } else {
       const result = await saveServices(postData);
@@ -298,7 +312,7 @@ function ServicesProvide(props) {
           props.setProgress(34);
         }
       } else {
-        alert('unexpected error occured !');
+        alert('unexpected error occured !!!');
       }
     }
 
@@ -313,6 +327,7 @@ function ServicesProvide(props) {
       if (res.data) {
         if (res.data.responseCode === 200) {
           console.log('hit');
+          tempAddToListData = []
           return "success";
         } else {
           return 'fail';
@@ -339,6 +354,10 @@ function ServicesProvide(props) {
   useEffect(() => {
     localStorage.setItem('location', data.location);
     localStorage.setItem('type', data.type);
+    
+    if(data && data.location && data.type)
+      setSaveButtonEnable(true)
+
     if (data.type === 'Full-Time') {
       localStorage.setItem('fees', data.fees);
       localStorage.setItem('workingDays', data.workingDays);
@@ -471,7 +490,7 @@ function ServicesProvide(props) {
 
 
   const classes = useStyles();
-  console.log(SavedServices)
+  
   return (
 
     <div>
