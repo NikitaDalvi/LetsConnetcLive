@@ -230,7 +230,7 @@ function RegistrationForm(props) {
                 />
               </Grid>
               <Grid item xs={isMobile ? 12 : 5} style={{ paddingTop: '10px' }}>
-                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '15px', fontWeight: 'bold', textDecoration: 'underline' }}>Terms and Conditions.</span></p>
+                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '13px', fontWeight: 'bold', textDecoration: 'underline' }}>Terms & Conditions.</span></p>
               </Grid>
             </Grid>
             <Button type='button' disabled={!checkForValidation()} onClick={handleClick} className={classes.btnSignUp}>Sign Up</Button>

@@ -624,7 +624,7 @@ function ServicesProvide(props) {
       </Grid>}
 
 
-      {/*<Grid item xs={9} className={classes.grid}>
+      <Grid item xs={9} className={classes.grid}>
         <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
@@ -650,7 +650,7 @@ function ServicesProvide(props) {
           </Table>
 
         </TableContainer>
-              </Grid>*/}
+              </Grid>
     </div>
 
 

@@ -542,6 +542,7 @@ function ServiceRequest(props) {
     </div>
   );
 
+  console.log(confirmedRequests);
   return (
     <div>
       <AppBar position="static" style={{ borderRadius: '5px', height: '60px', backgroundColor: 'white' }}>
@@ -558,16 +559,15 @@ function ServiceRequest(props) {
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
-              title={props.userType === 'Service-Provider' ? "New" : ''}
-              title={props.userType === 'Customer' ? "Pending" : ''}
-              style={{ backgroundColor: '#EA4335' }}
+              title={props.userType==='Service-Provider'?"New":'Pending'}
+              style={{backgroundColor:'#EA4335'}}
             />
             <CardContent className={classes.CardContent}>
-
               <div>
                 {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} />))}
               </div>
             </CardContent>
+            
           </Card>
         </Grid>
         <Grid item xs={3}>
