@@ -58,24 +58,31 @@ function ServicesProvide(props) {
     });
 
     if (!type || !location || !fees || !workingDays) {
-      console.log('AAAA')
+      
+      console.log("AAA")
       setSaveButtonEnable(false)
     }
     else if (name === 'type' && value === 'Full-Time') {
+      console.log("bbb")
       setOpen(true);
-      console.log('BBBB')
+    
       setSaveButtonEnable(location && fees && fees !== 'null' && workingDays)
     }
     else if (name === 'type' && value !== 'Full-Time') {
-      console.log('CCCC')
+      console.log("ccc")
+      
       setSaveButtonEnable(location && type)
     }
     else {
-      console.log('DDDD')
+      console.log("ddd")
+     
       setSaveButtonEnable(type && type !== 'Full-Time' ? location : location && fees && workingDays)
     }
+    //setSaveButtonEnable(false)
 
     if (name === 'service') {
+      console.log("eee")
+      
       const service = props.dropdownList.find(service => service.Services === value);
       setData(prevValue => {
         return {
@@ -85,12 +92,14 @@ function ServicesProvide(props) {
       });
     }
 
-
+    
     console.log(data);
+ 
   }
 
 
   function addToList() {
+   
     // setRow(prevValue => [...prevValue, data]);
     if (data.location === '') {
       setLocationError(true);
@@ -141,11 +150,13 @@ function ServicesProvide(props) {
       });
     }
 
+    
     //clearService()
 
 
   }
   function saveDetails() {
+    setSaveButtonEnable(false)
     saveToDatabase(false)
   }
 
@@ -317,6 +328,9 @@ function ServicesProvide(props) {
     }
 
     setShowServiceAssignmentSection(true)
+    setSaveButtonEnable(false)
+  
+  
   }
 
   async function saveServices(postData) {
@@ -335,6 +349,7 @@ function ServicesProvide(props) {
       }
     }
     console.log(res);
+    setSaveButtonEnable(false)
   }
 
   async function saveWorkingHours(workingHours) {
@@ -361,6 +376,7 @@ function ServicesProvide(props) {
     if (data.type === 'Full-Time') {
       localStorage.setItem('fees', data.fees);
       localStorage.setItem('workingDays', data.workingDays);
+      
     }
   }, [data]);
 
@@ -538,7 +554,7 @@ function ServicesProvide(props) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value='OffShore'>Any</MenuItem>
+              <MenuItem value='OffShore'>MyOffice</MenuItem>
               <MenuItem value='OnSite'>Onsite</MenuItem>
               <MenuItem value='Remote'>Remote</MenuItem>
             </Select>
@@ -643,7 +659,7 @@ function ServicesProvide(props) {
       </Grid>}
 
 
-      <Grid item xs={9} className={classes.grid}>
+      {showServiceAssignmentSection &&<Grid item xs={9} className={classes.grid}>
         <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
@@ -669,7 +685,7 @@ function ServicesProvide(props) {
           </Table>
 
         </TableContainer>
-              </Grid>
+              </Grid>}
     </div>
 
 

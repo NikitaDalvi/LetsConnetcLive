@@ -18,11 +18,10 @@ import { v4 as uuidv4 } from 'uuid';
 function DayTime({workingHours,currentUser,serviceTypeId,addWorkingHours,day,removeTimeSlot,alert,savedDays}){
 
 const [slot,setSlot] = useState({
-  ServiceProviderId:'',
-  ServiceTypeId:'',
+ // ServiceProviderId:'',
+ // ServiceTypeId:'',
   WorkingDays:'',
   TimeSlotDetails:{
-    TimeslotId:'',
     StartTime:'',
     StartAMPM:'',
     EndTime:'',
@@ -52,11 +51,11 @@ const handleCheck = (event) => {
   var name = event.target.name;
 
   if(checkBox.checked){
-    setSlot(prevValue => {return {...prevValue,WorkingDays:name};});
+    setSlot(prevValue => {return {...prevValue,WorkingDays: Number(name)};});
     setChecked(true);
     setDisable(false);
   }else{
-    setSlot(prevValue => {return {...prevValue,WorkingDays:''};});
+    setSlot(prevValue => {return {...prevValue,WorkingDays: 0};});
       setChecked(false);
     setDisable(true);
   }
@@ -136,7 +135,6 @@ const handleClick = () => {
   const Slot = {
     ...slot,
     TimeSlotDetails:{
-      TimeslotId:slot.TimeSlotDetails.TimeslotId,
       StartTime:`${slot.TimeSlotDetails.StartTime} ${slot.TimeSlotDetails.StartAMPM}`,
       EndTime:`${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`
     }
@@ -204,7 +202,7 @@ if(day!=null){
         setDisable(false);
 
         if(savedDays.length !== 0){
-          const exist = savedDays.find(Day => Day === day);
+          const exist = savedDays.find(Day => Day == day);
           if(exist){
             setExistence(true);
             setDisable(true);
@@ -253,7 +251,7 @@ const classes = useStyles();
        />
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{width:'50%',margin:'8px 10px 5px 10px'}} variant='h5'>{day === 'Monday'?'Mon':day==='Tuesday'?'Tue':day==='Wednesday'?'Wed':day==='Thursday'?'Thu':day === 'Friday'?'Fri':day==='Saturday'?'Sat':day==='Sunday'?'Sun':''}</Typography>
+            <Typography style={{width:'50%',margin:'8px 10px 5px 10px'}} variant='h5'>{day == 1 ?'Mon':day== 2 ? 'Tue': day == 3 ? 'Wed': day == 4 ?'Thu':day == 5 ?'Fri':day == 6 ?'Sat': day == 7 ? 'Sun': 0}</Typography>
           </Grid>
         </Grid>
       </Grid>

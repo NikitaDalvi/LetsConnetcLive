@@ -1,89 +1,118 @@
-/*jshint esversion: 9*/
 import React from "react";
 import UploadItem from "./subComponents/DocumentUploadItem";
 import EmployeeList from "./subComponents/EmployeeList";
-import { Typography, makeStyles, Grid, Button, Container } from '@material-ui/core';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect';
-import { selectUserType, selectRegisteredUser, selectSubscriptionType } from '../redux/user/user-selector';
-import { setRegisteredUser, setProgress, setCurrentUser, setUserStatus, setUserType } from '../redux/user/user-actions';
+import {
+  Typography,
+  makeStyles,
+  Grid,
+  Button,
+  Container,
+} from "@material-ui/core";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { createStructuredSelector } from "reselect";
+import {
+  selectUserType,
+  selectRegisteredUser,
+  selectSubscriptionType,
+} from "../redux/user/user-selector";
+import {
+  setRegisteredUser,
+  setProgress,
+  setCurrentUser,
+  setUserStatus,
+  setUserType,
+} from "../redux/user/user-actions";
 import { API } from "../API";
 
-
-function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId, setProgress, setUser, setUserStatus, setUserType }) {
+function DocumentUpload({
+  userType,
+  history,
+  subsType,
+  user,
+  setRegisteredUserId,
+  setProgress,
+  setUser,
+  setUserStatus,
+  setUserType,
+}) {
   var SPitem = [];
-  if (subsType === 'Individual') {
-    
-    
-    SPitem = ["Adhaar Card","Pan Card","CA Certificate"];
+ 
+  if (subsType === "Individual") {
+    SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
   } else {
-    SPitem = ["Company PAN Card", "Incorporation Certificate/Incorporation proof", "Udhyog Adhaar", "CA Certificate"];
-    
+    SPitem = [
+      "Company PAN Card",
+      "Incorporation Certificate/Incorporation proof",
+      "Udhyog Adhaar",
+      "CA Certificate",
+    ];
   }
-  
+
   var Items;
 
   Items = SPitem;
 
   const [validation, setValidation] = React.useState(true);
 
-  const [incorporationCertificate, setIncorporationCertificate] = React.useState({
+  const [
+    incorporationCertificate,
+    setIncorporationCertificate,
+  ] = React.useState({
     file: null,
     type: 5,
-    number: ''
+    number: "",
   });
 
   const [AdhaarCard, setAdhaarCard] = React.useState({
     file: null,
     type: 1,
-    number: ''
+    number: "",
   });
-
 
   const [CACertificate, setCACertificate] = React.useState({
     file: null,
     type: 4,
-    number: ''
+    number: "",
   });
 
   const [panCard, setPanCard] = React.useState({
     file: null,
     type: 2,
-    number: ''
+    number: "",
   });
 
   const [udyogAdhar, setUdyogAdhar] = React.useState({
     file: null,
     type: 7,
-    number: ''
+    number: "",
   });
 
   function handleChange(event, id) {
-    console.log('called');
+    console.log("called");
     const { name, value } = event.target;
 
-    const item = Items.filter((i, index) => { return index === id; });
+    const item = Items.filter((i, index) => {
+      return index === id;
+    });
     console.log(item[0]);
-
 
     switch (item[0]) {
       case "Incorporation Certificate/Incorporation proof":
-        if (name === 'file') {
+        if (name === "file") {
           let file = event.target.files[0];
-          setIncorporationCertificate(prevValue => {
+          setIncorporationCertificate((prevValue) => {
             return {
               ...prevValue,
-              file: file
+              file: file,
             };
           });
-
         } else {
-          setIncorporationCertificate(prevValue => {
+          setIncorporationCertificate((prevValue) => {
             console.log(prevValue.number);
             return {
               ...prevValue,
-              number: value
+              number: value,
             };
           });
         }
@@ -91,22 +120,21 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
         break;
 
       case "Adhaar Card":
-        if (name === 'file') {
+        if (name === "file") {
           let file = event.target.files[0];
           console.log(file.name);
-          setAdhaarCard(prevValue => {
+          setAdhaarCard((prevValue) => {
             return {
               ...prevValue,
-              file: file
+              file: file,
             };
           });
-
         } else {
-          setAdhaarCard(prevValue => {
+          setAdhaarCard((prevValue) => {
             console.log(prevValue.number);
             return {
               ...prevValue,
-              number: value
+              number: value,
             };
           });
         }
@@ -114,21 +142,20 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
         break;
 
       case "CA Certificate":
-        if (name === 'file') {
+        if (name === "file") {
           let file = event.target.files[0];
-          setCACertificate(prevValue => {
+          setCACertificate((prevValue) => {
             return {
               ...prevValue,
-              file: file
+              file: file,
             };
           });
-
         } else {
-          setCACertificate(prevValue => {
+          setCACertificate((prevValue) => {
             console.log(prevValue.number);
             return {
               ...prevValue,
-              number: value
+              number: value,
             };
           });
         }
@@ -137,20 +164,20 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
 
       case "Company PAN Card":
       case "Pan Card":
-        if (name === 'file') {
+        if (name === "file") {
           let file = event.target.files[0];
           console.log(file);
-          setPanCard(prevValue => {
+          setPanCard((prevValue) => {
             return {
               ...prevValue,
-              file: file
+              file: file,
             };
           });
         } else {
-          setPanCard(prevValue => {
+          setPanCard((prevValue) => {
             return {
               ...prevValue,
-              number: value
+              number: value,
             };
           });
           console.log(panCard);
@@ -158,66 +185,68 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
 
         break;
       case "Udhyog Adhaar":
-        if (name === 'file') {
+        if (name === "file") {
           let file = event.target.files[0];
-          setUdyogAdhar(prevValue => {
+          setUdyogAdhar((prevValue) => {
             return {
               ...prevValue,
-              file: file
+              file: file,
             };
           });
         } else {
-          setUdyogAdhar(prevValue => {
+          setUdyogAdhar((prevValue) => {
             return {
               ...prevValue,
-              number: value
+              number: value,
             };
           });
         }
-
         break;
       default:
-
     }
   }
 
-
   React.useEffect(() => {
     if (user) {
-      setUserType('Service-Provider');
+      setUserType("Service-Provider");
       setProgress(100);
     }
-  }, [setProgress, user])
-
-
-
+  }, [setProgress, user]);
 
   const uploadDocuments = () => {
-    if (subsType==='Individual' && (AdhaarCard.file === null || AdhaarCard.number === '')) {
-      alert('Adhaar Card document and Adhaar Card number is mandatory!')
+    if (
+      userType === "Individual" &&
+      (AdhaarCard.file === null || AdhaarCard.number === "")
+    ) {
+      alert("Adhaar Card document and Adhaar Card number is mandatory!");
       return;
     }
-  
+
     const allDocuments = [];
     let result = null;
-    if (subsType === 'Individual') {
+    if (userType === "Individual") {
       allDocuments.push(AdhaarCard, panCard, CACertificate);
-
     } else {
-      allDocuments.push(incorporationCertificate, panCard, udyogAdhar, CACertificate);
+      allDocuments.push(
+        incorporationCertificate,
+        panCard,
+        udyogAdhar,
+        CACertificate
+      );
     }
 
     console.log(allDocuments);
-    allDocuments.map(async document => {
+    allDocuments.map(async (document) => {
       let formdata = new FormData();
-      formdata.append('Files', document.file);
-      formdata.append('AddedById', user.Id);
-      formdata.append('DocumentType', document.type);
-      formdata.append('DocumentNumber', document.number);
-      result = await fetch(`${API.URL}UploadDocuments/${user.Id}/${document.type}/${document.number}`,
+      formdata.append("Files", document.file);
+      formdata.append("AddedById", user.Id);
+      formdata.append("DocumentType", document.type);
+      formdata.append("DocumentNumber", document.number);
+      result = await fetch(
+        `${API.URL}UploadDocuments/${user.Id}/${document.type}/${document.number}`,
         {
-          method: 'POST',
-          body: formdata
+          method: "POST",
+          body: formdata,
         }
       );
       let res = await result.json();
@@ -226,64 +255,82 @@ function DocumentUpload({ userType, history, subsType, user, setRegisteredUserId
         console.log(res);
         setUser(user);
         if (user.UserRole !== 6) {
-          history.push('/UserPage/ServiceProvider/Dashboard');
+          history.push("/UserPage/ServiceProvider/Dashboard");
         } else {
-          history.push('/UserPage/SPAdmin/MyEmployees');
+          history.push("/UserPage/SPAdmin/MyEmployees");
         }
       }
 
       console.log(res);
     });
+  };
 
-  }
-
-
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme) => ({
     title: {
-      textAlign: 'center'
+      textAlign: "center",
     },
     btnUpload: {
       margin: theme.spacing(1),
-      width: '200px',
-      fontSize: '12px',
-      background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-      height: '40px',
-      color: 'white',
-      borderRadius: '8px'
-    }
+      width: "200px",
+      fontSize: "12px",
+      background: "linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)",
+      height: "40px",
+      color: "white",
+      borderRadius: "8px",
+    },
   }));
 
   const classes = useStyles();
-console.log(subsType)
-console.log(Items)
+  console.log(userType);
+  console.log(subsType);
+
+  console.log(Items);
+ 
   return (
     <Container maxWidth="sm">
-      <Typography className={classes.title} variant='h4'>KYC verification</Typography>
+      <Typography className={classes.title} variant="h4">
+        KYC verification
+      </Typography>
       <br />
       <br />
-      {Items.map((uploadItem, index) => (<UploadItem item={uploadItem} validate={validation} change={handleChange} id={index} />))}
+      {Items.map((uploadItem, index) => (
+        <UploadItem
+          item={uploadItem}
+          validate={validation}
+          change={handleChange}
+          id={index}
+        />
+      ))}
       <div style={{ textAlign: "center", marginBottom: "10px" }}>
-        <a ><Button className={classes.btnUpload} type="submit" onClick={() => { uploadDocuments(); }}>UPLOAD AND VERIFY</Button></a>
+        <a>
+          <Button
+            className={classes.btnUpload}
+            type="submit"
+            onClick={() => {
+              uploadDocuments();
+            }}
+          >
+            UPLOAD AND VERIFY
+          </Button>
+        </a>
       </div>
     </Container>
   );
-
-
 }
 const mapStateToProps = createStructuredSelector({
   userType: selectUserType,
   user: selectRegisteredUser,
-  subsType: selectSubscriptionType
-})
-
-const mapDispatchToProps = dispatch => ({
-  setRegisteredUser: value => dispatch(setRegisteredUser(value)),
-  setProgress: value => (dispatch(setProgress(value))),
-  setUser: value => dispatch(setCurrentUser(value)),
-  setUserStatus: value => dispatch(setUserStatus(value)),
-  setUserType: value => dispatch(setUserType(value))
+  subsType: selectSubscriptionType,
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DocumentUpload));
+const mapDispatchToProps = (dispatch) => ({
+  setRegisteredUser: (value) => dispatch(setRegisteredUser(value)),
+  setProgress: (value) => dispatch(setProgress(value)),
+  setUser: (value) => dispatch(setCurrentUser(value)),
+  setUserStatus: (value) => dispatch(setUserStatus(value)),
+  setUserType: (value) => dispatch(setUserType(value)),
+});
 
-
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DocumentUpload)
+);

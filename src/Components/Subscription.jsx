@@ -64,6 +64,7 @@ function Subscription(props) {
     } else {
       setProgress(100);
     }
+
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -132,6 +133,7 @@ function Subscription(props) {
 
   const SubsSelectionClick = (type, companyName) => {
     var updatedData;
+    
     setSubscriptionType(type);
     
     if (props.userType === 'Service-Provider') {
@@ -287,7 +289,7 @@ function Subscription(props) {
           <br />
           <br />
           <Grid container style={{ textAlign: 'center', paddingLeft: isMobile ? '' : '180px' }} >
-            <Grid itemn xs={isMobile ? 12 : 5}>
+            <Grid item xs={isMobile ? 12 : 5}>
               <SubscriptionCard type='Individual' img={`${API.BASE_URL}${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>

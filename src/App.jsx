@@ -15,6 +15,7 @@ import SelectedCA from "./Components/SelectedCA-component";
 import Timeslot from "./Components/subComponents/Timeslots-component";
 import SPUserPage from "./Components/LoggedInUser-component";
 import AboutPage from './Components/About-component';
+import Terms from './Components/Terms-component';
 //import LoggedInCustomer from "./Components/LoggedInUser-C-component";
 import Footer from "./Components/footer";
 import {Switch, Route, Redirect} from "react-router-dom";
@@ -23,6 +24,7 @@ import {setCurrentUser,setIsHome} from './redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from './redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
+
 
 
 class App extends React.Component{
@@ -55,6 +57,10 @@ render() {
      <Route path="/Message" exact component={KYCmessage}/>
      <Route path="/NextPage" exact component={NextPage}/>
      <Route path="/About" exact component={AboutPage}/>
+     <Route path="/Terms" exact component={Terms}/>
+
+     
+    
         <Route path="/Map" exact component={Map}/>
         <Route path="/SelectedCA" exact component={SelectedCA}/>
         <Route path="/Timeslot" exact component={Timeslot}/>

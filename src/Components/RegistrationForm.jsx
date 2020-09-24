@@ -1,7 +1,7 @@
 /*jshint esversion: 6*/
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Typography, makeStyles, TextField, Grid, Button, Container, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
+
+import { Typography, makeStyles, TextField, Grid, Button, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
 import RegistrationLogo from '../Images/registration.png';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';

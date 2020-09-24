@@ -177,7 +177,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
               <div>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/'); setIsHome(true); }}>Home</Button>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/About'); setIsHome(false); }}>About</Button>
-                <Button className={classes.commonButton} color="inherit">Services</Button>
+                <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/Terms'); setIsHome(false); }}>Services</Button>
                 <Button aria-controls="simple-menu" name='btn-register' aria-haspopup="true" className={classes.commonButton} color="inherit" onClick={(event) => { handleClick(event); }}>Register</Button>
                 <Button aria-controls="simple-menu" name='btn-login' aria-haspopup="true" className={classes.commonButton} color="inherit" onClick={(event) => { handleClick(event); }}>Login</Button>
                 <Menu

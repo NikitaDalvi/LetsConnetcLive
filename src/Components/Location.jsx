@@ -378,6 +378,9 @@ const classes = useStyles();
 
     {({getInputProps, suggestions, getSuggestionItemProps, loading})=>(
       <div>
+         <Grid item xs={12}style={{width:'300px'}}>
+        <TextField variant='outlined' label='Flat-No./Block-No.' style={{width:'100%',marginTop:'10px'}} value={detailedAddress} onChange={detailsChange} />
+      </Grid><br/>
       <Grid item xs={12} style={{width:'300px'}}>
       <TextField variant='outlined' label='Address' multiline rows='3'
              {...getInputProps({
@@ -411,9 +414,7 @@ const classes = useStyles();
              })}
            </div>
       </Grid>
-      <Grid item xs={12}>
-        <TextField variant='outlined' label='Flat-No./Block-No.' style={{width:'100%',marginTop:'10px'}} value={detailedAddress} onChange={detailsChange} />
-      </Grid>
+     
       <Grid item xs={12}>
       <Button className={classes.button} onClick={addToList} variant="contained" >
         ADD TO LIST &#10095;

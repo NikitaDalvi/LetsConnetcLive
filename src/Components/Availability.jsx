@@ -9,7 +9,7 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectWorkingHours } from '../redux/service/service-selector';
+import { selectServiceType, selectWorkingHours } from '../redux/service/service-selector';
 import { selectCurrentUser } from '../redux/user/user-selector';
 import { setWorkingHours, clearWorkingHours, setServicesProgress } from '../redux/service/service-actions';
 import { setUserServiceStatus } from '../redux/user/user-actions';
@@ -17,16 +17,27 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { API } from '../API';
 
-function Availability({ workingHours, currentUser, setWorkingHours, clearWorkingHours, setServiceStatus, setProgress }) {
+function Availability({ workingHours, currentUser, setWorkingHours, clearWorkingHours, setServiceStatus, setProgress, serviceTypeId }) {
 
 
   const saveToDatabase = async () => {
 
     if (workingHours !== []) {
       const request = {
+        ticket: currentUser.Ticket,
         BufferTiming: buffer,
-        WorkingHours: workingHours,
-        ticket: currentUser.Ticket
+        WorkingHours: {
+          ServiceProviderId: currentUser.Id,
+          ServiceTypeId: serviceTypeId,
+          WorkingHourDetails:workingHours.map(data => {
+            let newData = data
+            delete newData.ServiceProviderId
+            delete newData.ServiceTypeId
+            return newData
+          })
+        }
+       
+        
       };
 
       console.log(request);
@@ -73,56 +84,61 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
       };
       getWorkingHours(requestData)
         .then(res => {
+          console.log(res)
           if (res) {
             console.log(res);
             if (res.length !== 0) {
               clearWorkingHours();
               res.map(day => {
-                switch (day.WorkingDays) {
+                
+                setSavedDays(prevValue => {
+                  return [...prevValue, day.WorkingDays]
+                })
+                /*switch (day.WorkingDays) {
                   case 1:
-                    day.WorkingDays = "Monday";
+                    day.WorkingDays = 1;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Monday'];
                     });
 
                     break;
                   case 2:
-                    day.WorkingDays = "Tuesday";
+                    day.WorkingDays = 2;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Tuesday'];
                     });
 
                     break;
                   case 3:
-                    day.WorkingDays = "Wednesday";
+                    day.WorkingDays = 3;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Wednesday'];
                     });
 
                     break;
                   case 4:
-                    day.WorkingDays = "Thursday";
+                    day.WorkingDays = 4;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Thursday'];
                     });
 
                     break;
                   case 5:
-                    day.WorkingDays = "Friday";
+                    day.WorkingDays = 5;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Friday'];
                     });
 
                     break;
                   case 6:
-                    day.WorkingDays = "Saturday";
+                    day.WorkingDays = 6;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Saturday'];
                     });
 
                     break;
                   case 7:
-                    day.WorkingDays = "Sunday";
+                    day.WorkingDays = 7;
                     setSavedDays(prevValue => {
                       return [...prevValue, 'Sunday'];
                     });
@@ -130,7 +146,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
                     break;
                   default:
 
-                }
+                }*/
               });
               setWorkingHours(res);
             }
@@ -187,7 +203,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
 
   const classes = useStyles();
 
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const days = [7, 1, 2, 3, 4, 5, 6];
   if (!serviceAdded) {
     return (
       <div>
@@ -259,7 +275,8 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  workingHours: selectWorkingHours
+  workingHours: selectWorkingHours,
+  serviceTypeId: selectServiceType
 })
 
 const mapDispatchToProps = dispatch => ({
