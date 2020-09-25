@@ -451,7 +451,10 @@ function ServiceRequest(props) {
   }, [currentUser]);
 
   async function GetRequests(data) {
-    let apiUrl = (props.userType === 'ServiceProvider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatus')
+    console.log(props.userType)
+    
+
+    let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatus')
     const result = await axios.post(`${API.URL}${apiUrl}`, data);
     console.log(result);
     return result.data.output;

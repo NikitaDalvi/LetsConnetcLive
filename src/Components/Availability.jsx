@@ -152,7 +152,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
             }
 
           } else {
-            alert('getting details failed!');
+           
           }
 
         });

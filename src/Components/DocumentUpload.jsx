@@ -1,3 +1,4 @@
+/*jshint esversion: 9*/
 import React from "react";
 import UploadItem from "./subComponents/DocumentUploadItem";
 import EmployeeList from "./subComponents/EmployeeList";
@@ -37,7 +38,6 @@ function DocumentUpload({
   setUserType,
 }) {
   var SPitem = [];
- 
   if (subsType === "Individual") {
     SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
   } else {
@@ -201,6 +201,7 @@ function DocumentUpload({
             };
           });
         }
+
         break;
       default:
     }
@@ -215,16 +216,16 @@ function DocumentUpload({
 
   const uploadDocuments = () => {
     if (
-      userType === "Individual" &&
+      subsType === "Individual" &&
       (AdhaarCard.file === null || AdhaarCard.number === "")
     ) {
       alert("Adhaar Card document and Adhaar Card number is mandatory!");
       return;
     }
-
+    debugger;
     const allDocuments = [];
     let result = null;
-    if (userType === "Individual") {
+    if (subsType === "Individual") {
       allDocuments.push(AdhaarCard, panCard, CACertificate);
     } else {
       allDocuments.push(
@@ -281,11 +282,8 @@ function DocumentUpload({
   }));
 
   const classes = useStyles();
-  console.log(userType);
   console.log(subsType);
-
   console.log(Items);
- 
   return (
     <Container maxWidth="sm">
       <Typography className={classes.title} variant="h4">

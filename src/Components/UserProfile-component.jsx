@@ -330,7 +330,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
     if (data) {
       console.log('data',data)
       console.log('UserType', userType)
-      return userType.toUpperCase() === 'SERVICE-PROVIDER' ?
+      return userType && userType.toUpperCase() === 'SERVICE-PROVIDER' ?
         (data.Description
         && data.Description.length > 0) : true
         && data.FullName

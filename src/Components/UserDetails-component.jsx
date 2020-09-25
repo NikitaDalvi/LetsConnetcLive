@@ -262,7 +262,7 @@ function UserDetailPage({ expertId, currentUser }) {
             ServiceSeekerId: currentUser.Id,
             ServiceId: bookAppointmentRequest.ServiceId,
             StartDate: bookAppointmentRequest.StartDate,
-            EndDate: bookAppointmentRequest.EndDate,
+            EndDate: bookAppointmentRequest.StartDate,
             RequestedTimeSlot: bookAppointmentRequest.ServiceListDetails,
             Ticket: currentUser.Ticket
           };
