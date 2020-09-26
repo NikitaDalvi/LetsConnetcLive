@@ -282,6 +282,7 @@ function DocumentUpload({
   }));
 
   const classes = useStyles();
+  console.log(userType)
   console.log(subsType);
   console.log(Items);
   return (

@@ -45,6 +45,7 @@ function ServicesProvide(props) {
   const [SavedServices, setSaveServices] = useState([]);
   const [saveButtonEnable, setSaveButtonEnable] = useState(false)
   const [showServiceAssignmentSection, setShowServiceAssignmentSection] = useState(false)
+  const [showApplySave, setShowApplySave] = useState(false)
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -148,9 +149,10 @@ function ServicesProvide(props) {
         type: data.type,
         location: data.location
       });
+      
     }
 
-    
+   
     //clearService()
 
 
@@ -158,6 +160,7 @@ function ServicesProvide(props) {
   function saveDetails() {
     setSaveButtonEnable(false)
     saveToDatabase(false)
+    setShowApplySave(true)
   }
 
   function editService(row) {
@@ -188,6 +191,7 @@ function ServicesProvide(props) {
   }
 
   async function saveToDatabase(clearData) {
+    setShowApplySave(true)
     var type = '';
     switch (data.type) {
       case 'hour':
@@ -631,7 +635,7 @@ function ServicesProvide(props) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={8} className={classes.grid}>
+        {showApplySave &&<Grid item xs={8} className={classes.grid}>
           <Grid container>
             {props.serviceList.map((item, index) => (
               <Grid item xs='12' className={classes.grid} key={index}>
@@ -655,7 +659,7 @@ function ServicesProvide(props) {
               Apply & Save
               </Button>
           </div>}
-        </Grid>
+        </Grid>}
       </Grid>}
 
 

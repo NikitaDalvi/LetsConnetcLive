@@ -66,10 +66,10 @@ function Login(props) {
     const res = result.data.output;
     console.log(res);
     if (res !== null) {
-      console.log(res.Status);
-
+      
       if (props.userType === 'Service-Provider') {
        
+        console.log('In Service Provider')
         if (res.UserRole === 4 || res.UserRole === 5) {
           setSeverity('info');
           setAlert('These credentials belong to a Customer account. Please Login again !');
@@ -107,7 +107,7 @@ function Login(props) {
             return;
         }
       } else {
-      
+        console.log('NOT In Service Provider')
         if (res.UserRole === 2 || res.UserRole === 3 || res.UserRole === 6) {
           setSeverity('info');
           setAlert('These credentials belong to a Service-Provider account. Please Login again !');
@@ -122,7 +122,9 @@ function Login(props) {
             props.history.push('/Registration/Subscription');
             return;
           case 2:
+            
             setRegisteredUser(res);
+            alert("I m S P")
             props.history.push('/Registration/KYC');
             return;
           case 6:
