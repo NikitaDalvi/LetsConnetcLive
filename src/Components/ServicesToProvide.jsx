@@ -191,7 +191,7 @@ function ServicesProvide(props) {
   }
 
   async function saveToDatabase(clearData) {
-    setShowApplySave(true)
+    
     var type = '';
     switch (data.type) {
       case 'hour':
@@ -655,7 +655,7 @@ function ServicesProvide(props) {
             ))}
           </Grid>
           {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '100%', textAlign: 'right', paddingRight: '150px' }}>
-            <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { saveToDatabase(true); }} variant="contained" startIcon={<SaveAltIcon />}>
+            <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { setShowApplySave(false); saveToDatabase(true); }} variant="contained" startIcon={<SaveAltIcon />}>
               Apply & Save
               </Button>
           </div>}

@@ -434,21 +434,31 @@ function ServiceRequest(props) {
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
 
+  
+
   useEffect(() => {
     if (currentUser) {
-      const request = {
-        ServiceProviderId: currentUser.Id,
-        ticket: currentUser.Ticket
-      };
+      
       const today = formatDate(new Date());
       setToday(today);
+
+      const request = {
+        ServiceProviderId: currentUser.Id,
+        ticket: currentUser.Ticket,
+        ServiceSeekerId:currentUser.Id,
+      }
+
+      props.userType === "Service-Provider" ? delete request.ServiceSeekerId : delete request.ServiceProviderId
+      
       GetRequests(request)
         .then(res => {
-          setNewRequests(res && res.NewReqest);
+          setNewRequests(res && props.userType === "Service-Provider" ? res.NewReqest : res);
           setConfirmedRequests(res && res.OnBoardedRequest);
-        });
+        })
     }
   }, [currentUser]);
+
+  
 
   async function GetRequests(data) {
     console.log(props.userType)
