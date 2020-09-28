@@ -454,6 +454,7 @@ function ServiceRequest(props) {
         .then(res => {
           setNewRequests(res && props.userType === "Service-Provider" ? res.NewReqest : res);
           setConfirmedRequests(res && res.OnBoardedRequest);
+          setCompletedRequests(res && res.CompeletedRequest)
         })
     }
   }, [currentUser]);
@@ -502,6 +503,7 @@ function ServiceRequest(props) {
   const handleAppointmentStatus = (object) => {
     changeAppointmentStatus(object)
       .then(res => {
+        
         if (res.responseCode === 200 && object.Status === 1) {
           const appointment = newRequests.find(item => item.ServiceRequestId === object.RequestId);
           setConfirmedRequests(prevValue => {
@@ -516,6 +518,12 @@ function ServiceRequest(props) {
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setNewRequests(appointments);
           alert('Appointment rejected successfully!');
+          return;
+        }
+        if(res.responseCode ===200 && object.Status === 4){
+          const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
+          setCompletedRequests(appointments);
+          alert('Appointment  Completed successfully!');
           return;
         }
         alert('Unexpected error occured!');
@@ -556,7 +564,11 @@ function ServiceRequest(props) {
     </div>
   );
 
+  console.log(newRequests);
+  console.log(Today);
   console.log(confirmedRequests);
+  console.log(completedRequests);
+
   return (
     <div>
       <AppBar position="static" style={{ borderRadius: '5px', height: '60px', backgroundColor: 'white' }}>
@@ -594,7 +606,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate === Today ? <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} name={item.RequestedBy} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
+                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate === Today ? <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
             </CardContent>
           </Card>
@@ -609,7 +621,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
+                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
             </CardContent>
           </Card>
@@ -624,7 +636,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
+                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
             </CardContent>
           </Card>

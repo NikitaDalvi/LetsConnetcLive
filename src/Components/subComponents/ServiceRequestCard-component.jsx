@@ -75,7 +75,7 @@ useEffect(()=>{
         </Grid>
       </Grid>
       <div style={{display:status===1?'':'none', textAlign:'right'}}>
-        <Button variant="contained" startIcon={<DoneAllIcon/>} style={{border:'1px solid #2e7d32',backgroundColor:'transparent',color:'#2e7d32'}}>Done</Button>
+        <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'transparent',color:'#2e7d32'}}>Done</Button>
       </div>
       <div style={{display:status===4?'':'none', textAlign:'right'}}>
         <Button variant="contained" onClick={()=>{handleModal(service);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#ffd600',color:'white'}}>Rate and Review</Button>

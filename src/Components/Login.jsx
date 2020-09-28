@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setCurrentUser, setUserType, setRegisteredUser } from '../redux/user/user-actions';
+import { setCurrentUser, setUserType, setRegisteredUser,setSubscriptionType } from '../redux/user/user-actions';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser, selectUserType } from '../redux/user/user-selector';
 import { Snackbar, Typography, makeStyles, TextField, Grid, Button, Container, Backdrop, CircularProgress } from '@material-ui/core';
@@ -66,7 +66,15 @@ function Login(props) {
     const res = result.data.output;
     console.log(res);
     if (res !== null) {
-      
+      switch(res.UserRole){
+        case 2 || 4:
+          setSubscriptionType('Individual');
+          break;
+        case 3 || 5:
+          setSubscriptionType('Corporate');
+          break;
+          default:
+      }
       if (props.userType === 'Service-Provider') {
        
         console.log('In Service Provider')
@@ -322,7 +330,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   setRegisteredUser: value => dispatch(setRegisteredUser(value)),
   setCurrentUser: user => dispatch(setCurrentUser(user)),
-  setUserType: value => dispatch(setUserType(value))
+  setUserType: value => dispatch(setUserType(value)),
+  setSubscriptionType: value => dispatch(setSubscriptionType(value))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
