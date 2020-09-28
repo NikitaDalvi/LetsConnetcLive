@@ -614,7 +614,7 @@ function ServiceRequest(props) {
             </CardContent>
           </Card>
         </Grid>
-        {/*<Grid item xs={3}>
+        <Grid item xs={3}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
@@ -628,7 +628,7 @@ function ServiceRequest(props) {
               </div>
             </CardContent>
           </Card>
-  </Grid>*/}
+  </Grid>
         <Modal
           open={open}
           onClose={handleClose}
