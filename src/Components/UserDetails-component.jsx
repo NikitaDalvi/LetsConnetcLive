@@ -406,6 +406,7 @@ function UserDetailPage({ expertId, currentUser }) {
                       autoOk={true}
                       variant="inline"
                       format="dd/MM/yyyy"
+                      minDate ={new Date()}
                       formatDate={(date) => moment(new Date()).format('DD-MM-YYYY')}
                       margin="normal"
                       id="date-picker-inline"
@@ -442,6 +443,7 @@ function UserDetailPage({ expertId, currentUser }) {
                           format="dd/MM/yyyy"
                           onChange={handleEndDateChange}
                           formatDate={(date) => moment(new Date()).format('DD-MM-YYYY')}
+                          minDate ={selectedDate}
                           value={selectedEndDate}
                           margin="normal"
                           id="date-picker-inline"
