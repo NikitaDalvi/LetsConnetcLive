@@ -256,7 +256,7 @@ function DocumentUpload({
         console.log(res);
         setUser(user);
         if (user.UserRole !== 6) {
-          history.push("/UserPage/ServiceProvider/Dashboard");
+          history.push("/UserPage/ServiceProvider/MyServices/ServicesToProvide");
         } else {
           history.push("/UserPage/SPAdmin/MyEmployees");
         }

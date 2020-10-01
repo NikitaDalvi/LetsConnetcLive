@@ -5,7 +5,8 @@ function SubscriptionCard(props) {
 
   const calculatediscount = () => {
     let { price, discount } = props
-    return (price * discount / 100)
+    return price- (price * discount / 100)
+
   }
 
   const useStyles = makeStyles(theme => ({

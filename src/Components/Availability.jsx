@@ -16,6 +16,7 @@ import { setUserServiceStatus } from '../redux/user/user-actions';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { API } from '../API';
+import Tooltip from "@material-ui/core/Tooltip";
 
 function Availability({ workingHours, currentUser, setWorkingHours, clearWorkingHours, setServiceStatus, setProgress, serviceTypeId }) {
 
@@ -94,59 +95,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
                 setSavedDays(prevValue => {
                   return [...prevValue, day.WorkingDays]
                 })
-                /*switch (day.WorkingDays) {
-                  case 1:
-                    day.WorkingDays = 1;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Monday'];
-                    });
-
-                    break;
-                  case 2:
-                    day.WorkingDays = 2;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Tuesday'];
-                    });
-
-                    break;
-                  case 3:
-                    day.WorkingDays = 3;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Wednesday'];
-                    });
-
-                    break;
-                  case 4:
-                    day.WorkingDays = 4;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Thursday'];
-                    });
-
-                    break;
-                  case 5:
-                    day.WorkingDays = 5;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Friday'];
-                    });
-
-                    break;
-                  case 6:
-                    day.WorkingDays = 6;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Saturday'];
-                    });
-
-                    break;
-                  case 7:
-                    day.WorkingDays = 7;
-                    setSavedDays(prevValue => {
-                      return [...prevValue, 'Sunday'];
-                    });
-
-                    break;
-                  default:
-
-                }*/
+                
               });
               setWorkingHours(res);
             }
@@ -159,6 +108,19 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
     }
 
   }, [currentUser, setWorkingHours]);
+
+  const statusBuffer = (buffer) => {
+    switch (buffer) {
+      case 1:
+        return "Buffer Time 30";
+  
+      case 2:
+        return "Buffer Time 60";
+    
+        default:
+        return "Buffer Time is not Set";
+    }
+  };
 
   const getWorkingHours = async (data) => {
     const res = await axios.post(`${API.URL}GetWorkingHourListByServiceProviderId`, data);
@@ -231,8 +193,11 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
           </Snackbar>
           <div style={{ textAlign: 'left  ' }}>
             <br />
+            
             <Container style={{ width: '80%', marginLeft: '0' }}>
+            <Tooltip title={statusBuffer(buffer)}>
               <FormControl className={classes.formControl}>
+              
                 <InputLabel id="demo-simple-select-label">Buffer</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -248,6 +213,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
                   <MenuItem value={2}>60</MenuItem>
                 </Select>
               </FormControl>
+              </Tooltip>
               <br />
               <br />
               {

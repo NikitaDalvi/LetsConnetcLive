@@ -130,7 +130,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       <AppBar position="static" className={classes.appbar}>
         <Box display="flex" justifyContent="flex-end" >
           <Toolbar className={classes.toolbar}>
-            <img src={Logo} className={classes.imgLogo} />
+            <img src={Logo} className={classes.imgLogo}  onClick={() => { history.push('/UserPage/ServiceProvider/Dashboard') }} />
             {isMobile ?
               <React.Fragment>
                 <IconButton disabled={currentUser && currentUser.Status !== 6} onClick={() => { setOpen(true); }}><MenuIcon /></IconButton>
