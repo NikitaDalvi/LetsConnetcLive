@@ -10,7 +10,7 @@ function RateAssignCard(props){
     <div class="card-header" id={"heading"+props.id} style={{backgroundColor:"transparent"}}>
   <h2 class="mb-0">
     <button class="btn " type="button" data-toggle="collapse" data-target={"#collapse"+props.id} aria-expanded="true" aria-controls={"collapse"+props.id}>
-      Services served >
+      Services served 
     </button>
   </h2>
 </div>

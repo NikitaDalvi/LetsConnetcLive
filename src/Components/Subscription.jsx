@@ -212,8 +212,8 @@ function Subscription(props) {
     console.log(data);
     const options = {
       //"key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
-      //"key": 'rzp_test_4WUuA0rfz1EeJX',
-      "key": 'rzp_test_MnipG3QvM11kCX',
+      "key": 'rzp_test_4WUuA0rfz1EeJX',
+      //"key": 'rzp_test_MnipG3QvM11kCX',
       "amount": props.DiscountPercentage,
       "currency": result.currency,
       "name": "Subscription Purchase",

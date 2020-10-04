@@ -189,7 +189,10 @@ function LoggedIn(props) {
   };
 
 
-
+  const imgClick = () => {
+    
+    props.history.push('/UserPage/ServiceProvider/Dashboard')
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -211,7 +214,7 @@ function LoggedIn(props) {
             <MenuIcon />
           </IconButton>
 
-          <img src={Logo} st />
+          <img src={Logo}  onClick={() => imgClick()} />
 
           <ExitToAppIcon type='button' onClick={() => { props.setCurrentUser(null); props.history.push('/'); }} style={{ color: 'black', position: 'absolute', right: '100px' }} />
           <Badge badgeContent={notifications.length} color="secondary" style={{ color: 'black', position: 'absolute', right: '150px' }}>

@@ -355,7 +355,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   addWorkingHours : slot => dispatch(addAvailability(slot)),
   removeTimeSlot: slot => dispatch(removeTimeslot(slot))
-})
+})  
 
 export default connect(mapStateToProps,mapDispatchToProps)(DayTime);
 
