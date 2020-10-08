@@ -30,7 +30,6 @@ function loadRazorPay(src) {
   });
 }
 
-
 function Subscription(props) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const [modalShow, setModalShow] = useState(false);
@@ -42,9 +41,12 @@ function Subscription(props) {
   const [initialData, setinitialData] = useState({});
   const [company, setCompany] = useState({});
   const [selectedSub, setSelectedSub] = useState('');
+ 
   //
   const handleChange = event => {
     setCompanyName(event.target.value);
+
+    
   };
 
   const { userType, setProgress, registeredUser, setCurrentUser,setSubscriptionType } = props;
@@ -202,9 +204,12 @@ function Subscription(props) {
 
     var data = null;
     if (type === "Individual") {
-      data = await axios.post(`${API.URL}razorPay/${initialData.Price}`);
+       let PriceAfterDiscount = Math.round(initialData.Price- (initialData.Price * initialData.DiscountPercentage / 100))
+       console.log()
+      data = await axios.post(`${API.URL}razorPay/${PriceAfterDiscount}`);
     } else {
-      data = await axios.post(`${API.URL}razorPay/${company.Price}`);
+      let CompanyAfterDiscount = Math.round(company.Price- (company.Price * company.DiscountPercentage / 100))
+      data = await axios.post(`${API.URL}razorPay/${CompanyAfterDiscount}`);
     }
 
     const result = data.data.output.Attributes;
@@ -214,11 +219,11 @@ function Subscription(props) {
       //"key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
       "key": 'rzp_test_4WUuA0rfz1EeJX',
       //"key": 'rzp_test_MnipG3QvM11kCX',
-      "amount": props.DiscountPercentage,
+      //"amount": (initialData.Price- (initialData.Price * initialData.DiscountPercentage / 100)),
       "currency": result.currency,
       "name": "Subscription Purchase",
       "description": "Test Transaction",
-      "image": "https://example.com/your_logo",
+      //"image": "https://example.com/your_logo",
       "order_id": result.id,
       "handler": function (response) {
         console.log(response);
@@ -291,11 +296,11 @@ function Subscription(props) {
           <br />
           <Grid container style={{ textAlign: 'center', paddingLeft: isMobile ? '' : '180px' }} >
             <Grid item xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Individual' img={`${API.BASE_URL}${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
+              <SubscriptionCard type='Individual' img={`${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>
             <Grid item xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Corporate' img={`${API.BASE_URL}${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
+              <SubscriptionCard type='Corporate' img={`${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
               <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
             </Grid>
           </Grid>

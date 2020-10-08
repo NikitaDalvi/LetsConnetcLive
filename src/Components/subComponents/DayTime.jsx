@@ -74,14 +74,14 @@ const handleCheck = (event) => {
 // };
 
 const onStartChange = event => {
-  const{value} = event.target;
-  setStartTime(value);
+  //const{value} = event.target;
+  setStartTime(event);
   setSlot(prevValue => {return{
     ...prevValue,
     TimeSlotDetails:{
       ...prevValue.TimeSlotDetails,
       TimeslotId:uuidv4(),
-      StartTime:value
+      StartTime:event
     }
   };});
   console.log(slot.TimeSlotDetails);
@@ -100,14 +100,14 @@ const onStartAMPM = event => {
 };
 
 const onEndChange = event => {
-    const{value} = event.target;
-  setEndTime(value);
+   // const{value} = event.target;
+  setEndTime(event);
   console.log(slot);
   setSlot(prevValue => {return{
     ...prevValue,
     TimeSlotDetails:{
       ...prevValue.TimeSlotDetails,
-      EndTime:value
+      EndTime:event
     }
   };});
 };
@@ -216,7 +216,6 @@ if(day!=null){
 },[day, savedDays,workingHours,setExistence]);
 
 
-
 const useStyles = makeStyles((theme) => ({
   picker:{
     margin:'0 10px 10px 10px'
@@ -260,90 +259,45 @@ const classes = useStyles();
         <Grid container>
           <Grid item xs={4}>
           <FormControl className={classes.formControl}>
-       <InputLabel id="demo-simple-select-label">Start Time</InputLabel>
-       <Select
-         labelId="demo-simple-select-label"
-         id="demo-simple-select"
-         onChange={onStartChange}
-         value={slot.TimeSlotDetails.StartTime}
-       >
-         <MenuItem value={'12:00'}>12:00</MenuItem>
-         <MenuItem value={'1:00'}>1:00</MenuItem>
-         <MenuItem value={'2:00'}>2:00</MenuItem>
-         <MenuItem value={'3:00'}>3:00</MenuItem>
-         <MenuItem value={'4:00'}>4:00</MenuItem>
-         <MenuItem value={'5:00'}>5:00</MenuItem>
-         <MenuItem value={'6:00'}>6:00</MenuItem>
-         <MenuItem value={'7:00'}>7:00</MenuItem>
-         <MenuItem value={'8:00'}>8:00</MenuItem>
-         <MenuItem value={'9:00'}>9:00</MenuItem>
-         <MenuItem value={'10:00'}>10:00</MenuItem>
-         <MenuItem value={'11:00'}>11:00</MenuItem>
-       </Select>
+          <KeyboardTimePicker
+          margin="normal"
+          id="time-picker"
+          //label="Start Time"
+          value={slot.TimeSlotDetails.StartTime}
+          onChange={onStartChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change time',
+          }}
+        />
      </FormControl>
-     <FormControl className={classes.AMPM}>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    onChange={onStartAMPM}
-    value={slot.TimeSlotDetails.StartAMPM}
-  >
-    <MenuItem value={'PM'}>PM</MenuItem>
-    <MenuItem value={'AM'}>AM</MenuItem>
-  </Select>
-</FormControl>
+    
           </Grid>
           <Grid item xs={4}>
           <FormControl className={classes.formControl}>
-       <InputLabel id="demo-simple-select-label">End Time</InputLabel>
-       <Select
-       value={slot.TimeSlotDetails.EndTime}
-         labelId="demo-simple-select-label"
-         id="demo-simple-select"
-         onChange={onEndChange}
-       >
-         <MenuItem value={'12:00'}>12:00</MenuItem>
-         <MenuItem value={'1:00'}>1:00</MenuItem>
-         <MenuItem value={'2:00'}>2:00</MenuItem>
-         <MenuItem value={'3:00'}>3:00</MenuItem>
-         <MenuItem value={'4:00'}>4:00</MenuItem>
-         <MenuItem value={'5:00'}>5:00</MenuItem>
-         <MenuItem value={'6:00'}>6:00</MenuItem>
-         <MenuItem value={'7:00'}>7:00</MenuItem>
-         <MenuItem value={'8:00'}>8:00</MenuItem>
-         <MenuItem value={'9:00'}>9:00</MenuItem>
-         <MenuItem value={'10:00'}>10:00</MenuItem>
-         <MenuItem value={'11:00'}>11:00</MenuItem>
-       </Select>
+          <KeyboardTimePicker
+          margin="normal"
+          id="time-picker"
+         // label="End Time"
+          value={slot.TimeSlotDetails.EndTime}
+          onChange={onEndChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change time',
+          }}
+        />
      </FormControl>
-
-     <FormControl className={classes.AMPM}>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    value={slot.TimeSlotDetails.EndAMPM}
-    onChange={onEndAMPM}
-  >
-    <MenuItem value={'PM'}>PM</MenuItem>
-    <MenuItem value={'AM'}>AM</MenuItem>
-  </Select>
-</FormControl>
           </Grid>
           <Grid item xs={2}>
-          <Fab size="small" disabled={disable} className={classes.addBtn} color="secondary" aria-label="add" onClick={handleClick}>
+          <Fab size="small"  className={classes.addBtn} color="secondary" aria-label="add" onClick={handleClick}>
             <AddIcon />
           </Fab>
           </Grid>
         </Grid>
       </MuiPickersUtilsProvider>
-      {timeslots.map((item,index) =><div key={index} style={{marginBottom:'5px',padding:'8px'}}> <Typography variant='body1'>From:{item.StartTime} - To:{item.EndTime}  <RemoveCircleIcon style={{display:disable?'none':''}} type='button' color='secondary' onClick={() => {removeTimeslot(item.TimeslotId);}}/></Typography></div>)}
+      {timeslots.map((item,index) =><div key={index} style={{marginBottom:'5px',padding:'8px'}}> <Typography variant='body1'>From:{item.StartTime} - To:{item.EndTime}  <RemoveCircleIcon  type='button' color='secondary' onClick={() => {removeTimeslot(item.TimeslotId);}}/></Typography></div>)}
       </Grid>
 
     </Grid>
   )
-
-
-
 }
 
 const mapStateToProps = createStructuredSelector({

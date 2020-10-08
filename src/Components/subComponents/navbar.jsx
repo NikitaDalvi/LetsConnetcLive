@@ -44,9 +44,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       history.push('/');
     } else {
       if (type === 'sp') {
-        // const serviceTypes = await axios.get('https://localhost:44327/api/getServiceTypes');
-        // console.log(serviceTypes.data.output);
-        // serviceTypes.data.output.map(type => addServiceTypes(type));
+        
         setUserType('Service-Provider')
       } else {
         setUserType('Customer')
@@ -125,7 +123,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
   }
 
   const imgClick = () => {
-    alert('dfsfsfd')
+    
     history.push('/UserPage/ServiceProvider/Dashboard')
   }
 

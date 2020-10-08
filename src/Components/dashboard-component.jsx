@@ -177,13 +177,22 @@ const Dashboard = (props) => {
             <Grid item xs={3}>
               <DashboardCard
                 color="#FFBE57"
-                caption="Rating and Review"
-                name="RATING AND REVIEW"
+                caption="Rating"
+                name="RATING"
                 rating={
                   dashboardDetails !== null
                     ? `${dashboardDetails.AvgRating}`
                     : "5 &#10032;"
                 }
+               
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <DashboardCard
+                color="#7DCEA0"
+                caption="Review"
+                name="REVIEW"
+                
                 quantity={
                   dashboardDetails !== null
                     ? dashboardDetails.ReviewCount
@@ -192,6 +201,7 @@ const Dashboard = (props) => {
               />
             </Grid>
           </Grid>
+          
         </Container>
         <br />
         <br />
@@ -261,15 +271,25 @@ const Dashboard = (props) => {
               />
             </Grid>
             <Grid item xs={3}>
+
               <DashboardCard
                 color="#FFBE57"
-                caption="Rating and Review"
-                name="RATING AND REVIEW"
+                caption="Rating"
+                name="RATING"
                 rating={
                   dashboardCustomerDetails !== null
                     ? `${dashboardCustomerDetails.AvgRating}`
                     : "5 &#10032;"
                 }
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+
+              <DashboardCard
+                color="#82E0AA"
+                caption="Review"
+                name="REVIEW"
                 quantity={
                   dashboardCustomerDetails !== null
                     ? dashboardCustomerDetails.ReviewCount
@@ -277,6 +297,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
+            
           </Grid>
         </Container>
         <br />

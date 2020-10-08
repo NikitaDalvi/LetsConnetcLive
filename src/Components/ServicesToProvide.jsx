@@ -638,7 +638,7 @@ function ServicesProvide(props) {
         {showApplySave &&<Grid item xs={8} className={classes.grid}>
           <Grid container>
             {props.serviceList.map((item, index) => (
-              <Grid item xs='12' className={classes.grid} key={index}>
+              <Grid item xs='8' className={classes.grid} key={index}>
                 <Paper className={classes.paper}>
                   <Grid container>
                     <Grid item xs='8'>
@@ -654,7 +654,7 @@ function ServicesProvide(props) {
               </Grid>
             ))}
           </Grid>
-          {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '100%', textAlign: 'right', paddingRight: '150px' }}>
+          {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '65%', textAlign: 'right', paddingRight: '150px' }}>
             <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { setShowApplySave(false); saveToDatabase(true); }} variant="contained" startIcon={<SaveAltIcon />}>
               Apply & Save
               </Button>
@@ -671,6 +671,7 @@ function ServicesProvide(props) {
                 <StyledTableCell>#</StyledTableCell>
                 <StyledTableCell align="center">Services</StyledTableCell>
                 <StyledTableCell align="center">Fees (&#8377;)</StyledTableCell>
+                <StyledTableCell align="center">Action</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -681,6 +682,19 @@ function ServicesProvide(props) {
                   </StyledTableCell>
                   <StyledTableCell align="center">{row.Service}</StyledTableCell>
                   <StyledTableCell align="center">{row.Fees}</StyledTableCell>
+                  <StyledTableCell align="center">
+                  {" "}
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: "#2196f3", color: "white" }}
+                        className={classes.tableBtn}
+                        startIcon={<EditIcon />}
+                        onClick={() => editService(row)}
+                      >
+                        Edit
+                      </Button>
+
+                  </StyledTableCell>
 
                 </StyledTableRow>
               ))}

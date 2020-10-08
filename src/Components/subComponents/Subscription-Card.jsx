@@ -27,6 +27,7 @@ function SubscriptionCard(props) {
         <img src={props.img} style={{ width: '100%', height: 'auto' }} />
         <br />
         <br />
+       
         <Typography variant='h5' style={{ fontWeight: 'bold' }}>{props.type}</Typography>
         <Typography variant="subtitle1" gutterBottom>{props.discount===null?<span style={{ fontSize: "16px",fontWeight: 'bold'}}>At ₹ {props.price}</span>:
         <span><span style={{ fontSize: "16px",fontWeight: 'bold',textDecoration: 'line-through'}}>At ₹ {props.price}</span><span style={{ fontSize: "16px", fontWeight: 'bold'}}>&nbsp;&nbsp;{props.discount}&nbsp;%Off&nbsp;&nbsp; ₹{calculatediscount()}</span></span>}</Typography>
