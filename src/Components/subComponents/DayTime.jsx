@@ -13,6 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 
 
 function DayTime({workingHours,currentUser,serviceTypeId,addWorkingHours,day,removeTimeSlot,alert,savedDays}){
@@ -125,6 +126,7 @@ const onEndAMPM = event => {
 };
 
 const handleClick = () => {
+  setChecked(true);
   // const StartTime = startTime.toString();
   // const EndTime = endTime.toString();
   // const timeSlot = {
@@ -156,6 +158,7 @@ addWorkingHours(Slot);
   return alert();
 }
 
+
   //
   // setSlot({
   //   ServiceProviderId:'',
@@ -171,7 +174,10 @@ const removeTimeslot = (Id) => {
     day:day,
     Id:Id
   };
+  setChecked(false);
   removeTimeSlot(object);
+  
+  
 };
 
 useEffect(() => {
@@ -197,8 +203,11 @@ if(day!=null){
         setSlot(prevValue => {return{
           ...prevValue,
             WorkingDays:day
-        };});
+            
+        };
         setChecked(true);
+      });
+        
         setDisable(false);
 
         if(savedDays.length !== 0){
@@ -293,7 +302,7 @@ const classes = useStyles();
           </Grid>
         </Grid>
       </MuiPickersUtilsProvider>
-      {timeslots.map((item,index) =><div key={index} style={{marginBottom:'5px',padding:'8px'}}> <Typography variant='body1'>From:{item.StartTime} - To:{item.EndTime}  <RemoveCircleIcon  type='button' color='secondary' onClick={() => {removeTimeslot(item.TimeslotId);}}/></Typography></div>)}
+      {timeslots.map((item,index) =><div key={index} style={{marginBottom:'5px',padding:'8px'}}> <Typography variant='body1'>From:{moment(item.StartTime).format("hh:mm A")} - To:{moment(item.EndTime).format("hh:mm A")}  <RemoveCircleIcon  type='button' color='secondary' onClick={() => {removeTimeslot(item.TimeslotId);}}/></Typography></div>)}
       </Grid>
 
     </Grid>

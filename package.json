@@ -18,7 +18,7 @@
     "bootstrap": "^4.4.1",
     "date-fns": "^2.14.0",
     "http-proxy-middleware": "^1.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-addons-update": "^15.6.2",
     "react-bootstrap": "^1.0.0",
