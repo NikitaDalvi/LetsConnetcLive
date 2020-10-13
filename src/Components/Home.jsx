@@ -65,7 +65,7 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) 
 
   return (
     <div className="container" style={{ marginTop: '100px' }}>
-      <img src={homeVector} style={{ position: 'absolute', top: '0', right: '10px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
+      <img src={homeVector} style={{ position: 'absolute', top: '0', left: '240px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
       <div className='row mb-5' >
         <div className={isMobile ? 'col-lg-12' : 'col-lg-4'}>
           <Typography className={classes.TypographyBrand} variant="h6" gutterBottom>

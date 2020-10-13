@@ -98,8 +98,41 @@ function ServicesProvide(props) {
  
   }
 
+  console.log(data)
+  async function saveToDatabaseDetails(){
+    
+    const Service ={
+      ServiceId: data.Id,
+     //ServiceTypeId: props.serviceType,
+     ServiceProviderId: currentUser.Id,
+     Fees: data.fees
+
+    }
+
+    const postService =  {
+      Service,
+        ticket: currentUser.Ticket
+
+      };
+      const res = await saveServiceDetails(postService);
+      if (res) {
+        if (res.data) {
+          if (res.data.responseCode === 200) {
+            return 'success';
+          } else {
+            return 'fail';
+          }
+        }
+      }
+    }
+  
+    
+
+  
 
   function addToList() {
+   
+    setShowApplySave(true);
    
     // setRow(prevValue => [...prevValue, data]);
     if (data.location === '') {
@@ -152,7 +185,7 @@ function ServicesProvide(props) {
       
     }
 
-   
+
     //clearService()
 
 
@@ -186,12 +219,36 @@ function ServicesProvide(props) {
 
   }
 
-  function removeService(service) {
-    props.removeService(service);
-  }
+  async function removeService(item){
+    props.removeService(item);
+    
+      console.log(item);
+
+    const Service ={
+     ServiceId: item.Id,
+     ServiceProviderId: currentUser.Id
+    }
+
+    const postdeleteService =  {
+        Service,
+        ticket: currentUser.Ticket
+
+      };
+      const res = await deleteServiceDetails(postdeleteService);
+      if (res) {
+        if (res.data) {
+          if (res.data.responseCode === 200) {
+            return 'success';
+          } else {
+            return 'fail';
+          }
+        }
+      }
+    }
 
   async function saveToDatabase(clearData) {
-    
+
+     setShowApplySave(true);
     var type = '';
     switch (data.type) {
       case 'hour':
@@ -212,7 +269,7 @@ function ServicesProvide(props) {
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
-      services: [],
+      //services: [],
       ticket: currentUser.Ticket
     };
     /*props.serviceList.map(service => {
@@ -226,7 +283,7 @@ function ServicesProvide(props) {
 
       postData.services.push(entry);
     });*/
-    let postServicesArray = []
+   /* let postServicesArray = []
     tempAddToListData.map(service => {
 
       const entry = {
@@ -238,7 +295,7 @@ function ServicesProvide(props) {
 
       postServicesArray.push(entry);
     });
-    postData.services = postServicesArray
+  postData.services = postServicesArray*/
 
     if (type === 'Full_Time') {
       var days = 0;
@@ -300,10 +357,6 @@ function ServicesProvide(props) {
               Id: '',
               service: '',
               fees: '',
-              type: '',
-              location: '',
-              workingDays: ''
-        
             })
           }
         } else {
@@ -340,7 +393,7 @@ function ServicesProvide(props) {
   async function saveServices(postData) {
 
 
-    const res = await axios.post(`${API.URL}AddService`, postData);
+    const res = await axios.post(`${API.URL}AddServiceBasic`, postData);
     if (res) {
       if (res.data) {
         if (res.data.responseCode === 200) {
@@ -348,14 +401,40 @@ function ServicesProvide(props) {
           tempAddToListData = []
           return "success";
         } else {
-          return 'fail';
+            return 'fail';
         }
       }
     }
     console.log(res);
     setSaveButtonEnable(false)
   }
+  async function saveServiceDetails(postService)
+  {
+    const res = await axios.post(`${API.URL}AddServiceDetail`, postService);
+    if (res) {
+      if (res.data) {
+        if (res.data.responseCode === 200) {
+          return 'success';
+        } else {
+          return 'fail';
+        }
+      }
+    }
+  }
 
+  async function deleteServiceDetails(postdeleteService)
+  {
+    const res = await axios.post(`${API.URL}DeleteService`, postdeleteService);
+    if (res) {
+      if (res.data) {
+        if (res.data.responseCode === 200) {
+          return 'success';
+        } else {
+          return 'fail';
+        }
+      }
+    }
+  }
   async function saveWorkingHours(workingHours) {
     const res = await axios.post(`${API.URL}AddWorkingHours`, workingHours);
     if (res) {
@@ -591,7 +670,7 @@ function ServicesProvide(props) {
         </Grid>
 
         <Grid item xs={2} style={{ margin: 'auto', marginLeft: '15px' }}>
-          <Button className={classes.button} disabled={!saveButtonEnable} onClick={(e) => saveDetails()} variant="contained" >
+        <Button className={classes.button} disabled={!saveButtonEnable} onClick={(e) => saveToDatabase(true)} variant="contained" >
             Save
             </Button>
         </Grid>
@@ -629,7 +708,7 @@ function ServicesProvide(props) {
             </Grid>
 
             <Grid item xs={12}>
-              <Button className={classes.button} style={{ width: '98%', marginLeft: '10px' }} onClick={addToList} variant="contained" >
+              <Button className={classes.button} style={{ width: '98%', marginLeft: '10px' }} onClick={() => { addToList(); saveToDatabaseDetails(); }}  variant="contained" >
                 ADD TO LIST &#10095;
             </Button>
             </Grid>
@@ -655,55 +734,13 @@ function ServicesProvide(props) {
             ))}
           </Grid>
           {props.serviceList && props.serviceList.length > 0 && <div style={{ width: '65%', textAlign: 'right', paddingRight: '150px' }}>
-            <Button className={classes.button} style={{ width: '32%', margin: '5px' }} onClick={() => { setShowApplySave(false); saveToDatabase(true); }} variant="contained" startIcon={<SaveAltIcon />}>
-              Apply & Save
-              </Button>
-          </div>}
+        </div>}
         </Grid>}
       </Grid>}
 
 
-      {showServiceAssignmentSection &&<Grid item xs={9} className={classes.grid}>
-        <TableContainer component={Paper} style={{ width: '100%', height: '500px' }}>
-          <Table className={classes.table} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>#</StyledTableCell>
-                <StyledTableCell align="center">Services</StyledTableCell>
-                <StyledTableCell align="center">Fees (&#8377;)</StyledTableCell>
-                <StyledTableCell align="center">Action</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {SavedServices.map((row, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    {index + 1}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{row.Service}</StyledTableCell>
-                  <StyledTableCell align="center">{row.Fees}</StyledTableCell>
-                  <StyledTableCell align="center">
-                  {" "}
-                      <Button
-                        variant="contained"
-                        style={{ backgroundColor: "#2196f3", color: "white" }}
-                        className={classes.tableBtn}
-                        startIcon={<EditIcon />}
-                        onClick={() => editService(row)}
-                      >
-                        Edit
-                      </Button>
 
-                  </StyledTableCell>
-
-                </StyledTableRow>
-              ))}
-            </TableBody>
-
-          </Table>
-
-        </TableContainer>
-              </Grid>}
+             
     </div>
 
 

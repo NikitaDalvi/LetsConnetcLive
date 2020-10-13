@@ -98,6 +98,7 @@ function UserDetailPage({ expertId, currentUser }) {
         .then(res => { setExpertDetails(res); console.log(res); });
     }
   }, [expertId]);
+  
 
   async function getExpertDetails() {
     const data = {
