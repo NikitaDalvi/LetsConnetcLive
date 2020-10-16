@@ -49,6 +49,7 @@ function DayTime({
   const [slot, setSlot] = useState({
     // ServiceProviderId:'',
     // ServiceTypeId:'',
+    
     WorkingDays: "",
     TimeSlotDetails: {
       StartTime: "",

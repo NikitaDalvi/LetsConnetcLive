@@ -64,7 +64,9 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
             setProgress(66);
           }
           getWorkingHours(requestData)
-            .then(result => setSelectedWorkingDays(result));
+            .then(result => 
+              setSelectedWorkingDays(result)
+              );
         }
       }
     }
@@ -98,6 +100,10 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
                 
               });
               setWorkingHours(res);
+              console.log(res._BufferTiming)
+              if(res.length != 0){
+              setBuffer(res[0]._BufferTiming);
+            }
             }
 
           } else {
