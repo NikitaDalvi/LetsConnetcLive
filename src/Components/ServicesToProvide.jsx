@@ -472,7 +472,8 @@ function ServicesProvide(props) {
               Id: output.Id,
               type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
               location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
-              workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday'
+              workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday',
+              Fees: output.Fees
             }
           })
         } else {
