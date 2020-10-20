@@ -152,7 +152,7 @@ function DocumentUpload({
           });
         } else {
           setCACertificate((prevValue) => {
-            console.log(prevValue.number);
+            console.log(prevValue.DocumentUpload);
             return {
               ...prevValue,
               number: value,

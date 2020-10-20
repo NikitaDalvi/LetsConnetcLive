@@ -37,58 +37,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const data = [
-  {
-    name: 'Devang Khandhar',
-    serviceType: 'CA',
-    rating: 4.5,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Saurabh Mane',
-    serviceType: 'Web development',
-    rating: 4.5,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Saikiran Bait',
-    serviceType: 'Music',
-    rating: 3.5,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Nikhil Hinduja',
-    serviceType: 'Data Science',
-    rating: 4,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Nikita Dalvi',
-    serviceType: 'Dance',
-    rating: 3.8,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Rahul Roy',
-    serviceType: 'Content Writing',
-    rating: 4,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Jason Kinny',
-    serviceType: 'Pharmaceuticals',
-    rating: 4.5,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name: 'Devang Khandhar',
-    serviceType: 'CA',
-    rating: 4,
-    address: '1667 Terra Street,South Whidbey,Washington'
-  }
-];
-
-
 
 function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   const classes = useStyles();
@@ -109,9 +57,10 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   useEffect(() => {
     setLoading(true);
     console.log(radius);
+    console.log(navigator.permissions.allow)
     const getLocation = () => {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        navigator.geolocation.getCurrentPosition(showPosition, showError, {maximumAge:60000, timeout: 10000, enableHighAccuracy: true});
       } else {
         alert('Geolocation is not supported by this browser.');
       }
@@ -187,8 +136,9 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     }
   }, [ratingFilter]);
 
-
+  console.log(navigator.geolocation)
   function showError(error) {
+    
     switch (error.code) {
       case error.PERMISSION_DENIED:
         alert("User denied the request for Geolocation.");

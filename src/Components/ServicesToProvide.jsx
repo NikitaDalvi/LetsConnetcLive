@@ -305,16 +305,14 @@ function ServicesProvide(props) {
       ticket: currentUser.Ticket,
     };
 
-    const res = getBasicDetails(postData);
-    if (res) {
-      if (res.data) {
-        if (res.data.responseCode === 200) {
-          return "success";
-        } else {
-          return "fail";
-        }
-      }
-    }
+    const requestData = {
+      ServiceProviderId: currentUser.Id,
+      ticket: currentUser.Ticket,
+    };
+    
+
+    getBasicDetails(requestData);
+    
   }
 
   async function saveToDatabase(clearData) {
@@ -453,10 +451,35 @@ function ServicesProvide(props) {
     setSaveButtonEnable(false);
   }
 
-  
+  console.log(data)
   const getBasicDetails = async (data) => {
     const res = await axios.post(`${API.URL}GetWorkingBasicDetails`, data);
-    alert("HII")
+    if (res) {
+
+      console.log(res)
+      if (res.data) {
+        if (res.data.responseCode === 200) {
+          const output = res.data.output
+          console.log(output)
+          if(output){
+            setSaveButtonEnable(false);
+            setShowServiceAssignmentSection(true);
+            setShowApplySave(true);
+          }
+          setData(previousValue => {
+            return {
+              ...previousValue,
+              Id: output.Id,
+              type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
+              location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
+              workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday'
+            }
+          })
+        } else {
+          return "fail";
+        }
+      }
+    }
   };
 
   async function saveServiceDetails(postService) {
@@ -748,10 +771,10 @@ function ServicesProvide(props) {
           </FormControl>
         </Grid>
 
-        <Grid item xs={2} style={{ margin: "auto", marginLeft: "15px" }}>
+        <Grid item xs={2} style={{ margin: "auto", marginLeft: "5%" }}>
           <Button
             className={classes.button}
-            disabled={!saveButtonEnable}
+            disabled={saveButtonEnable}
             //onClick={(e) => saveToDatabase(true)}
             onClick={(e) => saveDetails()}
             variant="contained"
@@ -840,10 +863,11 @@ function ServicesProvide(props) {
               </Grid>
             </Grid>
           </Grid>
-          {showApplySave && (
+          
             <Grid item xs={8} className={classes.grid}>
               <Grid container>
                 {props.serviceList.map((item, index) => (
+
                   <Grid item xs="8" className={classes.grid} key={index}>
                     <Paper className={classes.paper}>
                       <Grid container>
@@ -874,6 +898,7 @@ function ServicesProvide(props) {
                     </Paper>
                   </Grid>
                 ))}
+                   
               </Grid>
               {props.serviceList && props.serviceList.length > 0 && (
                 <div
@@ -885,7 +910,7 @@ function ServicesProvide(props) {
                 ></div>
               )}
             </Grid>
-          )}
+          
         </Grid>
       )}
     </div>

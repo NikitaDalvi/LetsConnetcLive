@@ -290,7 +290,7 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
-                alert('Booking Successfull!');
+                alert('Requested Booking Successfully Done!');
               } else {
                 alert('Booking unsuccessfull! Please Try again later!');
               }
@@ -315,7 +315,7 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
-                alert('Booking Successfull!');
+                alert('Requested Booking Successfully Done!');
               } else {
                 alert('Booking unsuccessfull! Please Try again later!');
               }

@@ -91,7 +91,7 @@ function Subscription(props) {
               setCompany(corporate);
               setLoading(false);
             }
-            // axios.get(`https://localhost:44327/api/getSubscription/0`)
+            // axios.get(`https://localhost:44327/api/getSgetSubscriptionubscription/0`)
             //       .then((res) => {
             //           setinitialData(res.data);
             //           axios.get(`https://localhost:44327/api/getSubscription/1`)
