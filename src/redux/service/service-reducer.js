@@ -30,6 +30,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
         dropdownList:[...state.dropdownList,action.payload]
       };
 
+    case serviceActionTypes.ADD_SERVICE_FROM_API: 
+    return {
+      ...state,
+      serviceList: action.payload
+    }
+
     case serviceActionTypes.ADD_SERVICE:
     return {
       ...state,

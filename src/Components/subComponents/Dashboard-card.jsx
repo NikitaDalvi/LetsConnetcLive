@@ -20,9 +20,10 @@ function DashboardCard(props){
   const classes = useStyles();
   console.log(props.name,props.quantity)
   return(
-    <Paper className={classes.paper} elevation={0}>
+    <Paper className={classes.paper} elevation={0} onClick={() => props.history.push('ServiceRequest')}>
       <Typography variant='subtitle1'>{props.caption}</Typography>
       <Typography variant='h5'>{props.name}</Typography>
+      
       {/*<Grid container style={{marginTop:'20%'}}>
         <Grid item xs={3}>
         <Typography variant='h5'>{props.rating}</Typography>

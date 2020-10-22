@@ -23,6 +23,7 @@ import {
   setSavedServices,
   setServicesProgress,
   clearService,
+  addServicesFromAPI,
 } from "../redux/service/service-actions";
 import {
   setCurrentUser,
@@ -79,6 +80,7 @@ function ServicesProvide(props) {
     setSavedServices,
     savedServices,
     clearService,
+    addServicesFromAPI
   } = props;
 
   const [loading, setLoading] = useState(true);
@@ -171,7 +173,7 @@ function ServicesProvide(props) {
   }
 
   function addToList() {
-    setShowApplySave(true);
+    
 
     // setRow(prevValue => [...prevValue, data]);
     if (data.location === "") {
@@ -316,7 +318,7 @@ function ServicesProvide(props) {
   }
 
   async function saveToDatabase(clearData) {
-    setShowApplySave(true);
+    setShowApplySave(false);
     var type = "";
     switch (data.type) {
       case "hour":
@@ -473,7 +475,7 @@ function ServicesProvide(props) {
               type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
               location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
               workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday',
-              Fees: output.Fees
+              fees: output.Fees
             }
           })
         } else {
@@ -575,7 +577,11 @@ function ServicesProvide(props) {
                   `${API.URL}GetServiceListByServiceProviderId`,
                   savedServicesRequest
                 )
-                .then((res) => setSavedServices(res.data.output));
+                .then((res) => {
+                  //setSavedServices(res.data.output)
+                
+                  addServicesFromAPI(res.data.output)
+                });
             });
             
           }
@@ -722,7 +728,7 @@ function ServicesProvide(props) {
           </FormControl>
         </Grid>
 
-        <Grid
+        {showApplySave && ( <Grid
           item
           xs="2"
           style={{
@@ -740,7 +746,7 @@ function ServicesProvide(props) {
             label="Fees/day"
             variant="outlined"
           />
-        </Grid>
+        </Grid>)}
 
         <Grid
           item
@@ -929,6 +935,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   SetServiceType: (serviceType) => dispatch(setServiceType(serviceType)),
   AddService: (service) => dispatch(addService(service)),
+  addServicesFromAPI: (services) => dispatch(addServicesFromAPI(services)),
   AddToDropdown: (service) => dispatch(setDropdown(service)),
   removeService: (service) => dispatch(removeService(service)),
   clearDropdown: () => dispatch(clearDropdown()),

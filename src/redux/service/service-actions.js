@@ -20,6 +20,11 @@ export const addService = service => ({
   payload:service
 });
 
+export const addServicesFromAPI = services => ({
+  type: serviceActionTypes.ADD_SERVICE_FROM_API,
+  payload: services
+})
+
 export const removeService = service => ({
   type:serviceActionTypes.REMOVE_SERVICE,
   payload:service
