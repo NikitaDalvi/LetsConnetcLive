@@ -454,7 +454,9 @@ function ServiceRequest(props) {
         .then(res => {
           setNewRequests(res && props.userType === "Service-Provider" ? res.NewReqest : res);
           setConfirmedRequests(res && res.OnBoardedRequest);
-          setCompletedRequests(res && res.CompeletedRequest)
+          setCompletedRequests(res && res.CompeletedRequest);
+         
+       
         })
     }
   }, [currentUser]);
@@ -467,8 +469,11 @@ function ServiceRequest(props) {
 
     let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatus')
     const result = await axios.post(`${API.URL}${apiUrl}`, data);
+  
     console.log(result);
     return result.data.output;
+  
+    
   }
 
   function formatDate(date) {
@@ -511,6 +516,8 @@ function ServiceRequest(props) {
           });
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setNewRequests(appointments);
+          window.location.reload(true);
+
           alert('Appointment confirmed successfully!');
           return;
         }
@@ -523,6 +530,8 @@ function ServiceRequest(props) {
         if(res.responseCode ===200 && object.Status === 4){
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setCompletedRequests(appointments);
+          window.location.reload(true);
+
           alert('Appointment  Completed successfully!');
           return;
         }

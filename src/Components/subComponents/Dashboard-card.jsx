@@ -17,10 +17,25 @@ function DashboardCard(props){
     }
   }));
 
+  function changepage(){
+    alert("HIIII")
+    console.log(props)
+    if(props.name=== 'NEW' && props.name==='TODAY' && props.name==='UPCOMING' && props.name==='COMPLETED'){
+      props.history.push('ServiceRequest')
+    }
+    else if(props.name==='COMMISION DUE'){
+
+    }
+    else{
+      
+    }
+
+  }
   const classes = useStyles();
   console.log(props.name,props.quantity)
   return(
-    <Paper className={classes.paper} elevation={0} onClick={() => props.history.push('ServiceRequest')}>
+    <Paper className={classes.paper} elevation={0} 
+    onClick={() => changepage() }>
       <Typography variant='subtitle1'>{props.caption}</Typography>
       <Typography variant='h5'>{props.name}</Typography>
       

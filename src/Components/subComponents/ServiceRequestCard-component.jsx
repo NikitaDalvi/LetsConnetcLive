@@ -67,10 +67,12 @@ useEffect(()=>{
         </Grid>
       </Grid>
       <Grid container className={classes.grid} style={{display:status===3 && userType==='Service-Provider'?'':'none'}}>
-        <Grid item xs='5' className={classes.gridItem}>
+      <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} item xs='6' className={classes.gridItem}>
+
           <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#2e7d32',color:'white'}}>Accept</Button>
         </Grid>
-        <Grid item xs='6' className={classes.gridItem}>
+        <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} item xs='6' className={classes.gridItem}>
+
         <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#b71c1c',color:'white'}}>Reject</Button>
         </Grid>
       </Grid>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Typography, makeStyles, TextField, Grid, Button, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
 import RegistrationLogo from '../Images/registration.png';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { selectUserType, selectRegisteredUser } from '../redux/user/user-selector';
 import { selectAllServiceTypes } from '../redux/service/service-selector';
@@ -230,7 +230,7 @@ function RegistrationForm(props) {
                 />
               </Grid>
               <Grid item xs={isMobile ? 12 : 5} style={{ paddingTop: '10px' }}>
-                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '13px', fontWeight: 'bold', textDecoration: 'underline' }}>Terms & Conditions.</span></p>
+                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '13px', fontWeight: 'bold', textDecoration: 'underline' }} onClick={() => props.history.push('/Terms')}>Terms & Conditions.</span></p>
               </Grid>
             </Grid>
             <Button type='button' disabled={!checkForValidation()} onClick={handleClick} className={classes.btnSignUp}>Sign Up</Button>
