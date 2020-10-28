@@ -58,6 +58,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
   const [Slots, setSlots] = useState([]);
 
+  
   const serviceData = [{
     service: 'Static Website',
     price: '50',
@@ -115,18 +116,24 @@ function UserDetailPage({ expertId, currentUser }) {
   const [selectedEndDate, setSelectedEndDate] = React.useState(null)
 
   const handleDateChange = (date) => {
+    debugger
     setSelectedDate(date);
+    setCheckavaiable(true)
+    setBookingHours(false)
     const Date = moment(date).format('YYYY-MM-DD').toString();
     setBookAppointmentRequest(prevValue => {
+      
       return {
         ...prevValue,
         StartDate: Date
       };
+      
     });
 
     if (expertDetails.BasicDetails.ServiceCharge === 1) {
       getAvailableSlots(date)
-        .then(res => setTimeSlots(res && res.SlotList ? res.SlotList : []));
+        .then(res => {console.log(res);
+          setTimeSlots(res && res.SlotList ? res.SlotList : [])});
     }
   
     console.log(bookAppointmentRequest);
@@ -134,7 +141,9 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
   const handleEndDateChange = (date) => {
+    debugger
     setSelectedEndDate(date)
+   
     const Date = moment(date).format('YYYY-MM-DD').toString();
     setBookAppointmentRequest(prevValue => {
       return {
@@ -199,6 +208,10 @@ function UserDetailPage({ expertId, currentUser }) {
   };
 
   const handleChange = (event) => {
+    alert("hii")
+    setBookingHours(false);
+
+    setCheckavaiable(false);
     const { value } = event.target;
     setBookAppointmentRequest(prevValue => {
       return {
@@ -218,40 +231,66 @@ function UserDetailPage({ expertId, currentUser }) {
       };
     });
   };
+  const [setCheck, setCheckavaiable] = useState(false);
+
+  const [setBooking, setBookingHours] = useState(false);
 
   const handleCheckAvalibility = () => {
+    
+
     getAvailableSlotsFullTime()
       .then(res => {
+        if(res.IsAvailable === true){
+          setBookingHours(true);  
+          setCheckavaiable(false);
+              }
+        else{
+          setBookingHours(false);
+        }
         alert(res.Message)
+        
+        
         setBookAppointmentRequest(previousValue => {
           return {
             ...previousValue,
             WorkingDays : res.WorkingDays
           }
+          
         })
+        
         //setTimeSlots(res.SlotList)
+        
         
       })
       .catch(err => {
         alert('Not Found')
       });
+      
+      
   }
 
   const getAvailableSlotsFullTime = async () => {
+    
 
 
     const request = {
       ServiceProviderId: expertId,
       StartDate: bookAppointmentRequest.StartDate,
       EndDate: bookAppointmentRequest.EndDate,
-      Ticket: currentUser.Ticket
+      Ticket: currentUser.Ticket,
+
     };
     const result = await axios.post(`${API.URL}GetAvailableFullTimeSlot`, request);
+    
     return result.data.output;
+    
   };
 
 
   const handleBooking = () => {
+   
+  
+
     if (bookAppointmentRequest.ServiceId !== null) {
       var request;
       var URL;
@@ -290,8 +329,12 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
+                window.location.reload(true);
                 alert('Requested Booking Successfully Done!');
+                
+
               } else {
+                window.location.reload(true);
                 alert('Booking unsuccessfull! Please Try again later!');
               }
             });
@@ -315,10 +358,13 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
+                window.location.reload(true);
                 alert('Requested Booking Successfully Done!');
               } else {
+                window.location.reload(true);
                 alert('Booking unsuccessfull! Please Try again later!');
               }
+
             });
 
           break;
@@ -328,6 +374,8 @@ function UserDetailPage({ expertId, currentUser }) {
     } else {
       alert('please fill all the fields !');
     }
+    setCheckavaiable(false)
+
 
 
   };
@@ -419,13 +467,17 @@ function UserDetailPage({ expertId, currentUser }) {
                       }}
                     />
                   </Grid>
-                  <Grid item xs='6' style={{ padding: '30px 20px 0 0', textAlign: 'right', display: selectedDate !== null ? '' : 'none' }}>
-                    {expertDetails.BasicDetails.ServiceCharge ? (expertDetails.BasicDetails.ServiceCharge === 1 ? timeSlots ? timeSlots.map((item, index) => <FormControlLabel
+                  <Grid item xs='5' style={{ display: selectedDate !== null ? '' : 'none' }}>
+                    { 
+                    (expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 1 ? timeSlots&&timeSlots.length>0 ? timeSlots.map((item, index) => <FormControlLabel
                       onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime,item.TimeSlotNo); }}
                       key={index}
-                      control={<Checkbox name="gilad" />}
+                      control={<Checkbox name="gilad" style = {{ padding: '10px', textAlign: 'Center', color:'red'}} />}
                       label={`${item.StartTime} - ${item.EndTime}`}
-                    />) : <Typography>No Records Found</Typography> : expertDetails.BasicDetails.ServiceCharge === 2 ? <Input
+                    />)
+                     :
+                     <Typography style={{ padding: '30px 20px 0 0', textAlign: 'right', color:'red'}} >Not Available</Typography> 
+                    : expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 2 ? <Input
                       id="outlined-number"
                       placeholder="No. of Assignments"
                       type="number"
@@ -452,22 +504,22 @@ function UserDetailPage({ expertId, currentUser }) {
                           KeyboardButtonProps={{
                             'aria-label': 'change date',
                           }}
-                        />) : ''}
+                        />)}
 
                   </Grid>
                 </Grid>
               </MuiPickersUtilsProvider>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  {expertDetails.BasicDetails.ServiceCharge === 3 && <Button className={classes.button} onClick={handleCheckAvalibility} variant="contained" >
+                {setCheck && <Grid item xs={6}>
+                  {expertDetails.BasicDetails.ServiceCharge === 3 && <Button className={classes.button} onClick={handleCheckAvalibility}  variant="contained" >
                     Check Avalibilty
                 </Button>}
-                </Grid>
-                <Grid xs={6}>
+                </Grid>}
+                {setBooking && <Grid item xs={6}>
                   <Button className={classes.button} onClick={handleBooking} variant="contained" >
                     BOOK NOW
-          </Button>
-                </Grid>
+                  </Button>
+                </Grid>}
 
               </Grid>
 

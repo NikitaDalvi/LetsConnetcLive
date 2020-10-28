@@ -9,7 +9,10 @@ import { setIsHome, setCurrentUser, setUserType } from '../redux/user/user-actio
 // import Content from "./subComponents/home-content";
 import { Typography, makeStyles, Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import { Box } from "@material-ui/core";
 import { useMediaQuery } from 'react-responsive';
+import { red, green } from "@material-ui/core/colors";
+import Tooltip from "@material-ui/core/Tooltip";
 
 function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
@@ -55,9 +58,13 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) 
   }, [currentUser, setIsHome, history])
 
   const handleClick = (type) => {
-    setUserType(type)
-    setIsHome(false)
+    
     history.push('/Registration/Form')
+  }
+
+  const videoClick = () => {
+    
+    history.push('/MusicCard')
   }
 
   const classes = useStyles();
@@ -74,6 +81,9 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) 
           <Typography className={classes.TypographyStart} variant="h5" gutterBottom>
             Your Business / Profession
       </Typography>
+     
+              
+      <Button className={classes.buttonLeft} onClick={() => { videoClick() }}>&#10095;</Button>
         </div>
         <div className={isMobile ? 'col-lg-12' : 'col-lg-8'} style={{ textAlign: 'right' }}>
           <img src={img} />

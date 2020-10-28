@@ -143,7 +143,7 @@ function LoggedIn(props) {
   const [name, setName] = React.useState('');
   const [type, setType] = React.useState(2);
   const theme = useTheme();
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(true);
 
 
   const handleDrawerOpen = () => {
@@ -190,8 +190,14 @@ function LoggedIn(props) {
 
 
   const imgClick = () => {
-    
-    props.history.push('/UserPage/ServiceProvider/Dashboard')
+    if(userType === 'Service-Provider'){
+
+      props.history.push('/UserPage/ServiceProvider/Dashboard')
+    }
+    else{
+      props.history.push('/UserPage/Customer/Dashboard')
+
+    }
   }
 
   const open = Boolean(anchorEl);

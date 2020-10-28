@@ -207,6 +207,7 @@ const classes = useStyles();
     <br/>
       <Paper  style={{padding:'15px',height:'80px',textAlign:'center',marginBottom:'5%'}}>
         <Grid container>
+
           <Grid item xs={3} >
               <TextField label='Full Name' style={{width:'80%'}} onChange={handleChange} name="FullName"   placeholder="Fullname" value={EmployeeDetail.FullName} />
           </Grid>
@@ -227,16 +228,28 @@ const classes = useStyles();
         <table className="table admin-table">
           <thead>
             <th scope="col">#</th>
+            <th scope="col">Image</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Contact No.</th>
+            <th scope="col">Cont</th>
             <th scope="col">KYC Status</th>
-            <th scope="col"></th>
+            <th scope="col">Staus</th>
+            
           </thead>
           <tbody>
             {
               Employee.map((emp,index) => {
-              return <EmployeeTableItem key={index} index={index+1} id={emp.Id} DP={emp.DPPath} name={emp.FullName} email={emp.EmailId} contact={emp.ContactNo} isRemove={removeEmployee} isEdit={handleEdit} kyc={emp.userStatus} />
+              return <EmployeeTableItem 
+             
+              id={emp.Id} 
+              DP={emp.DPPath} 
+              name={emp.FullName} 
+              email={emp.EmailId} 
+              contact={emp.ContactNo} 
+              //isRemove={removeEmployee} 
+              //isEdit={handleEdit} 
+              kyc={emp.userStatus}
+              key={index} index={index+1}  />
             })
           }
           </tbody>

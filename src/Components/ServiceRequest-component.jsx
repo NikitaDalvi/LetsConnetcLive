@@ -568,7 +568,7 @@ function ServiceRequest(props) {
       <br />
       <TextField multiline rows={4} label='review' variant='outlined' style={{ width: '100%' }} />
       <br />
-      <Button startIcon={<DoneIcon />} color='secondary' variant='contained' className={classes.button}>Submit</Button>
+      <Button startIcon={<DoneIcon />} color='secondary' variant='contained' className={classes.button} >Submit</Button>
       <Button startIcon={<CloseIcon />} variant='contained' color='primary' onClick={handleClose} className={classes.button}>Close</Button>
     </div>
   );

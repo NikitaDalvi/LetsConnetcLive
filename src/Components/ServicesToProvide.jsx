@@ -260,6 +260,7 @@ function ServicesProvide(props) {
 
     console.log(item);
 
+  
     const Service = {
       ServiceId: item.Id,
       ServiceProviderId: currentUser.Id,
@@ -527,6 +528,7 @@ function ServicesProvide(props) {
   useEffect(() => {
     localStorage.setItem("location", data.location);
     localStorage.setItem("type", data.type);
+    console.log(props.serviceList);
 
     if (data && data.location && data.type) setSaveButtonEnable(true);
 
@@ -580,7 +582,7 @@ function ServicesProvide(props) {
                 )
                 .then((res) => {
                   //setSavedServices(res.data.output)
-                
+                console.log(res.data.output);
                   addServicesFromAPI(res.data.output)
                 });
             });

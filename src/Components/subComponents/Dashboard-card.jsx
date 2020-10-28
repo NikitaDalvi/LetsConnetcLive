@@ -5,7 +5,7 @@ import React from "react"
 
 
 
-function DashboardCard(props){
+function DashboardCard({history,...props}){
 
   const useStyles = makeStyles((theme) => ({
     paper:{
@@ -18,10 +18,12 @@ function DashboardCard(props){
   }));
 
   function changepage(){
-    alert("HIIII")
+    alert(props.name)
     console.log(props)
-    if(props.name=== 'NEW' && props.name==='TODAY' && props.name==='UPCOMING' && props.name==='COMPLETED'){
-      props.history.push('ServiceRequest')
+    //debugger;
+
+    if(props.name=== 'NEW' || props.name==='TODAY' || props.name==='UPCOMING' || props.name==='COMPLETED' || props.name==='NEARBY EXPERTS' || props.name==='CONFIRMED' || props.name==='PENDING' || props.name==='PAST'){
+      history.push('ServiceRequest');
     }
     else if(props.name==='COMMISION DUE'){
 

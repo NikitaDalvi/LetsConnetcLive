@@ -24,7 +24,7 @@ import {setCurrentUser,setIsHome} from './redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser} from './redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
-
+import MusicCard from './Components/player-component';
 
 
 class App extends React.Component{
@@ -58,6 +58,10 @@ render() {
      <Route path="/NextPage" exact component={NextPage}/>
      <Route path="/About" exact component={AboutPage}/>
      <Route path="/Terms" exact component={Terms}/>
+     <Route path="/MusicCard" exact component={MusicCard}/>
+
+     
+
 
      
     

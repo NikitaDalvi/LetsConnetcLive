@@ -57,125 +57,112 @@ function Login(props) {
   //   const res =  await axios.post('https://localhost:44327/api/login/loginUser',input);
   //   return res.data.output;
   // };
-
-  async function checkValidation() {
+  async  function checkValidation(){
     // props.history.push(`/UserPage/ServiceProvider/RatingAndReview`);
     setLoading(true);
-    const { setCurrentUser, setUserType, setRegisteredUser } = props;
-    const result = await axios.post(`${API.URL}login/loginUser`, input);
-    const res = result.data.output;
-    console.log(res);
-    if (res !== null) {
-      switch(res.UserRole){
-        case 2 || 4:
-          setSubscriptionType('Individual');
-          break;
-        case 3 || 5:
-          setSubscriptionType('Corporate');
-          break;
-          default:
+   const{setCurrentUser,setUserType,setRegisteredUser} = props;
+   const result = await axios.post(`${API.URL}login/loginUser`, input);
+   const res = result.data.output;
+  console.log(res);
+  if(res !== null){
+    console.log(res.Status);
+  
+    if(props.userType === 'Service-Provider'){
+      debugger
+      if(res.UserRole === 4 || res.UserRole === 5){
+        setSeverity('info');
+        setAlert('These credentials belong to a Customer account. Please Login again !');
+        handleAlert();
+        setUserType('Customer');
+        setLoading(false);
+        return;
       }
-      if (props.userType === 'Service-Provider') {
-       
-        console.log('In Service Provider')
-        if (res.UserRole === 4 || res.UserRole === 5) {
-          setSeverity('info');
-          setAlert('These credentials belong to a Customer account. Please Login again !');
-          handleAlert();
-          setUserType('Customer');
-          setLoading(false);
-          return;
+      switch (res.Status) {
+        case 1:
+        setRegisteredUser(res);
+        props.history.push('/Registration/Subscription');
+        return;
+        case 2:
+        case 5:
+        setRegisteredUser(res);
+        props.history.push('/Registration/KYC');
+        return;
+        case 3:
+        case 4:
+        case 6:
+        case 7:
+        case 9:
+        setCurrentUser(res);
+        setLoading(false);
+        if(res.UserRole!== 6){
+                props.history.push('/UserPage/ServiceProvider/Dashboard');
+        }else{
+          props.history.push('/UserPage/SPAdmin/MyEmployees');
         }
-        switch (res.Status) {
-          case 1:
-            setRegisteredUser(res);
-            props.history.push('/Registration/Subscription');
+  
+        break;
+        default:
             return;
-          case 2:
-          case 5:
-            setRegisteredUser(res);
-            props.history.push('/Registration/KYC');
-            return;
-          case 3:
-          case 4:
-          case 6:
-          case 7:
-          case 9:
-            setCurrentUser(res);
-            setLoading(false);
-            if (res.UserRole !== 6) {
-              props.history.push('/UserPage/ServiceProvider/Dashboard');
-              //props.history.push('/UserPage/ServiceProvider/UserProfile');
-            } else {
-              props.history.push('/UserPage/SPAdmin/MyEmployees');
-            }
-
-            break;
-          default:
-            return;
-        }
-      } else {
-        console.log('NOT In Service Provider')
-        if (res.UserRole === 2 || res.UserRole === 3 || res.UserRole === 6) {
-          setSeverity('info');
-          setAlert('These credentials belong to a Service-Provider account. Please Login again !');
-          handleAlert();
-          setUserType('Service-Provider');
-          setLoading(false);
-          return;
-        }
-        switch (res.Status) {
-          case 1:
-            setRegisteredUser(res);
-            props.history.push('/Registration/Subscription');
-            return;
-          case 2:
-            
-            setRegisteredUser(res);
-            alert("I m S P")
-            props.history.push('/Registration/KYC');
-            return;
-          case 6:
-          case 7:
-          case 9:
-            setCurrentUser(res);
-            setLoading(false);
-            props.history.push('/UserPage/Customer/Dashboard');
-            //props.history.push('/UserPage/Customer/UserProfile');
-            break;
-          default:
-            return;
-        }
-        // if(res.Status === 1){
-        //   setRegisteredUser(res);
-        //   props.history.push('/Registration/Subscription');
-        //   return;
-        // }
-        //   setCurrentUser(res);
-        //   setLoading(false);
-        // props.history.push('/UserPage/Customer/Dashboard');
       }
-    } else {
-      setOpen(false);
-      setSeverity('error');
-      setAlert('Invalid Credentails!. Please try again.');
-      handleAlert();
-      setLoading(false);
-      console.log('invalid');
+    }else{
+      debugger
+      if(res.UserRole === 2 ||res.UserRole === 3 ||res.UserRole === 6){
+        setSeverity('info');
+        setAlert('These credentials belong to a Service-Provider account. Please Login again !');
+        handleAlert();
+        setUserType('Service-Provider');
+        setLoading(false);
+        return;
+      }
+      switch (res.Status) {
+        case 1:
+        setRegisteredUser(res);
+        props.history.push('/Registration/Subscription');
+        return;
+        case 2:
+        setRegisteredUser(res);
+        props.history.push('/Registration/KYC');
+        return;
+        case 6:
+        case 7:
+        case 9:
+        setCurrentUser(res);
+        setLoading(false);
+        props.history.push('/UserPage/Customer/Dashboard');
+        break;
+        default:
+            return;
+      }
+      // if(res.Status === 1){
+      //   setRegisteredUser(res);
+      //   props.history.push('/Registration/Subscription');
+      //   return;
+      // }
+      //   setCurrentUser(res);
+      //   setLoading(false);
+      // props.history.push('/UserPage/Customer/Dashboard');
     }
-    // .then(res => res.data.output !== null ? setCurrentUser(res.data.output): console.log("invalid"))
-    // .then(res => console.log(res.data.output.Id));
-
-
-
-    // console.log(props.currentUser);
-    //
-    // if(props.currentUser !== null){
-    //   debugger
-    //
-    // }
-
-
+  }else{
+    setOpen(false);
+    setSeverity('error');
+    setAlert('Invalid Credentails!. Please try again.');
+    handleAlert();
+    setLoading(false);
+    console.log('invalid');
+  }
+  // .then(res => res.data.output !== null ? setCurrentUser(res.data.output): console.log("invalid"))
+  // .then(res => console.log(res.data.output.Id));
+  
+  
+  
+  // console.log(props.currentUser);
+  //
+  // if(props.currentUser !== null){
+  //   debugger
+  //
+  // }
+  
+  
     // if(input.username === "user" && input.password === "password"){
     //   setLogIn(true);
     //   if(userType==="new"){
@@ -194,10 +181,11 @@ function Login(props) {
     // }else{
     //   setLogIn(false);
     // }
-
-
-
+  
+  
+  
   }
+  
 
 
   const useStyles = makeStyles(theme => ({
