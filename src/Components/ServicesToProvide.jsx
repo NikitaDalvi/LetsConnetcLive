@@ -256,6 +256,8 @@ function ServicesProvide(props) {
   }
 
   async function removeService(item) {
+    
+    item.Id = data.service.Id;
     props.removeService(item);
 
     console.log(item);
@@ -639,6 +641,8 @@ function ServicesProvide(props) {
     },
   }));
 
+  
+
   const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -877,6 +881,7 @@ function ServicesProvide(props) {
             <Grid item xs={8} className={classes.grid}>
               <Grid container>
                 {props.serviceList.map((item, index) => (
+                  
 
                   <Grid item xs="8" className={classes.grid} key={index}>
                     <Paper className={classes.paper}>

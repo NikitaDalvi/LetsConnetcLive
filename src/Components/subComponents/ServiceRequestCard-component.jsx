@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ServiceRequestCard({amount,Id,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId}){
+function ServiceRequestCard({amount,Id,userId,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId}){
 
 const [Date,setDate] = useState('');
 const [request,setRequest] = useState({});
@@ -80,7 +80,7 @@ useEffect(()=>{
         <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'transparent',color:'#2e7d32'}}>Done</Button>
       </div>
       <div style={{display:status===4?'':'none', textAlign:'right'}}>
-        <Button variant="contained" onClick={()=>{handleModal(service);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#ffd600',color:'white'}}>Rate and Review</Button>
+        <Button variant="contained" onClick={()=>{handleModal(service,userId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#ffd600',color:'white'}}>Rate and Review</Button>
       </div>
     </div>
   );

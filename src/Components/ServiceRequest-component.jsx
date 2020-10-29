@@ -58,341 +58,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-
 const data = [
-  {
-    name: 'Saurabh Mane',
-    dos: '12 May',
-    type: 'pending',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Devang Khandhar',
-    dos: '11 June',
-    type: 'pending',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Dishank Mehta',
-    dos: '01 Dec',
-    type: 'approved',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Karan Chaudhari',
-    dos: '15 Oct',
-    type: 'approved',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Rohan Naik',
-    dos: '12 Nov',
-    type: 'completed',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Vidhi Roy',
-    dos: '12 Sept',
-    type: 'completed',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Mayank Joshi',
-    dos: '30 May',
-    type: 'approved',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Surabhi Patil',
-    dos: '30 May',
-    type: 'approved',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Rahul Roy',
-    dos: '01 June',
-    type: 'pending',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Vicky Kapoor',
-    dos: '19 May',
-    type: 'pending',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Surabhi Joshi',
-    dos: '01 Sept',
-    type: 'approved',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  },
-  {
-    name: 'Aditya Mhatre',
-    dos: '05 Oct',
-    type: 'completed',
-    services: [{
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    },
-    {
-      service: 'Financial consulting',
-      timeSlots: [{
-        startTime: '10:00',
-        endTime: '12:00'
-      },
-      {
-        startTime: '10:00',
-        endTime: '12:00'
-      }]
-    }]
-  }
 ]
-
-
-
-
-
-
-
 function ServiceRequest(props) {
 
   //   function rand() {
@@ -418,22 +85,16 @@ function ServiceRequest(props) {
   const { currentUser } = props;
 
   const classes = useStyles();
-
-  const newItem = data.filter(item => item.type === 'pending');
-  const todayItem = data.filter(item => item.dos === '30 May');
-  const onBoardItem = data.filter(item => item.type === 'approved' && item.dos !== '30 May');
-  const completedItem = data.filter(item => item.type === 'completed');
-
-
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const [rate, setRate] = useState('');
+  const [review,setReview] = useState('');
   const [name, setName] = useState('');
   const [newRequests, setNewRequests] = useState([]);
   const [Today, setToday] = useState('');
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
-
+  const [seekerId,setSeekerId] = useState('');
   
 
   useEffect(() => {
@@ -465,6 +126,7 @@ function ServiceRequest(props) {
 
   async function GetRequests(data) {
     console.log(props.userType)
+    console.log(data)
     
 
     let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatus')
@@ -490,14 +152,53 @@ function ServiceRequest(props) {
     return [year, month, day].join('-');
   }
 
+  
+
+  async function saveRatingReview(){
+    //debugger;
+   
+    const postData = {
+      Id: currentUser.Id,
+      ReviewedToId: seekerId,
+      ReviewedById : currentUser.Id,
+      Rating:rate,
+      Review: review,
+      ticket: currentUser.Ticket,
+    };
+    console.log(postData);
+     const res = await axios.post(`${API.URL}RateService`, postData);
+     if (res) {
+     if (res.data) {
+        if (res.data.responseCode === 200) {
+          window.location.reload(true);
+          alert('Completed successfully!');
+          return "success";
+        
+         
+        } else {
+          window.location.reload(true);
+          alert('Fail!');
+         return "fail";
+        }
+      }
+     }
+    console.log(res);
+   
+
+  }
+
   const handleRate = (event) => {
     const { value } = event.target;
     setRate(value);
+    console.log(value);
   }
 
-  const handleOpen = (Name) => {
+  const handleOpen = (Name,id) => {
+    console.log(id);
+    setSeekerId(id);
     setName(Name);
     setOpen(true);
+    
   };
 
   const handleClose = () => {
@@ -566,9 +267,9 @@ function ServiceRequest(props) {
       <Rating precision={0.5} name="read-only" value={rate} readOnly size="large" />
       <br />
       <br />
-      <TextField multiline rows={4} label='review' variant='outlined' style={{ width: '100%' }} />
+      <TextField multiline rows={4} label='review' onChange={e => setReview(e.target.value)} value={review} variant='outlined' style={{ width: '100%' }} />
       <br />
-      <Button startIcon={<DoneIcon />} color='secondary' variant='contained' className={classes.button} >Submit</Button>
+      <Button startIcon={<DoneIcon />} color='secondary' variant='contained' className={classes.button} onClick={()=>saveRatingReview()}>Submit</Button>
       <Button startIcon={<CloseIcon />} variant='contained' color='primary' onClick={handleClose} className={classes.button}>Close</Button>
     </div>
   );
@@ -577,6 +278,7 @@ function ServiceRequest(props) {
   console.log(Today);
   console.log(confirmedRequests);
   console.log(completedRequests);
+
 
   return (
     <div>
@@ -599,7 +301,7 @@ function ServiceRequest(props) {
             />
             <CardContent className={classes.CardContent}>
               <div>
-                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} date={item.TimeList[0].EndDate} />))}
+                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} date={item.TimeList[0].EndDate} />))}
               </div>
             </CardContent>
             
@@ -645,7 +347,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
+                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
             </CardContent>
           </Card>
