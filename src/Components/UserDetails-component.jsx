@@ -59,38 +59,7 @@ function UserDetailPage({ expertId, currentUser }) {
   const [Slots, setSlots] = useState([]);
 
   
-  const serviceData = [{
-    service: 'Static Website',
-    price: '50',
-  },
-  {
-    service: 'Dynamic Website',
-    price: '100'
-  },
-  ]
-
-  const data = [
-    {
-      startTime: '10:00',
-      endTime: '11:00'
-    },
-    {
-      startTime: '11:30',
-      endTime: '12:30'
-    },
-    {
-      startTime: '13:00',
-      endTime: '14:00'
-    },
-    {
-      startTime: '14:30',
-      endTime: '15:30'
-    },
-    {
-      startTime: '16:00',
-      endTime: '17:00'
-    },
-  ]
+  
 
 
   useEffect(() => {
@@ -178,6 +147,8 @@ function UserDetailPage({ expertId, currentUser }) {
   const [allRequest, setAllRequest] = React.useState([]);
 
   const onTimeSlotSelect = (startTime, endTime,timeslotno) => {
+    
+    setBookingHours(true); 
 
     const slot = {
       StartTime: startTime,
@@ -208,7 +179,8 @@ function UserDetailPage({ expertId, currentUser }) {
   };
 
   const handleChange = (event) => {
-    alert("hii")
+    
+    debugger
     setBookingHours(false);
 
     setCheckavaiable(false);
@@ -222,6 +194,7 @@ function UserDetailPage({ expertId, currentUser }) {
   };
 
   const handleAssignmentChange = event => {
+    setBookingHours(true); 
     const { value } = event.target;
     console.log(value);
     setBookAppointmentRequest(prevValue => {
@@ -230,6 +203,7 @@ function UserDetailPage({ expertId, currentUser }) {
         Assignments: value
       };
     });
+    
   };
   const [setCheck, setCheckavaiable] = useState(false);
 
@@ -288,8 +262,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
   const handleBooking = () => {
-   
-  
+    
 
     if (bookAppointmentRequest.ServiceId !== null) {
       var request;
@@ -297,6 +270,8 @@ function UserDetailPage({ expertId, currentUser }) {
       switch (expertDetails.BasicDetails.ServiceCharge) {
         case 1:
           URL = `${API.URL}RequestServiceProviderPerHr`;
+          
+  
           request = {
             ServiceProviderId: expertId,
             ServiceSeekerId: currentUser.Id,
@@ -307,7 +282,17 @@ function UserDetailPage({ expertId, currentUser }) {
             Ticket: currentUser.Ticket
           };
           bookAppointment(request, URL)
-            .then(res => console.log(res));
+          .then(res => {
+            if (res) {
+              window.location.reload(true);
+              alert('Requested Booking Successfully Done!');
+              
+
+            } else {
+              window.location.reload(true);
+              alert('Booking unsuccessfull! Please Try again later!');
+            }
+          });  
 
           break;
 
@@ -388,6 +373,7 @@ function UserDetailPage({ expertId, currentUser }) {
   };
 
   const handleClick = () => {
+    
     setAllRequest(prevValue => {
       return [...prevValue, request]
         ;
@@ -404,7 +390,8 @@ function UserDetailPage({ expertId, currentUser }) {
           <Grid item lg='6' md="12" sm="12" className={classes.profileSection}>
             <Paper elevation={2} className={classes.paper}>
               <Grid container style={{ marginBottom: '20px' }}>
-                <Grid item xs='3'>
+              
+                <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '2rem'}} item xs='4' className={classes.gridItem}>
                   <Avatar alt="Remy Sharp" src={`https://localhost:44327${expertDetails.BasicDetails.DPPath}`} className={classes.large} />
                 </Grid>
                 <Grid item xs="auto" style={{ padding: isMobile ? '30px 30px 0px 0px' : '30px 20px 0px' }}>
@@ -425,6 +412,7 @@ function UserDetailPage({ expertId, currentUser }) {
               <Typography variant='h6'>How do I charge?</Typography>
 
               <Typography variant='body1'>{expertDetails.BasicDetails.ServiceCharge ? `I charge per ${expertDetails.BasicDetails.ServiceCharge === 1 ? 'Hour' : expertDetails.BasicDetails.ServiceCharge === 2 ? 'Assignment' : 'FullDay'}` : ''}.</Typography>
+              
             </Paper>
           </Grid>
           <Grid item xs='6' className={classes.profileSection}>
@@ -448,7 +436,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid container>
-                  <Grid item xs='5'>
+                  <Grid item xs='6'>
                     <KeyboardDatePicker
                       style={{ width: '90%' }}
                       disableToolbar
@@ -467,7 +455,9 @@ function UserDetailPage({ expertId, currentUser }) {
                       }}
                     />
                   </Grid>
-                  <Grid item xs='5' style={{ display: selectedDate !== null ? '' : 'none' }}>
+                  </Grid>
+                  <Grid container>
+                  <Grid item xs='6' style={{ display: selectedDate !== null ? '' : 'none' }}>
                     { 
                     (expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 1 ? timeSlots&&timeSlots.length>0 ? timeSlots.map((item, index) => <FormControlLabel
                       onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime,item.TimeSlotNo); }}
@@ -476,8 +466,11 @@ function UserDetailPage({ expertId, currentUser }) {
                       label={`${item.StartTime} - ${item.EndTime}`}
                     />)
                      :
-                     <Typography style={{ padding: '30px 20px 0 0', textAlign: 'right', color:'red'}} >Not Available</Typography> 
-                    : expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 2 ? <Input
+                     <Typography style={{ padding: '30px 20px 0 0', color:'red'}} >Not Available</Typography> 
+                    : expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 2 ? 
+                    
+                    <Input
+                    style={{ padding: '20px 20px 0 0', textAlign: 'right'}}
                       id="outlined-number"
                       placeholder="No. of Assignments"
                       type="number"
@@ -509,7 +502,7 @@ function UserDetailPage({ expertId, currentUser }) {
                   </Grid>
                 </Grid>
               </MuiPickersUtilsProvider>
-              <Grid container spacing={2}>
+              <Grid >
                 {setCheck && <Grid item xs={6}>
                   {expertDetails.BasicDetails.ServiceCharge === 3 && <Button className={classes.button} onClick={handleCheckAvalibility}  variant="contained" >
                     Check Avalibilty

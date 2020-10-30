@@ -880,7 +880,7 @@ function ServicesProvide(props) {
           
             <Grid item xs={8} className={classes.grid}>
               <Grid container>
-                {props.serviceList.map((item, index) => (
+                {props.serviceList && props.serviceList.map((item, index) => (
                   
 
                   <Grid item xs="8" className={classes.grid} key={index}>
