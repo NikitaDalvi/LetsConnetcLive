@@ -62,7 +62,7 @@ let tempAddToListData = [];
 
 function ServicesProvide(props) {
   const [data, setData] = useState({
-    Id: "",
+    Id: localStorage.getItem("serviceId") || "",
     location: localStorage.getItem("location") || "",
     service: "",
     fees: localStorage.getItem("fees") || "",
@@ -256,15 +256,11 @@ function ServicesProvide(props) {
   }
 
   async function removeService(item) {
-    
-    item.Id = data.service.Id;
     props.removeService(item);
+    window.location.reload(true);
 
-    console.log(item);
-
-  
     const Service = {
-      ServiceId: item.Id,
+      ServiceId: item.serviceId,
       ServiceProviderId: currentUser.Id,
     };
 
@@ -275,9 +271,13 @@ function ServicesProvide(props) {
     const res = await deleteServiceDetails(postdeleteService);
     if (res) {
       if (res.data) {
+        
         if (res.data.responseCode === 200) {
+
+         
           return "success";
         } else {
+        
           return "fail";
         }
       }
