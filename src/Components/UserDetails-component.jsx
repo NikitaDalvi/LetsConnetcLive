@@ -61,7 +61,8 @@ function UserDetailPage({ expertId, currentUser }) {
   const [alertmessage, setalert] = useState(null);
 
   const [Slots, setSlots] = useState([]);
-  console.log(Slots)
+  const [sequentialSlots, setSequentialSlots] = useState([])
+
   useEffect(() => {
     if (expertId) {
       getExpertDetails()
@@ -148,7 +149,29 @@ function UserDetailPage({ expertId, currentUser }) {
 
   const [allRequest, setAllRequest] = React.useState([]);
 
-  const onTimeSlotSelect = (startTime, endTime, timeslotno) => {
+  const checkForSequential = () => {
+    let isSequential = true
+    sequentialSlots.forEach((item, index) => {
+      if(sequentialSlots.length === 1 || (index === sequentialSlots.length - 1)){
+        return isSequential
+      }
+        
+      if((item - sequentialSlots[index - 1] !== 1) && (sequentialSlots[index + 1] - item !== 1)){
+        isSequential = false
+        return isSequential
+      }
+    })
+
+  }
+  
+  const onTimeSlotSelect = (startTime, endTime, timeslotno, index) => {
+
+    if(sequentialSlots.includes(index)){
+      setSequentialSlots([...sequentialSlots, index].sort())
+    }
+    else{
+      setSequentialSlots(sequentialSlots.splice(index, 1).sort())
+    }
 
     setBookingHours(true);
 
@@ -242,7 +265,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
       })
       .catch(err => {
-        alert('Not Found')
+        alert('Kindly select Correct Start Date And End Date')
       });
 
 
@@ -425,6 +448,7 @@ function UserDetailPage({ expertId, currentUser }) {
   const classes = useStyles();
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   console.log('Service Charge value:', expertDetails && expertDetails.BasicDetails && expertDetails.BasicDetails.ServiceCharge)
+  console.log('IS Sequential:', checkForSequential())
   if (expertDetails !== null) {
     return (
     <Container>
@@ -502,7 +526,7 @@ function UserDetailPage({ expertId, currentUser }) {
                 <Grid item xs='6' style={{ display: selectedDate !== null ? '' : 'none' }}>
                   {
                     (expertDetails.BasicDetails.ServiceCharge && expertDetails.BasicDetails.ServiceCharge === 1 ? timeSlots && timeSlots.length > 0 ? timeSlots.map((item, index) => <FormControlLabel
-                      onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime, item.TimeSlotNo); }}
+                      onChange={() => { onTimeSlotSelect(item.StartTime, item.EndTime, item.TimeSlotNo, index); }}
                       key={index}
                       control={<Checkbox name="gilad" style={{ padding: '10px', textAlign: 'Center', color: 'red' }} />}
                       label={`${item.StartTime} - ${item.EndTime}`}
@@ -553,7 +577,7 @@ function UserDetailPage({ expertId, currentUser }) {
                 </Button>}
               </Grid>}
               {setBooking && <Grid item xs={6}>
-                <Button className={classes.button} onClick={handleBooking} variant="contained" >
+                <Button className={classes.button} onClick={handleBooking} variant="contained" disabled={checkForSequential()}>
                   BOOK NOW
                   </Button>
               </Grid>}
