@@ -113,7 +113,7 @@ function ServiceRequest(props) {
       
       GetRequests(request)
         .then(res => {
-          setNewRequests(res && props.userType === "Service-Provider" ? res.NewReqest : res);
+          setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
          
@@ -129,7 +129,7 @@ function ServiceRequest(props) {
     console.log(data)
     
 
-    let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatus')
+    let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatusforWeb')
     const result = await axios.post(`${API.URL}${apiUrl}`, data);
   
     console.log(result);
@@ -301,7 +301,7 @@ function ServiceRequest(props) {
             />
             <CardContent className={classes.CardContent}>
               <div>
-                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket} Id={item.ServiceRequestId} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} date={item.TimeList[0].EndDate} />))}
+                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket} Id={item.ServiceRequestId}  Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} date={item.TimeList[0].EndDate} />))}
               </div>
             </CardContent>
             
@@ -347,7 +347,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
+                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} Address={item.Address} Rating={item.Rating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
             </CardContent>
           </Card>

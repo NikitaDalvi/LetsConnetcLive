@@ -86,7 +86,6 @@ function UserDetailPage({ expertId, currentUser }) {
   const [selectedEndDate, setSelectedEndDate] = React.useState(null)
 
   const handleDateChange = (date) => {
-    debugger
     setSelectedDate(date);
     setCheckavaiable(true)
     setBookingHours(false)
@@ -113,7 +112,6 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
   const handleEndDateChange = (date) => {
-    debugger
     setSelectedEndDate(date)
 
     const Date = moment(date).format('YYYY-MM-DD').toString();
@@ -155,22 +153,24 @@ function UserDetailPage({ expertId, currentUser }) {
       if(sequentialSlots.length === 1 || (index === sequentialSlots.length - 1)){
         return isSequential
       }
-        
-      if((item - sequentialSlots[index - 1] !== 1) && (sequentialSlots[index + 1] - item !== 1)){
+      
+      if(sequentialSlots[index - 1] && sequentialSlots[index + 1] && (item - sequentialSlots[index - 1] !== 1) || (sequentialSlots[index + 1] - item !== 1)){
         isSequential = false
         return isSequential
       }
     })
 
+    return isSequential
+
   }
   
   const onTimeSlotSelect = (startTime, endTime, timeslotno, index) => {
 
-    if(sequentialSlots.includes(index)){
+    if(!sequentialSlots.includes(index)){
       setSequentialSlots([...sequentialSlots, index].sort())
     }
     else{
-      setSequentialSlots(sequentialSlots.splice(index, 1).sort())
+      setSequentialSlots(sequentialSlots.filter(item => item!=index).sort())
     }
 
     setBookingHours(true);
@@ -185,7 +185,6 @@ function UserDetailPage({ expertId, currentUser }) {
     const existing = slots.find(item => item.StartTime === startTime && item.EndTime === endTime);
 
     if (existing) {
-      debugger
       const currentIndex = slots.indexOf(existing);
       slots.splice(currentIndex, 1);
 
@@ -206,7 +205,6 @@ function UserDetailPage({ expertId, currentUser }) {
 
   const handleChange = (event) => {
 
-    debugger
     setBookingHours(false);
 
     setCheckavaiable(false);
@@ -297,24 +295,18 @@ function UserDetailPage({ expertId, currentUser }) {
       var URL;
       switch (expertDetails.BasicDetails.ServiceCharge) {
         case 1:
-          debugger
-
-
+          
           var check = 0
-          debugger
 
           if (Slots.length > 1) {
-            debugger
             Array.prototype.forEach.call(Slots, item => {
-
-              debugger
               console.log(item)
 
               Array.prototype.forEach.call(Slots, item1 => {
-                debugger
+               
                 console.log(item1)
                 if (item.timeslotno != item1.timeslotno && item.number != item1.timeslotno + 1 && item.number != item1.timeslotno - 1) {
-                  debugger
+            
                   alert('The squance must be in continues !!');
 
                   check = 1;
@@ -322,7 +314,7 @@ function UserDetailPage({ expertId, currentUser }) {
                 }
               });
               if (check == 1) {
-                debugger
+               
 
               }
 
@@ -332,7 +324,6 @@ function UserDetailPage({ expertId, currentUser }) {
 
           if (check = 0) {
 
-            debugger
             URL = `${API.URL}RequestServiceProviderPerHr`;
             setBookingHours(true);
 
@@ -577,7 +568,7 @@ function UserDetailPage({ expertId, currentUser }) {
                 </Button>}
               </Grid>}
               {setBooking && <Grid item xs={6}>
-                <Button className={classes.button} onClick={handleBooking} variant="contained" disabled={checkForSequential()}>
+                <Button className={classes.button} onClick={handleBooking} variant="contained" disabled={!checkForSequential()}>
                   BOOK NOW
                   </Button>
               </Grid>}
