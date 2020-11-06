@@ -92,20 +92,6 @@ const Dashboard = (props) => {
       <div>
         <Container>
           <center>
-            {currentUser && currentUser.Status === 6 && (
-              <Tooltip title={statusMapping(currentUser && currentUser.Status)}>
-              <Box
-                width="50%"
-                p={2}
-                bgcolor={green}
-                style={{ color: "#ffffff" }}
-              >
-                USER ACTIVE
-              </Box>
-              </Tooltip>
-            )}
-          </center>
-          <center>
             {currentUser && currentUser.Status !== 6 && (
               <Tooltip title={statusMapping(currentUser && currentUser.Status)}>
                 <Box
@@ -123,7 +109,7 @@ const Dashboard = (props) => {
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
               <DashboardCard
-                color="#EA4335"
+                color="#e65888"
                 caption="Service Request"
                 name="NEW"
                 quantity={
@@ -135,7 +121,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#4285F4"
+                color="#c95ed6"
                 caption="Service Request"
                 name="TODAY"
                 quantity={
@@ -147,7 +133,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#34A853"
+                color="#e65888"
                 caption="Service Request"
                 name="UPCOMING"
                 quantity={
@@ -158,7 +144,7 @@ const Dashboard = (props) => {
 
             <Grid item xs={3}>
               <DashboardCard
-                color="#B887F8"
+                color="#c95ed6"
                 caption="Service Request"
                 name="COMPLETED"
                 quantity={
@@ -168,7 +154,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#F4347B"
+                color="#e65888"
                 caption="Commission Due"
                 name="COMMISION DUE"
                 quantity="&#8377;1,11,000"
@@ -176,7 +162,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#FFBE57"
+                color="#c95ed6"
                 caption="Rating"
                 name="RATING"
                 rating={
@@ -189,7 +175,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#7DCEA0"
+                color="#e65888"
                 caption="Review"
                 name="REVIEW"
                 
@@ -223,7 +209,7 @@ const Dashboard = (props) => {
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
               <DashboardCard
-                color="#EA4335"
+                color="#e65888"
                 caption="Nearby Experts"
                 name="NEARBY EXPERTS"
                 quantity={
@@ -235,7 +221,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#4285F4"
+                color="#c85ed8"
                 caption="Service Requests"
                 name="CONFIRMED"
                 quantity={
@@ -247,7 +233,7 @@ const Dashboard = (props) => {
             </Grid>
             <Grid item xs={3}>
               <DashboardCard
-                color="#34A853"
+                color="#e65888"
                 caption="Service Request"
                 name="PENDING"
                 quantity={
@@ -260,7 +246,7 @@ const Dashboard = (props) => {
 
             <Grid item xs={3}>
               <DashboardCard
-                color="#B887F8"
+                color="#c85ed8"
                 caption="Service Request"
                 name="PAST"
                 quantity={
@@ -273,7 +259,7 @@ const Dashboard = (props) => {
             <Grid item xs={3}>
 
               <DashboardCard
-                color="#FFBE57"
+                color="#e65888"
                 caption="Rating"
                 name="RATING"
                 rating={
@@ -287,7 +273,7 @@ const Dashboard = (props) => {
             <Grid item xs={3}>
 
               <DashboardCard
-                color="#82E0AA"
+                color="#c85ed8"
                 caption="Review"
                 name="REVIEW"
                 quantity={

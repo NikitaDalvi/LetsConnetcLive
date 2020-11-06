@@ -18,7 +18,7 @@ function DashboardCard({history,...props}){
   }));
 
   function changepage(){
-    alert(props.name)
+   
     console.log(props)
     //debugger;
 

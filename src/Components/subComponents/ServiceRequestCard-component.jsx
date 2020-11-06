@@ -20,18 +20,22 @@ const useStyles = makeStyles((theme) => ({
   gridItem:{
     overflowWrap: 'break-word'
   }
+  
 }));
 
 
-function ServiceRequestCard({amount,Id,userId,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
+function ServiceRequestCard({amount,Id,userId,spId,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
 {
 
 const [Date,setDate] = useState('');
 const [request,setRequest] = useState({});
 const [rate, setRate] = useState('');
 
+
 useEffect(()=>{
+
   if(date){
+    console.log(userType);
     const Date = date.split('-');
     var mon  =  Date[1];
     mon = parseInt(mon);
@@ -91,7 +95,9 @@ useEffect(()=>{
         
         
         <InputLabel htmlFor="component-simple">Name</InputLabel>
+        
           <Typography gutterBottom variant='h6'>{name}</Typography>
+      
           <InputLabel htmlFor="component-simple">Adress</InputLabel>
           <Typography gutterBottom variant='h6'>{Address}</Typography>
           <InputLabel htmlFor="component-simple">Ratings</InputLabel>
@@ -105,15 +111,19 @@ useEffect(()=>{
 
   return(
     <div>
-      <Typography variant='h6'>{name}</Typography>
       
-      <Grid item xs={8}>
-        
-      <InfoIcon
+      <Grid container  className={classes.grid}>
+        <Grid item xs='5'>
+        <Typography variant='h6'>{name}</Typography>
+        </Grid>
+        <Grid item xs='5'>
+        <InfoIcon
       className={classes.icon}
       onClick={handleOpen}
       style={{ marginRight: "5px" }}
       />
+        </Grid>
+
       
       </Grid>
       <Grid container className={classes.grid}>
@@ -132,14 +142,15 @@ useEffect(()=>{
         
         
       </Grid>
-      <Grid container className={classes.grid} style={{display:status===3 && userType==='Service-Provider'?'':'none'}}>
+      <Grid container className={classes.grid} style={{display:status===3 && (userType===2||userType===3)?'':'none'}}>
       <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} item xs='6' className={classes.gridItem}>
 
-          <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#2e7d32',color:'white'}}>Accept</Button>
+          <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#ff4da6',color:'white'}}>Accept</Button>
         </Grid>
-        <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} item xs='6' className={classes.gridItem}>
+        <br />
+        <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '0.5rem'}} item xs='6' className={classes.gridItem}>
 
-        <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#b71c1c',color:'white'}}>Reject</Button>
+        <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#FF1493',color:'white'}}>Reject</Button>
         </Grid>
         <Modal
           open={open}
@@ -154,9 +165,14 @@ useEffect(()=>{
         <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'transparent',color:'#2e7d32'}}>Done</Button>
       </div>
       <div style={{display:status===4?'':'none', textAlign:'right'}}>
-        <Button variant="contained" onClick={()=>{handleModal(service,userId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#ffd600',color:'white'}}>Rate and Review</Button>
+        <Button variant="contained" onClick={()=>{handleModal(service,userId,spId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#FF1493',color:'white'}}>Rate and Review</Button>
       </div>
       
+      <div style={{display:status===3&&(userType===4||userType===5)?'':'none', textAlign:'center'}}>
+      {<Button  variant='contained' startIcon={<CancelOutlinedIcon/>}color='primary' onClick={()=>{handleStatus({...request,Status:5});}} size="small" className={classes.button}style={{backgroundColor:'#FF1493',color:'white'}}>Cancel Request</Button>}
+      </div>
+      
+
     </div>
   );
 }

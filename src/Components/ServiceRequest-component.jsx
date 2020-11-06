@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '800px',
 
   },
+  toolbarButtons: {
+    marginLeft: 'auto',
+  },
   bullet: {
     display: 'inline-block',
     margin: '0 2px',
@@ -94,12 +97,13 @@ function ServiceRequest(props) {
   const [Today, setToday] = useState('');
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
+  const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
   
 
   useEffect(() => {
     if (currentUser) {
-      
+      console.log(currentUser);
       const today = formatDate(new Date());
       setToday(today);
 
@@ -116,6 +120,7 @@ function ServiceRequest(props) {
           setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
+          
          
        
         })
@@ -156,7 +161,7 @@ function ServiceRequest(props) {
 
   async function saveRatingReview(){
     //debugger;
-   
+   if(props.userType==='Service-Provider'){
     const postData = {
       Id: currentUser.Id,
       ReviewedToId: seekerId,
@@ -165,7 +170,19 @@ function ServiceRequest(props) {
       Review: review,
       ticket: currentUser.Ticket,
     };
-    console.log(postData);
+
+   }
+   else{
+    const postData = {
+      Id: currentUser.Id,
+      ReviewedToId: spId, 
+      ReviewedById :currentUser.Id,
+      Rating:rate,
+      Review: review,
+      ticket: currentUser.Ticket,
+    }; 
+  
+  
      const res = await axios.post(`${API.URL}RateService`, postData);
      if (res) {
      if (res.data) {
@@ -182,8 +199,9 @@ function ServiceRequest(props) {
         }
       }
      }
+
     console.log(res);
-   
+    }
 
   }
 
@@ -194,8 +212,10 @@ function ServiceRequest(props) {
   }
 
   const handleOpen = (Name,id) => {
+    debugger
     console.log(id);
     setSeekerId(id);
+    setserviceProviderId(id);
     setName(Name);
     setOpen(true);
     
@@ -204,6 +224,7 @@ function ServiceRequest(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
 
 
   const handleAppointmentStatus = (object) => {
@@ -217,25 +238,29 @@ function ServiceRequest(props) {
           });
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setNewRequests(appointments);
-          window.location.reload(true);
+          
 
           alert('Appointment confirmed successfully!');
+         
           return;
         }
         if (res.responseCode === 200 && object.Status === 2) {
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setNewRequests(appointments);
           alert('Appointment rejected successfully!');
+          window.location.reload(true);
           return;
         }
         if(res.responseCode ===200 && object.Status === 4){
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setCompletedRequests(appointments);
-          window.location.reload(true);
+         
 
           alert('Appointment  Completed successfully!');
+         
           return;
         }
+
         alert('Unexpected error occured!');
       });
   };
@@ -269,8 +294,8 @@ function ServiceRequest(props) {
       <br />
       <TextField multiline rows={4} label='review' onChange={e => setReview(e.target.value)} value={review} variant='outlined' style={{ width: '100%' }} />
       <br />
-      <Button startIcon={<DoneIcon />} color='secondary' variant='contained' className={classes.button} onClick={()=>saveRatingReview()}>Submit</Button>
-      <Button startIcon={<CloseIcon />} variant='contained' color='primary' onClick={handleClose} className={classes.button}>Close</Button>
+      <Button startIcon={<DoneIcon />} style={{backgroundColor:'#ff4da6',color:'white'}} variant='contained' className={classes.button} onClick={()=>saveRatingReview()}>Submit</Button>
+      <Button startIcon={<CloseIcon />} variant='contained' style={{backgroundColor:'#FF1493',color:'white'}} onClick={handleClose} className={classes.button}>Close</Button>
     </div>
   );
 
@@ -297,12 +322,15 @@ function ServiceRequest(props) {
             <CardHeader
               className={classes.CardHeader}
               title={props.userType==='Service-Provider'?"New":'Pending'}
-              style={{backgroundColor:'#EA4335'}}
+              style={{backgroundColor:'#e65888'}}
             />
             <CardContent className={classes.CardContent}>
               <div>
-                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket} Id={item.ServiceRequestId}  Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={props.userType} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} date={item.TimeList[0].EndDate} />))}
+                {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket} Id={item.ServiceRequestId}  Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={currentUser&&currentUser.UserRole} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate}/>))}
               </div>
+              
+              
+            
             </CardContent>
             
           </Card>
@@ -312,13 +340,14 @@ function ServiceRequest(props) {
             <CardHeader
               className={classes.CardHeader}
               title="Today"
-              style={{ backgroundColor: '#1976d2' }}
+              style={{ backgroundColor: '#c85ed8' }}
             />
             <CardContent className={classes.CardContent}>
 
               <div>
                 {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate === Today ? <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} Id={item.ServiceRequestId} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
+              
             </CardContent>
           </Card>
         </Grid>
@@ -327,13 +356,14 @@ function ServiceRequest(props) {
             <CardHeader
               className={classes.CardHeader}
               title={props.userType === 'Service-Provider' ? "OnBoard" : 'Confirmed'}
-              style={{ backgroundColor: '#2e7d32' }}
+              style={{ backgroundColor: '#e65888' }}
             />
             <CardContent className={classes.CardContent}>
 
               <div>
                 {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
+              
             </CardContent>
           </Card>
         </Grid>
@@ -342,15 +372,17 @@ function ServiceRequest(props) {
             <CardHeader
               className={classes.CardHeader}
               title={props.userType === 'Service-Provider' ? "Completed" : 'Past'}
-              style={{ backgroundColor: '#fdd835' }}
+              style={{ backgroundColor: '#c85ed8' }}
             />
             <CardContent className={classes.CardContent}>
 
               <div>
-                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} Address={item.Address} Rating={item.Rating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
+                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} spId={item.ServiceProviderId} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} Address={item.Address} Rating={item.Rating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
+              
             </CardContent>
           </Card>
+          
   </Grid>
         <Modal
           open={open}
