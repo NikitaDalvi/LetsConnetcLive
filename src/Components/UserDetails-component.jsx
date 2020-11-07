@@ -468,7 +468,7 @@ function UserDetailPage({ expertId, currentUser }) {
             <Typography variant='body1'>{expertDetails.BasicDetails.Description ? expertDetails.BasicDetails.Description : 'No Description found'}.</Typography>
             <Typography variant='h6'>How do I charge?</Typography>
 
-            <Typography variant='body1'>{expertDetails.BasicDetails.ServiceCharge ? `I charge per ${expertDetails.BasicDetails.ServiceCharge === 1 ? 'Hour' : expertDetails.BasicDetails.ServiceCharge === 2 ? 'Assignment' : 'FullDay'}` : ''}.</Typography>
+            <Typography variant='body1'>{expertDetails.BasicDetails.ServiceCharge ? `I charge per ${expertDetails.BasicDetails.ServiceCharge === 1 ? 'Hour' : expertDetails.BasicDetails.ServiceCharge === 2 ? 'Assignment' : `FullDay(${expertDetails.BasicDetails.WorkingDays===1?'Mon-Fri':'Mon-Sat'})`}` : ''}.</Typography>
 
           </Paper>
         </Grid>

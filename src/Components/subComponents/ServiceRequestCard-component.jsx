@@ -35,7 +35,7 @@ const [rate, setRate] = useState('');
 useEffect(()=>{
 
   if(date){
-    console.log(userType);
+   
     const Date = date.split('-');
     var mon  =  Date[1];
     mon = parseInt(mon);

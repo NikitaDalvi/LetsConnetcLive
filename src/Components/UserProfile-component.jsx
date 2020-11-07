@@ -313,7 +313,14 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
           const dateTime = new Date(res.data.output.UserBasicDetails.DOB);
           setSelectedDate(dateTime);
-          const path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
+          let path;
+          if(!process.env.NODE_ENV||process.env.NODE_ENV==='development'){
+            //alert(true);
+            path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
+          }else{
+            path = `${process.env.REACT_APP_PROD_BASE_URL}${res.data.output.UserBasicDetails.DPPath}`
+          }
+           //path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
           setPath(path);
         })
 

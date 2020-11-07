@@ -155,7 +155,14 @@ function LoggedIn(props) {
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.FullName);
-      const Path = `${API.URL}${currentUser.DPPath}`
+      let Path = null;
+      console.log(process.env.NODE_ENV==='development');
+      if(!process.env.NODE_ENV||process.env.NODE_ENV==='development'){
+        //alert(true);
+        Path = `https://localhost:44327/${currentUser.DPPath}`
+      }else{
+        Path = `${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`
+      }
       console.log(Path);
       setPath(Path);
       setType(currentUser.UserRole);

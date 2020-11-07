@@ -117,6 +117,7 @@ function ServiceRequest(props) {
       
       GetRequests(request)
         .then(res => {
+          console.log(res);
           setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
@@ -161,8 +162,9 @@ function ServiceRequest(props) {
 
   async function saveRatingReview(){
     //debugger;
+    let postData = null;
    if(props.userType==='Service-Provider'){
-    const postData = {
+    postData = {
       Id: currentUser.Id,
       ReviewedToId: seekerId,
       ReviewedById : currentUser.Id,
@@ -173,7 +175,9 @@ function ServiceRequest(props) {
 
    }
    else{
-    const postData = {
+     debugger
+     alert('HII 123')
+    postData = {
       Id: currentUser.Id,
       ReviewedToId: spId, 
       ReviewedById :currentUser.Id,
@@ -181,7 +185,7 @@ function ServiceRequest(props) {
       Review: review,
       ticket: currentUser.Ticket,
     }; 
-  
+   }
   
      const res = await axios.post(`${API.URL}RateService`, postData);
      if (res) {
@@ -201,7 +205,7 @@ function ServiceRequest(props) {
      }
 
     console.log(res);
-    }
+
 
   }
 
@@ -211,11 +215,11 @@ function ServiceRequest(props) {
     console.log(value);
   }
 
-  const handleOpen = (Name,id) => {
+  const handleOpen = (Name,id,spId) => {
     debugger
-    console.log(id);
+    console.log(spId);
     setSeekerId(id);
-    setserviceProviderId(id);
+    setserviceProviderId(spId);
     setName(Name);
     setOpen(true);
     
