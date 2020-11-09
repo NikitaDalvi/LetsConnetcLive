@@ -95,7 +95,8 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
     Description: '',
     ticket: {},
     detailedAddress1: '',
-    detailedAddress2: ''
+    detailedAddress2: '',
+    dppath : ''
   });
 
   const [path, setPath] = useState(userIcon);
@@ -166,7 +167,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
           request.LocationDetails.push(address2);
         }
        
-        const result = await axios.post(`${API.URL}.}UpdateServiceProviderDescription`, request);
+        const result = await axios.post(`${API.URL}UpdateServiceProviderDescription`, request);
         if (result) {
           if (result.data.output === true) {
             const editData = { FullName: data.FullName, EmailId: data.EmailId, ContactNo: data.ContactNo, Gender: data.Gender === 'Male' ? 1 : data.Gender === 'Female' ? 2 : 3, DOB: data.DOB, Description: data.Description };
@@ -301,7 +302,9 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
             Gender: res.data.output.UserBasicDetails.Gender === 1 ? 'Male' : currentUser.Gender === 2 ? 'Female' : currentUser.Gender === 3 ? 'Others' : '',
             Description: res.data.output.UserBasicDetails.Description,
             ticket: currentUser.Ticket,
-            DOB: res.data.output.UserBasicDetails.DOB
+            DOB: res.data.output.UserBasicDetails.DOB,
+            dppath: res.data.output.UserBasicDetails.dppath
+
           });
           if (res.data.output.LocationDetails.length !== 0) {
             setAddress1(res.data.output.LocationDetails[0]);

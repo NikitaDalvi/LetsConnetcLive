@@ -315,7 +315,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       </Grid>
       <Grid container>
         {filteredList.map(item => <Grid item xs='3' className={classes.gridItem}>
-          <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`${API.URL}${item.DPPath}`} address={item.Address} />
+          <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`https://letnetworkdev.obtainbpm.com/${item.DPPath}`} address={item.Address} />
         </Grid>)}
       </Grid>
     </Container>

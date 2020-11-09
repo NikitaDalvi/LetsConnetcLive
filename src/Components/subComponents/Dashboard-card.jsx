@@ -26,11 +26,18 @@ function DashboardCard({history,...props}){
       history.push('ServiceRequest');
     }
     else if(props.name==='COMMISION DUE'){
+      history.push('CommissionDue');
 
     }
-    else{
+    else if(props.name==='RATING'){
+      history.push('RatingAndReview');
       
     }
+    else if(props.name==='REVIEW'){
+      history.push('RatingAndReview');
+      
+    }
+
 
   }
   const classes = useStyles();
