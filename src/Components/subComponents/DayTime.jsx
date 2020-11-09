@@ -29,6 +29,7 @@ import {
 import {
   addAvailability,
   removeTimeslot,
+  removeAvailability
 } from "../../redux/service/service-actions";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -45,6 +46,7 @@ function DayTime({
   removeTimeSlot,
   alert,
   savedDays,
+  removeAvailability
 }) {
   const [slot, setSlot] = useState({
     // ServiceProviderId:'',
@@ -85,9 +87,17 @@ function DayTime({
       setChecked(true);
       setDisable(false);
     } else {
-      setSlot((prevValue) => {
-        return { ...prevValue, WorkingDays: 0 };
+      removeAvailability(day);
+      setSlot({        
+        WorkingDays: "",
+        TimeSlotDetails: {
+          StartTime: "",
+          StartAMPM: "",
+          EndTime: "",
+          EndAMPM: "",
+        },
       });
+      setTimeslots([]);
       setChecked(false);
       setDisable(true);
     }
@@ -293,7 +303,6 @@ function DayTime({
               color="default"
               inputProps={{ "aria-label": "checkbox with default color" }}
               name={day}
-              disabled={existence}
             />
           </Grid>
           <Grid item xs={6}>
@@ -400,6 +409,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   addWorkingHours: (slot) => dispatch(addAvailability(slot)),
   removeTimeSlot: (slot) => dispatch(removeTimeslot(slot)),
+  removeAvailability: (day)=> dispatch(removeAvailability(day))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DayTime);

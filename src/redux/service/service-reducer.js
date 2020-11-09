@@ -102,6 +102,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       workingHours:removeTimeSlot(state.workingHours,action.payload)
     };
 
+    case serviceActionTypes.REMOVE_AVAILABILITY:
+      return{
+        ...state,
+        workingHours:state.workingHours.find(item => item.WorkingDays === action.payload)?state.workingHours.filter(item => item.WorkingDays !== action.payload):state.workingHours
+      };
+
     case serviceActionTypes.ADD_RATING_AND_REVIEWS:
     return{
       ...state,

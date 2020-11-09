@@ -62,6 +62,11 @@ export const removeTimeslot = object => ({
   payload:object
 });
 
+export const removeAvailability = day => ({
+  type:serviceActionTypes.REMOVE_AVAILABILITY,
+  payload:day
+});
+
 export const setWorkingHours = list => ({
   type: serviceActionTypes.SET_WORKING_HOURS,
   payload:list

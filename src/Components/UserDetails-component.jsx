@@ -449,7 +449,7 @@ function UserDetailPage({ expertId, currentUser }) {
             <Grid container style={{ marginBottom: '20px' }}>
 
               <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{ marginTop: '2rem' }} item xs='4' className={classes.gridItem}>
-                <Avatar alt="Remy Sharp" src={`https://localhost:44327${expertDetails.BasicDetails.DPPath}`} className={classes.large} />
+                <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${expertDetails.BasicDetails.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${expertDetails.BasicDetails.DPPath}`} className={classes.large} />
               </Grid>
               <Grid item xs="auto" style={{ padding: isMobile ? '30px 30px 0px 0px' : '30px 20px 0px' }}>
                 <Typography variant={isMobile ? 'h6' : 'h5'}>{expertDetails.BasicDetails.ServiceProvider}</Typography>
