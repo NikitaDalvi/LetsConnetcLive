@@ -1,6 +1,6 @@
 /*jshint esversion:9*/
 import React, { useEffect } from "react";
-import homeVector from "../Images/home-pg-vector.png";
+import homeVector from "../Images/Vector 2.png";
 import img from "../Images/img.png";
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';

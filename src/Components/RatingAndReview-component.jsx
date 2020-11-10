@@ -13,6 +13,7 @@ import {selectRatingAndReviews} from '../redux/service/service-selector';
 import {addRatingAndReviews} from '../redux/service/service-actions';
 import { API } from "../API";
 
+
 function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
 
     const [ratings,setRatings] = useState([]);
@@ -31,6 +32,8 @@ function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
       }
     },[currentUser]);
 
+    
+
     function getRatings(data){
       return  axios.post(`${API.URL}GetRatings`,data);
     }
@@ -38,6 +41,7 @@ function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
     return(
       <div>
       <Container >
+      
       <AppBar position="static" style={{borderRadius:'5px',height:'60px',backgroundColor:'white'}}>
     <Toolbar variant="dense" style={{marginTop:'5px'}}>
     <StarHalfIcon style={{color:'black'}}/>
@@ -49,12 +53,14 @@ function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
         <hr/>
         <div>
         <Container>
-        <Grid container spacing={3}>
+        
+        <Grid container spacing={1}>
+        
         {ratings.map((item,index)=><Grid item xs={4} key={index}>
         <RatingCard name={item.Name} dp ={item.DPPath} rating={item.Rating} review={item.Review}/>
         </Grid>)}
-
         </Grid>
+       
         </Container>
         </div>
         </Container>

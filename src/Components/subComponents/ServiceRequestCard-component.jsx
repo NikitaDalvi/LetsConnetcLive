@@ -1,6 +1,6 @@
 /*jshint esversion:9*/
 import React,{useState,useEffect} from 'react';
-import {Grid,Button,Typography,makeStyles} from '@material-ui/core';
+import {Grid,Button,Typography,makeStyles,Avatar} from '@material-ui/core';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
@@ -12,6 +12,7 @@ import Rating from '@material-ui/lab/Rating';
 
 
 
+
 const useStyles = makeStyles((theme) => ({
   grid:{
     textAlign:'center',
@@ -19,12 +20,20 @@ const useStyles = makeStyles((theme) => ({
   },
   gridItem:{
     overflowWrap: 'break-word'
-  }
+  },
+  large: {
+    width: theme.spacing(9),
+    height: theme.spacing(9),
+    marginLeft: '105px',
+    marginBottom: '10px',
+    marginTop: '30px'
+  },
+
   
 }));
 
 
-function ServiceRequestCard({amount,Id,userId,spId,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
+function ServiceRequestCard({amount,Id,userId,spId,dppath,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
 {
 
 const [Date,setDate] = useState('');
@@ -71,8 +80,8 @@ useEffect(()=>{
 
 
     return {
-      position: 'absolute',
-      width: '400px',
+      position: 'center',
+      width: '500px',
       color: 'black',
       top: `20%`,
       left: `40%`,
@@ -92,11 +101,13 @@ useEffect(()=>{
   const [modalStyle] = React.useState(getModalStyle);
   const body = (
     <div style={modalStyle} className={classes.paper}>
-        
-        
+        <Avatar alt="Remy Sharp" src={dppath} className={classes.large} />
+        {/*<Avatar  style={{alignSelf: 'center'}} alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${dppath}`:`${process.env.REACT_APP_PROD_BASE_URL}${dppath}`} className={classes.large} />*/}
+         
         <InputLabel htmlFor="component-simple">Name</InputLabel>
         
           <Typography gutterBottom variant='h6'>{name}</Typography>
+          <Typography gutterBottom variant='h6'>{dppath}</Typography>
       
           <InputLabel htmlFor="component-simple">Adress</InputLabel>
           <Typography gutterBottom variant='h6'>{Address}</Typography>
@@ -162,7 +173,7 @@ useEffect(()=>{
         </Modal>
       </Grid>
       <div style={{display:status===1?'':'none', textAlign:'right'}}>
-        <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'transparent',color:'#2e7d32'}}>Done</Button>
+        <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'#FF1493',color:'white'}}>Done</Button>
       </div>
       <div style={{display:status===4?'':'none', textAlign:'right'}}>
         <Button variant="contained" onClick={()=>{handleModal(service,userId,spId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#FF1493',color:'white'}}>Rate and Review</Button>

@@ -8,12 +8,12 @@ import profile from '../../Images/profile.jpg';
 const useStyles = makeStyles((theme) => ({
 
   large: {
-   width: theme.spacing(7),
-   height: theme.spacing(7),
+   width: theme.spacing(6),
+   height: theme.spacing(6),
    marginLeft:'5px'
  },
  paper:{
-   width:'350px',
+   width:'300px',
    padding:'5px'
  },
  description:{
@@ -31,7 +31,10 @@ function RatingCard(props){
   const classes = useStyles();
   return(
   <Paper className={classes.paper}>
-    <Grid container spacing={2}>
+    
+    <Grid container spacing={1}>
+      <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.7rem'}}>
+
       <Grid item xs={3} className={classes.profile}>
         <Avatar alt="Remy Sharp" src={props.dp} className={classes.large} />
       </Grid>
@@ -48,6 +51,7 @@ function RatingCard(props){
       </Grid>
       <Grid className={classes.description} item xs={12}>
       <em style={{fontWeight:'500'}}>  {props.review}</em>
+      </Grid>
       </Grid>
     </Grid>
   </Paper>

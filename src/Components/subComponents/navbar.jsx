@@ -75,7 +75,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
     },
     toolbar: {
       alignContent: 'flex-end',
-      marginRight: theme.spacing(15),
+      marginRight: theme.spacing(20),
       height: '100px'
     },
     commonButton: {
@@ -98,7 +98,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       marginRight: isMobile ? '50px' : '500px'
     },
     nested: {
-      paddingLeft: theme.spacing(4),
+      paddingLeft: theme.spacing(3),
     },
   }));
   const classes = useStyles();

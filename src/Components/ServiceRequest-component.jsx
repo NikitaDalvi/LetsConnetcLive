@@ -97,6 +97,8 @@ function ServiceRequest(props) {
   const [Today, setToday] = useState('');
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
+  const [cancelRequests, setCancelRequests] = useState([]);
+  
   const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
   
@@ -121,6 +123,7 @@ function ServiceRequest(props) {
           setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
+          setCancelRequests(res && res.cancelRequests);
           
          
        
@@ -258,9 +261,19 @@ function ServiceRequest(props) {
         if(res.responseCode ===200 && object.Status === 4){
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setCompletedRequests(appointments);
-         
+          window.location.reload(true);
 
           alert('Appointment  Completed successfully!');
+         
+          return;
+        }
+
+        if(res.responseCode ===200 && object.Status === 5){
+          const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
+          setCancelRequests(appointments);
+          window.location.reload(true);
+
+          alert('Appointment  Cancel successfully!');
          
           return;
         }
@@ -365,7 +378,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
+                {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} Address={item.Address} Rating={item.Rating} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
               
             </CardContent>
