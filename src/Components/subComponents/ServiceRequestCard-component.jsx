@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   large: {
     width: theme.spacing(9),
     height: theme.spacing(9),
-    marginLeft: '105px',
+    marginLeft: '180px',
     marginBottom: '10px',
     marginTop: '30px'
   },
@@ -101,18 +101,9 @@ useEffect(()=>{
   const [modalStyle] = React.useState(getModalStyle);
   const body = (
     <div style={modalStyle} className={classes.paper}>
-        <Avatar alt="Remy Sharp" src={dppath} className={classes.large} />
-        {/*<Avatar  style={{alignSelf: 'center'}} alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${dppath}`:`${process.env.REACT_APP_PROD_BASE_URL}${dppath}`} className={classes.large} />*/}
-         
-        <InputLabel htmlFor="component-simple">Name</InputLabel>
-        
+          <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${dppath}`:`${process.env.REACT_APP_PROD_BASE_URL}${dppath}`} className={classes.large} />
           <Typography gutterBottom variant='h6'>{name}</Typography>
-          <Typography gutterBottom variant='h6'>{dppath}</Typography>
-      
-          <InputLabel htmlFor="component-simple">Adress</InputLabel>
           <Typography gutterBottom variant='h6'>{Address}</Typography>
-          <InputLabel htmlFor="component-simple">Ratings</InputLabel>
-          
           <Rating style={{marginTop:'10px'}} name="read-only" value={rating} readOnly precision={0.5} size="large"/>
         
         </div>
