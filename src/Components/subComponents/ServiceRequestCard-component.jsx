@@ -115,33 +115,38 @@ useEffect(()=>{
     <div>
       
       <Grid container  className={classes.grid}>
-        <Grid item xs='5'>
+        <Grid item xs='3'>
         <Typography variant='h6'>{name}</Typography>
         </Grid>
-        <Grid item xs='5'>
+        <Grid item xs='9'>
         <InfoIcon
       className={classes.icon}
       onClick={handleOpen}
-      style={{ marginRight: "5px" }}
+      style={{ marginRight: "15px" }}
       />
+      
         </Grid>
 
       
       </Grid>
       <Grid container className={classes.grid}>
-        <Grid item xs='2' className={classes.gridItem}>
+        <Grid item xs='3' className={classes.gridItem} > 
           <Typography variant='h6'>{Date}</Typography>
+          
         </Grid>
-        <Grid item xs='8' className={classes.gridItem}>
-        <span>{service}</span>
+       
+          
+        
+        <Grid item xs='20' >
+        <span >{service}</span>
         {timeslots.map((item,index)=>(
-          <div key={index}>
+          <div style={{display:service!=='Accounting' ?'':'none'}}className={classes.gridItem} key={index}>
               <span>&#10093; {item.StartTime}-{item.EndTime}</span>
               <br/>
           </div>
         ))}
-        </Grid>
         
+        </Grid>
         
       </Grid>
       <Grid container className={classes.grid} style={{display:status===3 && (userType===2||userType===3)?'':'none'}}>

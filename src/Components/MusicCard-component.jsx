@@ -56,7 +56,7 @@ function MusicCard(props) {
             width="800px"
             height="400px"
             margin-left="230px"
-            src={"https://www.youtube.com/embed/" + props.data.videoId}
+            src={"https://youtu.be/QFaFIcGhPoM" + props.data.videoId}
             frameBorder="0"
             allow="accelerometer, autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
