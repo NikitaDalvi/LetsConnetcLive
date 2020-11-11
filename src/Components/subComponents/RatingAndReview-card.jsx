@@ -27,16 +27,18 @@ const useStyles = makeStyles((theme) => ({
 
 
 function RatingCard(props){
+  console.log(props.path)
 
   const classes = useStyles();
   return(
   <Paper className={classes.paper}>
     
-    <Grid container spacing={1}>
-      <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.7rem'}}>
+    <Grid container spacing={1} direction="row" >
+      <Grid container direction="row"justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} >
 
       <Grid item xs={3} className={classes.profile}>
-        <Avatar alt="Remy Sharp" src={props.dp} className={classes.large} />
+      <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${props.path}`:`${process.env.REACT_APP_PROD_BASE_URL}${props.path}`} className={classes.large} />
+        
       </Grid>
       <Grid item xs={8}>
         <Typography variant='h6'>{props.name}</Typography>

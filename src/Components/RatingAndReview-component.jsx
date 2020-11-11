@@ -57,7 +57,7 @@ function RatingAndReview({currentUser,ratingsAndReviews,addRatingsAndReviews}){
         <Grid container spacing={1}>
         
         {ratings.map((item,index)=><Grid item xs={4} key={index}>
-        <RatingCard name={item.Name} dp ={item.DPPath} rating={item.Rating} review={item.Review}/>
+        <RatingCard name={item.Name}  path={item.DPPath} rating={item.Rating} review={item.Review}/>
         </Grid>)}
         </Grid>
        

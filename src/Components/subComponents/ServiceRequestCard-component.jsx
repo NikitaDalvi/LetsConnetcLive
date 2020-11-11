@@ -150,15 +150,11 @@ useEffect(()=>{
         
       </Grid>
       <Grid container className={classes.grid} style={{display:status===3 && (userType===2||userType===3)?'':'none'}}>
-      <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}} item xs='6' className={classes.gridItem}>
-
+      <div style={{display:'grid',gridTemplateColumns:'50% 50%',columnGap:'5px',width:'100%'}}>
           <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#ff4da6',color:'white'}}>Accept</Button>
-        </Grid>
+          <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#FF1493',color:'white'}}>Reject</Button>
+        </div>
         <br />
-        <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '0.5rem'}} item xs='6' className={classes.gridItem}>
-
-        <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#FF1493',color:'white'}}>Reject</Button>
-        </Grid>
         <Modal
           open={open}
           onClose={handleClose}
