@@ -130,8 +130,8 @@ function ServicesProvide(props) {
     }, 1000)
     
     //setSaveButtonEnable(false)
-
     if (name === "service") {
+
       console.log("eee");
 
       const service = props.dropdownList.find(
@@ -307,7 +307,6 @@ function ServicesProvide(props) {
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
-      //services: [],
       ticket: currentUser.Ticket,
     };
 
@@ -686,7 +685,7 @@ function ServicesProvide(props) {
         </Alert>
       </Snackbar>
 
-      <Grid container>
+      {/*<Grid container>
         <Grid item xs="2">
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
@@ -704,9 +703,9 @@ function ServicesProvide(props) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="hour">hour</MenuItem>
-              <MenuItem value="assignment">assignment</MenuItem>
-              <MenuItem value="Full-Time">Full-Time</MenuItem>
+              <MenuItem value="hour">Hour</MenuItem>
+              <MenuItem value="assignment">Assignment</MenuItem>
+              <MenuItem value="Full-Time">Daily</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -796,7 +795,7 @@ function ServicesProvide(props) {
             Save
           </Button>
         </Grid>
-      </Grid>
+        </Grid>*/}
 
       {showServiceAssignmentSection && (
         <Grid container>

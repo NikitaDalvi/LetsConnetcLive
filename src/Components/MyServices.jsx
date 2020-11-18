@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Switch, Route } from "react-router-dom";
 import ServicesToProvide from './ServicesToProvide';
+import BasicToDetails from './BasicToDetails';
 import Location from './Location';
 import Availability from "./Availability";
 import PropTypes from 'prop-types';
@@ -80,6 +81,11 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
   const classes = useStyles();
 
 
+  function handleBasic() {
+    setFocus('BasicDetails');
+    history.push('/UserPage/ServiceProvider/MyServices/BasicToDetails');
+  }
+
   function handleServices() {
     setFocus('Services');
     history.push('/UserPage/ServiceProvider/MyServices/ServicesToProvide');
@@ -125,6 +131,9 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
     <Container>
       <CircularProgressWithLabel value={progress} />
       <Typography className={classes.root}>
+        <Link onClick={handleBasic} color="inherit" className={classes.link} style={{ color: focus === 'BasicDetails' ? '' : 'Gray' }}>
+        Basic Details
+        </Link>
         <Link onClick={handleServices} color="inherit" className={classes.link} style={{ color: focus === 'Services' ? '' : 'Gray' }}>
           Services
         </Link>
@@ -138,6 +147,7 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
       <br />
       <br />
       <Switch>
+        <Route path="/UserPage/ServiceProvider/MyServices/BasicToDetails" exact component={BasicToDetails} />
         <Route path="/UserPage/ServiceProvider/MyServices/ServicesToProvide" exact component={ServicesToProvide} />
         <Route path="/UserPage/ServiceProvider/MyServices/Location" exact component={Location} />
         <Route path="/UserPage/ServiceProvider/MyServices/Availability" exact component={Availability} />

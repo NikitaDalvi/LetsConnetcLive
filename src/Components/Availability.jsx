@@ -200,8 +200,8 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
           <div style={{ textAlign: 'left  ' }}>
             <br />
             
-            <Container style={{ width: '80%', marginLeft: '0' }}>
-            <Tooltip title={statusBuffer(buffer)}>
+           <Container style={{ width: '80%', marginLeft: '0' }}>
+           {/*<Tooltip title={statusBuffer(buffer)}>
               <FormControl className={classes.formControl}>
               
                 <InputLabel id="demo-simple-select-label">Buffer</InputLabel>
@@ -219,7 +219,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
                   <MenuItem value={2}>60</MenuItem>
                 </Select>
               </FormControl>
-              </Tooltip>
+      </Tooltip>*/ }
               <br />
               <br />
               {

@@ -346,8 +346,6 @@ function ServiceRequest(props) {
                 {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket}  dppath={item.DPPath} Id={item.ServiceRequestId}  Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={currentUser&&currentUser.UserRole} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate}/>))}
               </div>
               
-              
-            
             </CardContent>
             
           </Card>

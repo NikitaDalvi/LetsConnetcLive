@@ -56,6 +56,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import { API } from "../API";
 
 
@@ -229,7 +230,7 @@ function LoggedIn(props) {
 
           <img src={Logo}  onClick={() => imgClick()} />
 
-          <ExitToAppIcon type='button' onClick={() => { props.setCurrentUser(null); props.history.push('/'); }} style={{ color: 'black', position: 'absolute', right: '100px' }} />
+          <PowerSettingsNewIcon type='button' onClick={() => { props.setCurrentUser(null); props.history.push('/'); }} style={{ color: 'black', position: 'absolute', right: '100px' }} />
           <Badge badgeContent={notifications.length} color="secondary" style={{ color: 'black', position: 'absolute', right: '150px' }}>
             <NotificationsIcon type='button' onClick={handleClick} />
           </Badge>

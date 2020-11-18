@@ -111,8 +111,10 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     if (selectedServices.length !== 0) {
       var filteredResult = [];
       selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+      selectedServices.forEach(item=>{
+        nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
+      })
       setFilteredList(filteredResult);
-
     }
   }, [selectedServices]);
 
@@ -130,8 +132,17 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   useEffect(() => {
 
     if (ratingFilter) {
+      console.log(ratingFilter);
+
+      let rating = parseInt(ratingFilter)
       var filteredResult = [];
-      filteredResult.push(nearbyList.find(service => service.Rating >= ratingFilter));
+      debugger;
+      nearbyList.map(service => 
+        service.Rating>=rating?
+        filteredResult.push(service)
+        :
+        service);
+      //filteredResult.push(nearbyList.find(service => service.Rating >= ratingFilter));
       setFilteredList(filteredResult);
     }
   }, [ratingFilter]);
@@ -315,7 +326,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       </Grid>
       <Grid container>
         {filteredList.map(item => <Grid item xs='3' className={classes.gridItem}>
-          <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`https://letnetworkdev.obtainbpm.com/${item.DPPath}`} address={item.Address} />
+          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdev.obtainbpm.com/${item && item.DPPath}`} address={item && item.Address} />
         </Grid>)}
       </Grid>
     </Container>

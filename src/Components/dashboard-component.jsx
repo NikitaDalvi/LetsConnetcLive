@@ -208,10 +208,10 @@ const Dashboard = (props) => {
         <Container>
           <Grid container spacing={2} className={classes.grid}>
             <Grid item xs={3}>
-              <DashboardCard
+            <DashboardCard
                 color="#e65888"
                 caption="Nearby Experts"
-                name="NEARBY EXPERTS"
+                name="NEARBY EXPERT"
                 quantity={
                   dashboardCustomerDetails !== null
                     ? dashboardCustomerDetails.NearByExperts
