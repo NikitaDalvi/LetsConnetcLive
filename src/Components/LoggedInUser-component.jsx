@@ -298,7 +298,7 @@ function LoggedIn(props) {
                   <ListItemIcon style={{ paddingLeft: '20px' }}><DashboardIcon /></ListItemIcon>
                   <ListItemText primary='Dashboard' />
                 </ListItem>
-                <ListItem button style={{ display: userType === 'Service-Provider' ? '' : 'none' }} onClick={() => { props.history.push('/UserPage/ServiceProvider/MyServices/ServicesToProvide') }}>
+                <ListItem button style={{ display: userType === 'Service-Provider' ? '' : 'none' }} onClick={() => { props.history.push('/UserPage/ServiceProvider/MyServices/BasicToDetails') }}>
                   <ListItemIcon style={{ paddingLeft: '20px' }}><NextWeekIcon /></ListItemIcon>
                   <ListItemText primary='My Services' />
                 </ListItem>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Heading from "./subComponents/page-headings";
 import ServiceItem from "./subComponents/ServiceListItems";
 // import {Link} from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 import axios from "axios";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -60,15 +61,13 @@ import { setDate } from "date-fns/esm";
 
 let tempAddToListData = [];
 
-function ServicesProvide(props) {
+ function BasicDetails(props)  {
   const [data, setData] = useState({
     Id: localStorage.getItem("serviceId") || "",
     location: localStorage.getItem("location") || "",
-    service: "",
-    fees: localStorage.getItem("fees") || "",
     type: localStorage.getItem("type") || "",
     workingDays: localStorage.getItem("workingDays") || "",
-    otherService: null,
+    buffer : localStorage.getItem("buffer")
   });
 
   const {
@@ -89,6 +88,11 @@ function ServicesProvide(props) {
   const [feesError, setFeesError] = useState(false);
   const [typeError, setTypeError] = useState(false);
   const [SavedServices, setSaveServices] = useState([]);
+  const [buffer, setBuffer] = useState(null);
+  const [feesDisable, setFeesDisable] = useState(false)
+  const [preferenceDisable, setPreferenceDisable] = useState(false)
+  const [bufferDisable, setBufferDisable] = useState(false)
+
   const [saveButtonEnable, setSaveButtonEnable] = useState(false);
   const [
     showServiceAssignmentSection,
@@ -97,8 +101,9 @@ function ServicesProvide(props) {
   const [showApplySave, setShowApplySave] = useState(false);
 
   function handleChange(event) {
+   
     const { name, value } = event.target;
-    const { type, location, fees, workingDays } = data;
+    const { type, location, fees, workingDays, buffer} = data;
 
     setData((prevValue) => {
       return {
@@ -115,10 +120,10 @@ function ServicesProvide(props) {
         console.log("BBB");
         setOpen(true);
   
-        setSaveButtonEnable(location && fees && fees !== "null" && workingDays);
+        setSaveButtonEnable(location && fees && fees !== "null" && workingDays && buffer);
       } else if (name === "type" && value !== "Full-Time") {
         console.log("CCC");
-        setSaveButtonEnable(location && type);
+        setSaveButtonEnable(location && type && fees);
       } else {
         console.log("DDD");
         setSaveButtonEnable(
@@ -148,7 +153,7 @@ function ServicesProvide(props) {
     console.log(data);
   }
 
-  console.log(data);
+  console.log(buffer);
   async function saveToDatabaseDetails() {
     const Service = {
       ServiceId: data.Id,
@@ -173,117 +178,15 @@ function ServicesProvide(props) {
     }
   }
 
-  function addToList() {
-    
 
-    // setRow(prevValue => [...prevValue, data]);
-    if (data.location === "") {
-      setLocationError(true);
-      return;
-    } else {
-      setLocationError(false);
-    }
-    if (data.service === "") {
-      setServiceError(true);
-      return;
-    } else {
-      setServiceError(false);
-    }
-    if (data.fees === "") {
-      setFeesError(true);
-      return;
-    } else {
-      setFeesError(false);
-    }
-    if (data.type === "") {
-      setTypeError(true);
-      return;
-    } else {
-      setTypeError(false);
-    }
-
-    props.AddService(data);
-
-    tempAddToListData.push(data);
-    console.log(tempAddToListData);
-
-    if (data.type === "Full-Time") {
-      setData({
-        Id: "",
-        service: "",
-        type: data.type,
-        fees: data.fees,
-        location: data.location,
-        workingDays: data.workingDays,
-      });
-    } else {
-      setData({
-        Id: "",
-        service: "",
-        fees: "",
-        type: data.type,
-        location: data.location,
-      });
-    }
-
-    //clearService()
-  }
   function saveDetails() {
     setSaveButtonEnable(false);
     saveToDatabase(false);
     setShowApplySave(true);
   }
 
-  function editService(row) {
-    if (row.type === "Full-Time") {
-      setData({
-        Id: row.Id,
-        service: row.service,
-        fees: row.fees,
-        type: data.type,
-        location: data.location,
-        workingDays: data.workingDays,
-      });
-    } else {
-      setData({
-        Id: row.Id,
-        service: row.service,
-        fees: row.fees,
-        type: data.type,
-        location: data.location,
-      });
-    }
-  }
-
-  async function removeService(item) {
-    props.removeService(item);
-    window.location.reload(true);
-
-    const Service = {
-      ServiceId: item.serviceId,
-      ServiceProviderId: currentUser.Id,
-    };
-
-    const postdeleteService = {
-      Service,
-      ticket: currentUser.Ticket,
-    };
-    const res = await deleteServiceDetails(postdeleteService);
-    if (res) {
-      if (res.data) {
-        
-        if (res.data.responseCode === 200) {
-
-         
-          return "success";
-        } else {
-        
-          return "fail";
-        }
-      }
-    }
-  }
-
+  
+ 
   function getBasicDetailsService(){
 
     var type = "";
@@ -301,12 +204,14 @@ function ServicesProvide(props) {
         type = "";
     }
 
-    console.log(props.currentUser)
+    console.log(buffer)
     const postData = {
       UserId: currentUser.Id,
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
+      BufferTiming : buffer,
+      //services: [],
       ticket: currentUser.Ticket,
     };
 
@@ -342,8 +247,8 @@ function ServicesProvide(props) {
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
-      //services: [],
-      ticket: currentUser.Ticket,
+      BufferTiming : buffer,
+      ticket: currentUser.Ticket
     };
 
     
@@ -389,6 +294,8 @@ function ServicesProvide(props) {
             type: 1,
             ServiceCharge: type,
             ServiceGiven: data.location,
+            BufferTiming : buffer
+
           };
           const hoursSaved = {
             type: 2,
@@ -423,6 +330,7 @@ function ServicesProvide(props) {
           type: 1,
           ServiceCharge: type,
           ServiceGiven: data.location,
+          BufferTiming:buffer
         };
         setUserStatus(servicesSaved);
         if (currentUser.isLocationsAdded) {
@@ -467,9 +375,17 @@ function ServicesProvide(props) {
           const output = res.data.output
           console.log(output)
           if(output){
+
+            
             setSaveButtonEnable(false);
             setShowServiceAssignmentSection(true);
             setShowApplySave(true);
+            setBuffer(output.BufferTiming ? output.BufferTiming : 1);
+
+            setFeesDisable(true)
+            setPreferenceDisable(true)
+            setBufferDisable(true)
+            
           }
           setData(previousValue => {
             return {
@@ -478,7 +394,7 @@ function ServicesProvide(props) {
               type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
               location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
               workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday',
-              fees: output.Fees
+              fees: output.Fees              
             }
           })
         } else {
@@ -501,18 +417,6 @@ function ServicesProvide(props) {
     }
   }
 
-  async function deleteServiceDetails(postdeleteService) {
-    const res = await axios.post(`${API.URL}DeleteService`, postdeleteService);
-    if (res) {
-      if (res.data) {
-        if (res.data.responseCode === 200) {
-          return "success";
-        } else {
-          return "fail";
-        }
-      }
-    }
-  }
   async function saveWorkingHours(workingHours) {
     const res = await axios.post(`${API.URL}AddWorkingHours`, workingHours);
     if (res) {
@@ -551,61 +455,7 @@ function ServicesProvide(props) {
       getBasicDetailsService()
   }, [currentUser]);
 
-  useEffect(() => {
-    const status = async () => {
-      clearDropdown();
-      if (currentUser) {
-        const data = {
-          ServiceProviderId: currentUser.Id,
-          ticket: currentUser.Ticket,
-        };
-        axios.post(`${API.URL}GetServiceTypesByUserId`, data).then((res) => {
-          if (res.data.output && res.data.output[0]) {
-            const serviceTypeId = res.data.output[0].ServiceTypeId;
-            SetServiceType(serviceTypeId);
-            const typeId = {
-              ServiceTypeId: serviceTypeId,
-              ticket: currentUser.Ticket,
-            };
-            
-            axios.post(`${API.URL}GetServices`, typeId).then((res) => {
-              console.log(res);
-              res.data.output.map((item) => AddToDropdown(item));
-              const savedServicesRequest = {
-                ServiceProviderId: currentUser.Id,
-                ticket: currentUser.Ticket,
-              };
-            
-              axios
-                .post(
-                  `${API.URL}GetServiceListByServiceProviderId`,
-                  savedServicesRequest
-                )
-                .then((res) => {
-                  //setSavedServices(res.data.output)
-                console.log(res.data.output);
-                  addServicesFromAPI(res.data.output)
-                });
-            });
-            
-          }
-          
-        });
-      } else {
-        console.log("fail");
-      }
-    };
-
-    const Status = status();
-    console.log(Status);
-  }, [
-    currentUser,
-    AddToDropdown,
-    clearDropdown,
-    SetServiceType,
-    setSavedServices,
-  ]);
-
+  
   const useStyles = makeStyles((theme) => ({
     grid: {
       margin: theme.spacing(1),
@@ -675,7 +525,18 @@ function ServicesProvide(props) {
   };
 
   const classes = useStyles();
-
+  const statusBuffer = (buffer) => {
+    switch (buffer) {
+      case 1:
+        return "Buffer Time 30";
+  
+      case 2:
+        return "Buffer Time 60";
+    
+        default:
+        return "Buffer Time is not Set";
+    }
+  };
   return (
     <div>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -685,8 +546,8 @@ function ServicesProvide(props) {
         </Alert>
       </Snackbar>
 
-      {/*<Grid container>
-        <Grid item xs="2">
+       <Grid container>
+      <Grid item xs="2">
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Select fees as per
@@ -697,6 +558,7 @@ function ServicesProvide(props) {
               label="Select fees as per"
               value={data.type}
               name="type"
+              disabled={feesDisable}
               onChange={handleChange}
               error={typeError}
             >
@@ -721,6 +583,7 @@ function ServicesProvide(props) {
               label="Select Location"
               value={data.location}
               onChange={handleChange}
+              disabled={preferenceDisable}
               name="location"
               error={locationError}
             >
@@ -734,7 +597,31 @@ function ServicesProvide(props) {
           </FormControl>
         </Grid>
 
-        {showApplySave && ( <Grid
+        {data.type==='hour' && (<Grid item xs="2" style={{ marginLeft: "15px" }}>
+        <Tooltip title={statusBuffer(buffer)}>
+        <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">
+            Buffer
+            </InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={buffer}
+                  onChange={(event) => { setBuffer(event.target.value) }}
+                  name="buffer"
+                  disabled={bufferDisable}
+                  
+                >
+                  
+                  <MenuItem value={1}>30</MenuItem>
+                  <MenuItem value={2}>60</MenuItem>
+                
+            </Select>
+          </FormControl>
+          </Tooltip>
+        </Grid>)}
+
+        {data.type==='Full-Time' && <Grid
           item
           xs="2"
           style={{
@@ -752,7 +639,7 @@ function ServicesProvide(props) {
             label="Fees/day"
             variant="outlined"
           />
-        </Grid>)}
+        </Grid>}
 
         <Grid
           item
@@ -795,138 +682,8 @@ function ServicesProvide(props) {
             Save
           </Button>
         </Grid>
-        </Grid>*/}
+      </Grid>
 
-      {showServiceAssignmentSection && (
-        <Grid container>
-          <Grid item xs={3} className={classes.grid}>
-            <Grid container>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Select Service
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    label="Select Service"
-                    value={data.service}
-                    onChange={handleChange}
-                    name="service"
-                    error={serviceError}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {props.dropdownList.map((item) => (
-                      <MenuItem key={item.Id} value={item.Services}>
-                        {item.Services}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  className={classes.text}
-                  error={feesError}
-                  style={{
-                    marginBottom: "10px",
-                    marginLeft: "8px",
-                    display: data.service === "Others" ? "" : "none",
-                  }}
-                  id="outlined-basic"
-                  name="otherService"
-                  onChange={handleChange}
-                  value={data.otherService}
-                  label="Other Service"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  className={classes.text}
-                  error={feesError}
-                  style={{
-                    marginBottom: "10px",
-                    marginLeft: "8px",
-                    display: data.type === "Full-Time" ? "none" : "",
-                  }}
-                  id="outlined-basic"
-                  name="fees"
-                  onChange={handleChange}
-                  value={data && data.fees}
-                  label={`Fees/${data.type}`}
-                  variant="outlined"
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Button
-                  className={classes.button}
-                  style={{ width: "98%", marginLeft: "10px" }}
-                  onClick={() => {
-                    addToList();
-                    saveToDatabaseDetails();
-                  }}
-                  variant="contained"
-                >
-                  ADD TO LIST &#10095;
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          
-            <Grid item xs={8} className={classes.grid}>
-              <Grid container>
-                {props.serviceList && props.serviceList.map((item, index) => (
-                  
-
-                  <Grid item xs="8" className={classes.grid} key={index}>
-                    <Paper className={classes.paper}>
-                      <Grid container>
-                        <Grid item xs="8">
-                          <Typography variant="h6">{item.service}</Typography>
-                          <Typography variant="body1">
-                            Rs{item.fees} /
-                            {item.type === "Full-Time" ? "day" : item.type}
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          xs="4"
-                          style={{ textAlign: "right", padding: "20px" }}
-                        >
-                          <EditIcon
-                            onClick={() => editService(item)}
-                            className={classes.icon}
-                            color="secondary"
-                            style={{ marginRight: "10px" }}
-                          />
-                          <DeleteIcon
-                            className={classes.icon}
-                            onClick={() => removeService(item)}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </Grid>
-                ))}
-                   
-              </Grid>
-              {props.serviceList && props.serviceList.length > 0 && (
-                <div
-                  style={{
-                    width: "65%",
-                    textAlign: "right",
-                    paddingRight: "150px",
-                  }}
-                ></div>
-              )}
-            </Grid>
-          
-        </Grid>
-      )}
     </div>
   );
 }
@@ -953,4 +710,5 @@ const mapDispatchToProps = (dispatch) => ({
   clearService: () => dispatch(clearService()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServicesProvide);
+
+export default connect(mapStateToProps, mapDispatchToProps)(BasicDetails);
