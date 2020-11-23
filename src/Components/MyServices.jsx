@@ -134,13 +134,13 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
         <Link onClick={handleBasic} color="inherit" className={classes.link} style={{ color: focus === 'BasicDetails' ? '' : 'Gray' }}>
         Basic Details
         </Link>
-        {currentUser && currentUser.isServicesAdded &&<Link onClick={()=>{handleServices()}} color="inherit" className={classes.link} style={{ color: focus === 'Services' ? '' : 'Gray' }}>
+        {currentUser && currentUser.ServiceCharge &&<Link onClick={()=>{handleServices()}} color="inherit" className={classes.link} style={{ color: focus === 'Services' ? '' : 'Gray' }}>
           Services
         </Link>}
         {currentUser && currentUser.isServicesAdded && <Link onClick={() => { handleLocation() }} color="inherit" className={classes.link} style={{ color: focus === 'Location' ? 'Black' : 'Gray' }}>
           Location
         </Link>}
-        {currentUser && currentUser.isServicesAdded && currentUser.isLocationsAdded && <Link onClick={handleWorkingHours} color="inherit" className={classes.link} style={{ color: focus === 'WorkingHours' ? '' : 'Gray' }}>
+        {currentUser &&currentUser.ServiceCharge&& currentUser.isServicesAdded && currentUser.isLocationsAdded && <Link onClick={handleWorkingHours} color="inherit" className={classes.link} style={{ color: focus === 'WorkingHours' ? '' : 'Gray' }}>
           Working Hours
         </Link>}
       </Typography>

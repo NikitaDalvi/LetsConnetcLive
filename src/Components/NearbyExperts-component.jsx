@@ -65,31 +65,35 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         alert('Geolocation is not supported by this browser.');
       }
     };
-
-    const showPosition = async (position) => {
-      const request = {
-        Radius: parseInt(radius),
-        Latitude: position.coords.latitude.toString(),
-        Longitude: position.coords.longitude.toString()
-      }
-      setLocation({
-        Latitude: position.coords.latitude.toString(),
-        Longitude: position.coords.longitude.toString()
-      });
-      // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
-      getNearbyExperts(request)
-        .then(res => {
-          if (res) {
-            console.log(res.data);
-            if (res.data.output) {
-              setLoading(false);
-              setNearbyList(res.data.output);
-              setFilteredList(res.data.output);
-            }
-          }
+    //if(radius!=="0"){
+      const showPosition = async (position) => {
+        const request = {
+          Radius: parseInt(radius),
+          Latitude: position.coords.latitude.toString(),
+          Longitude: position.coords.longitude.toString()
+        }
+        setLocation({
+          Latitude: position.coords.latitude.toString(),
+          Longitude: position.coords.longitude.toString()
         });
+        // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
+        getNearbyExperts(request)
+          .then(res => {
+            if (res) {
+              console.log(res.data);
+              if (res.data.output) {
+                setLoading(false);
+                setNearbyList(res.data.output);
+                setFilteredList(res.data.output);
+              }
+            }
+          });
+  
+      };
+    // }else{
+    //   setFilteredList(nearbyList);
+    // }
 
-    };
 
 
     if (currentUser) {
@@ -110,7 +114,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   useEffect(() => {
     if (selectedServices.length !== 0) {
       var filteredResult = [];
-      selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+      //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+
       selectedServices.forEach(item=>{
         nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
       })

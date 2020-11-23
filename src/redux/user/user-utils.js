@@ -42,7 +42,7 @@ export const ChangeUserServiceStatus = (currentUser,object) => {
 
   switch (type) {
     case 1:
-      currentUser.isServicesAdded = true;
+      //currentUser.isServicesAdded = true;
       break;
     case 2:
       currentUser.isWorkingHoursAdded = true;

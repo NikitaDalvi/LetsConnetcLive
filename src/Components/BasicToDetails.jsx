@@ -64,12 +64,12 @@ let tempAddToListData = [];
 
 function BasicDetails(props) {
   const [data, setData] = useState({
-    Id: localStorage.getItem("serviceId") || "",
-    location: localStorage.getItem("location") || "",
+    Id: localStorage.getItem("serviceId") || null,
+    location: localStorage.getItem("location") || null,
     service: "",
-    fees: localStorage.getItem("fees") || "",
-    type: localStorage.getItem("type") || "",
-    workingDays: localStorage.getItem("workingDays") || "",
+    fees: localStorage.getItem("fees") || null,
+    type: localStorage.getItem("type") || null,
+    workingDays: localStorage.getItem("workingDays") || null,
     otherService: null,
   });
 
@@ -114,27 +114,7 @@ function BasicDetails(props) {
       };
     });
 
-    setTimeout(() => {
-      if (!type && !location && !fees && !workingDays) {
-        console.log("AAA");
-        setSaveButtonEnable(false);
-      } else if (name === "type" && value === "Full-Time") {
-        console.log("BBB");
-        setOpen(true);
-  
-        setSaveButtonEnable(location && fees && fees !== "null" && workingDays);
-      } else if (name === "type" && value !== "Full-Time") {
-        console.log("CCC");
-        setSaveButtonEnable(location && type);
-      } else {
-        console.log("DDD");
-        setSaveButtonEnable(
-          type && type !== "Full-Time"
-            ? location && type
-            : location && fees && workingDays
-        );
-      }
-    }, 1000)
+   
     
     //setSaveButtonEnable(false)
     if (name === "service") {
@@ -154,6 +134,8 @@ function BasicDetails(props) {
 
     console.log(data);
   }
+
+
 
   console.log(data);
   async function saveToDatabaseDetails() {
@@ -492,7 +474,38 @@ function BasicDetails(props) {
     localStorage.setItem("type", data.type);
     console.log(props.serviceList);
 
-    if (data && data.location && data.type) setSaveButtonEnable(true);
+   // if (data && data.location && data.type) setSaveButtonEnable(true);
+
+   if (!data.type && !data.location && !data.fees && !data.workingDays) {
+    console.log("AAA");
+    setSaveButtonEnable(true);
+  } else if (data.type === "Full-Time") {
+    setOpen(true);
+    debugger
+
+    if(data.location &&(data.fees!==''||data.fees!==null)&& data.workingDays){
+      setSaveButtonEnable(false);
+    }else{
+      setSaveButtonEnable(true);
+    }
+   
+  } else if (data.type === "assignment") {
+    console.log("CCC");
+    if(data.location && data.type){
+      setSaveButtonEnable(false);
+    }else{
+      setSaveButtonEnable(true);
+    }
+    
+  } else {
+    console.log("DDD");
+    if(data.type&&data.location&&(data.fees!==''||data.fees!==null)&&buffer){
+      setSaveButtonEnable(false);
+    }else{
+      setSaveButtonEnable(true);
+    }
+
+  }
 
     if (data.type === "Full-Time") {
       localStorage.setItem("fees", data.fees);
@@ -748,7 +761,7 @@ function BasicDetails(props) {
             name="fees"
             onChange={handleChange}
             value={data.fees}
-            label="Fees/day"
+            label="Fees"
             variant="outlined"
           />
         </Grid>}
