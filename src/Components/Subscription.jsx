@@ -218,7 +218,7 @@ function Subscription(props) {
     const options = {
       //"key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
       //"key": 'rzp_test_4WUuA0rfz1EeJX',
-      "key": 'rzp_test_d9wjg0F41CqdFW',
+      "key": 'rzp_test_nDfaBdpKMGXFdF',
       //"amount": (initialData.Price- (initialData.Price * initialData.DiscountPercentage / 100)),
       "currency": result.currency,
       "name": "Subscription Purchase",

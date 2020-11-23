@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed'
   },
   textField: {
-    width: '40ch',
+    width: '30ch',
   },
   margin: {
     margin: theme.spacing(1),
@@ -198,7 +198,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     const request = {
       searchQuery: searchText,
       Latitude: location.Latitude,
-      Longtitude: location.Longitude,
+      Longitude: location.Longitude,
       Radius: 5
     };
 
@@ -242,6 +242,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
                 <RadioGroup aria-label="gender" name="gender1" value={ratingFilter} onChange={event => { setRatingFilter(event.target.value); }}>
+                  <FormControlLabel value="0" control={<Radio />} label="> None" />
                   <FormControlLabel value="1" control={<Radio />} label="> 1" />
                   <FormControlLabel value="2" control={<Radio />} label="> 2" />
                   <FormControlLabel value="3" control={<Radio />} label="> 3" />
@@ -291,10 +292,10 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
                 <RadioGroup aria-label="gender" name="gender1" value={radius} onChange={event => { setRadius(event.target.value); }}>
+                  <FormControlLabel value="0" control={<Radio />} label="> None" />
                   <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
                   <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
                   <FormControlLabel value='10' control={<Radio />} label="Under 10Km" />
-                  <FormControlLabel value='' control={<Radio />} label="All" />
                 </RadioGroup>
               </FormControl>
             </ExpansionPanelDetails>

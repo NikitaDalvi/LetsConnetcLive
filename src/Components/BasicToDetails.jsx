@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import Heading from "./subComponents/page-headings";
 import ServiceItem from "./subComponents/ServiceListItems";
 // import {Link} from "react-router-dom";
-import Tooltip from "@material-ui/core/Tooltip";
 import axios from "axios";
+import Tooltip from "@material-ui/core/Tooltip";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../redux/user/user-selector";
@@ -61,13 +61,16 @@ import { setDate } from "date-fns/esm";
 
 let tempAddToListData = [];
 
- function BasicDetails(props)  {
+
+function BasicDetails(props) {
   const [data, setData] = useState({
     Id: localStorage.getItem("serviceId") || "",
     location: localStorage.getItem("location") || "",
+    service: "",
+    fees: localStorage.getItem("fees") || "",
     type: localStorage.getItem("type") || "",
     workingDays: localStorage.getItem("workingDays") || "",
-    buffer : localStorage.getItem("buffer")
+    otherService: null,
   });
 
   const {
@@ -101,9 +104,8 @@ let tempAddToListData = [];
   const [showApplySave, setShowApplySave] = useState(false);
 
   function handleChange(event) {
-   
     const { name, value } = event.target;
-    const { type, location, fees, workingDays, buffer} = data;
+    const { type, location, fees, workingDays } = data;
 
     setData((prevValue) => {
       return {
@@ -112,27 +114,7 @@ let tempAddToListData = [];
       };
     });
 
-    setTimeout(() => {
-      if (!type && !location && !fees && !workingDays) {
-        console.log("AAA");
-        setSaveButtonEnable(false);
-      } else if (name === "type" && value === "Full-Time") {
-        console.log("BBB");
-        setOpen(true);
-  
-        setSaveButtonEnable(location && fees && fees !== "null" && workingDays && buffer);
-      } else if (name === "type" && value !== "Full-Time") {
-        console.log("CCC");
-        setSaveButtonEnable(location && type && fees);
-      } else {
-        console.log("DDD");
-        setSaveButtonEnable(
-          type && type !== "Full-Time"
-            ? location && type
-            : location && fees && workingDays
-        );
-      }
-    }, 1000)
+   
     
     //setSaveButtonEnable(false)
     if (name === "service") {
@@ -153,7 +135,7 @@ let tempAddToListData = [];
     console.log(data);
   }
 
-  console.log(buffer);
+  console.log(data);
   async function saveToDatabaseDetails() {
     const Service = {
       ServiceId: data.Id,
@@ -178,7 +160,61 @@ let tempAddToListData = [];
     }
   }
 
+  function addToList() {
+    
 
+    // setRow(prevValue => [...prevValue, data]);
+    if (data.location === "") {
+      setLocationError(true);
+      return;
+    } else {
+      setLocationError(false);
+    }
+    if (data.service === "") {
+      setServiceError(true);
+      return;
+    } else {
+      setServiceError(false);
+    }
+    if (data.fees === "") {
+      setFeesError(true);
+      return;
+    } else {
+      setFeesError(false);
+    }
+    if (data.type === "") {
+      setTypeError(true);
+      return;
+    } else {
+      setTypeError(false);
+    }
+
+    props.AddService(data);
+
+    tempAddToListData.push(data);
+    console.log(tempAddToListData);
+
+    if (data.type === "Full-Time") {
+      setData({
+        Id: "",
+        service: "",
+        type: data.type,
+        fees: data.fees,
+        location: data.location,
+        workingDays: data.workingDays,
+      });
+    } else {
+      setData({
+        Id: "",
+        service: "",
+        fees: "",
+        type: data.type,
+        location: data.location,
+      });
+    }
+
+    //clearService()
+  }
   function saveDetails() {
     setSaveButtonEnable(false);
     saveToDatabase(false);
@@ -204,14 +240,12 @@ let tempAddToListData = [];
         type = "";
     }
 
-    console.log(buffer)
+    console.log(props.currentUser)
     const postData = {
       UserId: currentUser.Id,
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
-      BufferTiming : buffer,
-      //services: [],
       ticket: currentUser.Ticket,
     };
 
@@ -247,8 +281,8 @@ let tempAddToListData = [];
       ServiceCharge: type,
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
-      BufferTiming : buffer,
-      ticket: currentUser.Ticket
+      //services: [],
+      ticket: currentUser.Ticket,
     };
 
     
@@ -294,8 +328,7 @@ let tempAddToListData = [];
             type: 1,
             ServiceCharge: type,
             ServiceGiven: data.location,
-            BufferTiming : buffer
-
+            BufferTiming: buffer
           };
           const hoursSaved = {
             type: 2,
@@ -330,7 +363,7 @@ let tempAddToListData = [];
           type: 1,
           ServiceCharge: type,
           ServiceGiven: data.location,
-          BufferTiming:buffer
+          BufferTiming: buffer
         };
         setUserStatus(servicesSaved);
         if (currentUser.isLocationsAdded) {
@@ -361,7 +394,7 @@ let tempAddToListData = [];
       }
     }
     console.log(res);
-    setSaveButtonEnable(false);
+   
   }
 
   console.log(data)
@@ -375,17 +408,20 @@ let tempAddToListData = [];
           const output = res.data.output
           console.log(output)
           if(output){
-
-            
-            setSaveButtonEnable(false);
+          
             setShowServiceAssignmentSection(true);
-            setShowApplySave(true);
+           
             setBuffer(output.BufferTiming ? output.BufferTiming : 1);
+            if(output.ServiceCharge){
+              setFeesDisable(true)
+              setBufferDisable(true)
+            }
+           
 
-            setFeesDisable(true)
-            setPreferenceDisable(true)
-            setBufferDisable(true)
-            
+            if(output.ServiceGiven){
+              setPreferenceDisable(true)
+              setBufferDisable(true)
+            }
           }
           setData(previousValue => {
             return {
@@ -394,7 +430,7 @@ let tempAddToListData = [];
               type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
               location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
               workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday',
-              fees: output.Fees              
+              fees: output.Fees
             }
           })
         } else {
@@ -417,6 +453,7 @@ let tempAddToListData = [];
     }
   }
 
+ 
   async function saveWorkingHours(workingHours) {
     const res = await axios.post(`${API.URL}AddWorkingHours`, workingHours);
     if (res) {
@@ -455,7 +492,61 @@ let tempAddToListData = [];
       getBasicDetailsService()
   }, [currentUser]);
 
-  
+  useEffect(() => {
+    const status = async () => {
+      clearDropdown();
+      if (currentUser) {
+        const data = {
+          ServiceProviderId: currentUser.Id,
+          ticket: currentUser.Ticket,
+        };
+        axios.post(`${API.URL}GetServiceTypesByUserId`, data).then((res) => {
+          if (res.data.output && res.data.output[0]) {
+            const serviceTypeId = res.data.output[0].ServiceTypeId;
+            SetServiceType(serviceTypeId);
+            const typeId = {
+              ServiceTypeId: serviceTypeId,
+              ticket: currentUser.Ticket,
+            };
+            
+            axios.post(`${API.URL}GetServices`, typeId).then((res) => {
+              console.log(res);
+              res.data.output.map((item) => AddToDropdown(item));
+              const savedServicesRequest = {
+                ServiceProviderId: currentUser.Id,
+                ticket: currentUser.Ticket,
+              };
+            
+              axios
+                .post(
+                  `${API.URL}GetServiceListByServiceProviderId`,
+                  savedServicesRequest
+                )
+                .then((res) => {
+                  //setSavedServices(res.data.output)
+                console.log(res.data.output);
+                  addServicesFromAPI(res.data.output)
+                });
+            });
+            
+          }
+          
+        });
+      } else {
+        console.log("fail");
+      }
+    };
+
+    const Status = status();
+    console.log(Status);
+  }, [
+    currentUser,
+    AddToDropdown,
+    clearDropdown,
+    SetServiceType,
+    setSavedServices,
+  ]);
+
   const useStyles = makeStyles((theme) => ({
     grid: {
       margin: theme.spacing(1),
@@ -537,6 +628,7 @@ let tempAddToListData = [];
         return "Buffer Time is not Set";
     }
   };
+
   return (
     <div>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -600,7 +692,7 @@ let tempAddToListData = [];
         {data.type==='hour' && (<Grid item xs="2" style={{ marginLeft: "15px" }}>
         <Tooltip title={statusBuffer(buffer)}>
         <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">
+            <InputLabel id="demo-simple-select-outlined-label" shrink={buffer}>
             Buffer
             </InputLabel>
                 <Select
@@ -621,12 +713,12 @@ let tempAddToListData = [];
           </Tooltip>
         </Grid>)}
 
-        {data.type==='Full-Time' && <Grid
+        {data.type!=='assignment' && <Grid
           item
           xs="2"
           style={{
             marginLeft: "15px",
-            display: data.type === "Full-Time" ? "" : "none",
+            display: data.type!=='assignment'? "" : "none",
           }}
         >
           <TextField
@@ -686,6 +778,7 @@ let tempAddToListData = [];
 
     </div>
   );
+
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -709,6 +802,5 @@ const mapDispatchToProps = (dispatch) => ({
   setProgress: (value) => dispatch(setServicesProgress(value)),
   clearService: () => dispatch(clearService()),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasicDetails);

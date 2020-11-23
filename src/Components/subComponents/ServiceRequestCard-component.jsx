@@ -108,53 +108,34 @@ useEffect(()=>{
         
         </div>
   );
-
-  
-
   return(
     <div>
-      
-      <Grid container  className={classes.grid}>
-        <Grid item xs='3'>
-        <Typography variant='h6'>{name}</Typography>
-        </Grid>
-        <Grid item xs='9'>
-        <InfoIcon
-      className={classes.icon}
-      onClick={handleOpen}
-      style={{ marginRight: "15px" }}
-      />
-      
-        </Grid>
-
-      
-      </Grid>
-      <Grid container className={classes.grid}>
-        <Grid item xs='3' className={classes.gridItem} > 
-          <Typography variant='h6'>{Date}</Typography>
-          
-        </Grid>
-       
-          
-        
-        <Grid item xs='20' >
-        <span >{service}</span>
+         
+         <Typography variant='h6'>{name}</Typography>
+         <InfoIcon
+          className={classes.icon}
+          onClick={handleOpen}
+          style={{ marginRight: "15px" }}
+        />
+         <Typography variant='h6'>{Date}</Typography>
+         <span >{service}</span>
         {timeslots.map((item,index)=>(
           <div style={{display:service!=='Accounting' ?'':'none'}}className={classes.gridItem} key={index}>
               <span>&#10093; {item.StartTime}-{item.EndTime}</span>
               <br/>
           </div>
         ))}
+         
         
-        </Grid>
-        
-      </Grid>
+        <br/>
+          
       <Grid container className={classes.grid} style={{display:status===3 && (userType===2||userType===3)?'':'none'}}>
       <div style={{display:'grid',gridTemplateColumns:'50% 50%',columnGap:'5px',width:'100%'}}>
           <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#ff4da6',color:'white'}}>Accept</Button>
           <Button variant="contained" startIcon={<CancelOutlinedIcon/>} onClick={()=>{handleStatus({...request,Status:2});}} style={{backgroundColor:'#FF1493',color:'white'}}>Reject</Button>
         </div>
         <br />
+        <br/>
         <Modal
           open={open}
           onClose={handleClose}
