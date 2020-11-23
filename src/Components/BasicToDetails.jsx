@@ -114,7 +114,27 @@ function BasicDetails(props) {
       };
     });
 
-   
+    setTimeout(() => {
+      if (!type && !location && !fees && !workingDays) {
+        console.log("AAA");
+        setSaveButtonEnable(false);
+      } else if (name === "type" && value === "Full-Time") {
+        console.log("BBB");
+        setOpen(true);
+  
+        setSaveButtonEnable(location && fees && fees !== "null" && workingDays);
+      } else if (name === "type" && value !== "Full-Time") {
+        console.log("CCC");
+        setSaveButtonEnable(location && type);
+      } else {
+        console.log("DDD");
+        setSaveButtonEnable(
+          type && type !== "Full-Time"
+            ? location && type
+            : location && fees && workingDays
+        );
+      }
+    }, 1000)
     
     //setSaveButtonEnable(false)
     if (name === "service") {
