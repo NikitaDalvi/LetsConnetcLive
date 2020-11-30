@@ -1,4 +1,5 @@
 /*jshint esversion: 6*/
+/*jshint -W087*/
 import React, { useState } from "react";
 
 import { Typography, makeStyles, TextField, Grid, Button, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
@@ -19,7 +20,7 @@ import getStoredState from "redux-persist/es/getStoredState";
 function RegistrationForm(props) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const { userType, serviceTypes, setProgress, setRegisteredUser, addServiceTypes, removeServiceTypes, registeredUser, history } = props;
- 
+
   const [inputText, setInput] = useState({
     serviceTypeId: '',
     serviceType: '',
@@ -31,7 +32,7 @@ function RegistrationForm(props) {
     termsNConditionCheckbox: false
   });
 
-  
+
   /*React.useEffect(() => {
     GetServiceType().then(result => result.data.output.map(value => addServiceTypes(value)));
     setProgress(0);
@@ -48,7 +49,7 @@ function RegistrationForm(props) {
   async function handleClick() {
     console.log('hit');
     const { name, email, password, confirmPassword, mobile, serviceTypeId } = inputText;
-    
+
 
     if (password === confirmPassword) {
       const registrationData = {
@@ -61,8 +62,8 @@ function RegistrationForm(props) {
         UserRole: userType === 'Service-Provider' ? 2 : 4
       };
 
-     
-
+      debugger;
+      console.log(process.env.REACT_APP_DEV_URL);
       const userData = await axios.post(`${API.URL}registerUser`, registrationData);
       if (userData.data.output !== null) {
         console.log(userData);
@@ -79,11 +80,11 @@ function RegistrationForm(props) {
 
   const checkForValidation = () => {
     const { name, email, password, mobile, confirmPassword, termsNConditionCheckbox} = inputText
-    return name 
-            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) 
+    return name
+            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
             && /^\d{10}$/.test(mobile)
-            && password 
-            && (confirmPassword === password) 
+            && password
+            && (confirmPassword === password)
             && termsNConditionCheckbox
   }
 

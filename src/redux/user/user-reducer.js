@@ -116,7 +116,7 @@ const userReducer = (state=Initial_State, action) => {
     case UserActionTypes.SET_SERVICES_ADDED:
       return{
         ...state,
-        isServicesAdded:action.payload
+        currentUser:{...state.currentUser,isServicesAdded:action.payload}
       };
 
     default:

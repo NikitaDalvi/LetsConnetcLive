@@ -75,7 +75,7 @@ function CircularProgressWithLabel({ value }) {
 
 
 function MyServices({ history, progress, setProgress, currentUser, ...props }) {
-  
+
   const [focus, setFocus] = useState('');
 
   const classes = useStyles();
@@ -137,7 +137,7 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
         {currentUser && currentUser.ServiceCharge &&<Link onClick={()=>{handleServices()}} color="inherit" className={classes.link} style={{ color: focus === 'Services' ? '' : 'Gray' }}>
           Services
         </Link>}
-        {currentUser && currentUser.isServicesAdded && <Link onClick={() => { handleLocation() }} color="inherit" className={classes.link} style={{ color: focus === 'Location' ? 'Black' : 'Gray' }}>
+        {currentUser&& currentUser.ServiceCharge && currentUser.isServicesAdded && <Link onClick={() => { handleLocation() }} color="inherit" className={classes.link} style={{ color: focus === 'Location' ? 'Black' : 'Gray' }}>
           Location
         </Link>}
         {currentUser &&currentUser.ServiceCharge&& currentUser.isServicesAdded && currentUser.isLocationsAdded && <Link onClick={handleWorkingHours} color="inherit" className={classes.link} style={{ color: focus === 'WorkingHours' ? '' : 'Gray' }}>
