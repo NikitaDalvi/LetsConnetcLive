@@ -1,7 +1,7 @@
 /*jshint esversion:9*/
 
 export const ChangeUserServiceStatus = (currentUser,object) => {
-  debugger
+  
   const{type,ServiceCharge,ServiceGiven} = object;
   var chargeType = 0;
   var serviceType = 0;
@@ -42,7 +42,7 @@ export const ChangeUserServiceStatus = (currentUser,object) => {
 
   switch (type) {
     case 1:
-      currentUser.isServicesAdded = true;
+      //currentUser.isServicesAdded = true;
       break;
     case 2:
       currentUser.isWorkingHoursAdded = true;

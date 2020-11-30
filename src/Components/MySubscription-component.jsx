@@ -5,6 +5,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import {selectCurrentUser,selectUserType} from '../redux/user/user-selector';
+import { API } from '../API';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -32,7 +33,7 @@ function MySubscription({currentUser,userType}){
   },[currentUser]);
 
   const getSubscriptionDetails = async(data)=>{
-                        const result = await axios.post('https://localhost:44327/api/GetSubscriptionByUserId',data);
+                        const result = await axios.post(`${API.URL}GetSubscriptionByUserId`,data);
     return result.data.output;
   };
   const classes = useStyles();

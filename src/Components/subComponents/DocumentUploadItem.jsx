@@ -29,7 +29,7 @@ function fileChange(event){
   return(
     <div style={{textAlign:'center'}}>
     <FormControl className={classes.formControl}>
-    <Grid container>
+{ props.item !=="uploadDocuments"&&<Grid container>
     <Grid item style={{marginBottom:'10px'}}>
     <OutlinedInput
          id="outlined-adornment-weight"
@@ -49,8 +49,8 @@ function fileChange(event){
       </IconButton>
     </label>
     </Grid>
-</Grid>
-    <TextField id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />
+</Grid>}
+{props.item!=='CA Certificate'&&<TextField id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />}
     </FormControl>
     <br/>
     </div>

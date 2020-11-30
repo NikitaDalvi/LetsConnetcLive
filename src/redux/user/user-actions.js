@@ -51,6 +51,7 @@ export const setDashboardDetails = object => ({
   payload:object
 });
 
+
 export const setProfessionalList = value => ({
   type:UserActionTypes.SET_PROFESSIONAL_LIST,
   payload:value
@@ -81,3 +82,8 @@ export const setExpertId = value =>({
   type:UserActionTypes.SET_EXPERT_ID,
   payload:value
 });
+
+export const setServicesAdded = value => ({
+  type:UserActionTypes.SET_SERVICES_ADDED,
+  payload:value
+})

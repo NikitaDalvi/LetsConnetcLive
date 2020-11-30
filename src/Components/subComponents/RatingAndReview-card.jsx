@@ -8,12 +8,12 @@ import profile from '../../Images/profile.jpg';
 const useStyles = makeStyles((theme) => ({
 
   large: {
-   width: theme.spacing(7),
-   height: theme.spacing(7),
+   width: theme.spacing(6),
+   height: theme.spacing(6),
    marginLeft:'5px'
  },
  paper:{
-   width:'350px',
+   width:'300px',
    padding:'5px'
  },
  description:{
@@ -27,20 +27,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 function RatingCard(props){
+  console.log(props.path)
 
   const classes = useStyles();
   return(
   <Paper className={classes.paper}>
-    <Grid container spacing={2}>
+    
+    <Grid container spacing={1} direction="row" >
+      <Grid container  direction="row" justify="space-between" alignItems="flex-end" style={{marginRight: '1.5rem'}} >
+
       <Grid item xs={3} className={classes.profile}>
-        <Avatar alt="Remy Sharp" src={props.dp} className={classes.large} />
+      <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${props.path}`:`${process.env.REACT_APP_PROD_BASE_URL}${props.path}`} className={classes.large} />
+        
       </Grid>
       <Grid item xs={8}>
         <Typography variant='h6'>{props.name}</Typography>
         <Grid container spacing={3}>
-        <Grid item xs={1}>
-          {props.rating}
-        </Grid>
         <Grid item xs={3}>
             <Rating name="read-only" value={props.rating} readOnly precision={0.1} />
         </Grid>
@@ -48,6 +50,7 @@ function RatingCard(props){
       </Grid>
       <Grid className={classes.description} item xs={12}>
       <em style={{fontWeight:'500'}}>  {props.review}</em>
+      </Grid>
       </Grid>
     </Grid>
   </Paper>

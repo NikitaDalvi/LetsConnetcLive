@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function About(){
-    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const [checked, setChecked] = React.useState(false);
   const [bottomChecked,setBottom] = React.useState(true);
   const classes = useStyles();

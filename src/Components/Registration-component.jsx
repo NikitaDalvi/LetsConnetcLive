@@ -14,6 +14,7 @@ import Progressbar from './subComponents/ProgressBar';
 import {Switch, Route} from "react-router-dom";
 import MediaQuery from 'react-responsive';
 
+
 class Registration extends React.Component{
   constructor(){
     super();
@@ -173,6 +174,7 @@ this.props.setProgress(0);
          borderRadius:'8px'
      });
 
+     console.log('Registration Component:', this.props.userType)
 return(
   <div>
   <br/>

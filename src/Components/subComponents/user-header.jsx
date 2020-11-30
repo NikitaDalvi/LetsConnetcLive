@@ -2,7 +2,6 @@
 import React from "react";
   import {withRouter} from 'react-router-dom';
 
-
 function UserHeader(props){
   return(
     <div className="row" style={{borderBottom:"solid 1px black"}}>

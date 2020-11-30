@@ -6,6 +6,7 @@ import forgotPasswordImg from '../Images/forgotPassword.png';
 import axios from 'axios';
 import MuiAlert from '@material-ui/lab/Alert';
 import {withRouter} from 'react-router-dom';
+import { API } from '../API';
 
 const useStyles = makeStyles(theme =>({
   paper:{
@@ -49,7 +50,7 @@ function ForgotPassword({history}){
       const data = {
         EmailId:email
       };
-      const result = await axios.post('https://localhost:44327/api/forgotPassword',data);
+      const result = await axios.post(`${API.URL}forgotPassword`,data);
       if(result){
         if(result.data){
           console.log(result.data);

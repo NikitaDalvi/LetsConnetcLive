@@ -5,29 +5,60 @@ import React from "react"
 
 
 
-function DashboardCard(props){
+function DashboardCard({history,...props}){
 
   const useStyles = makeStyles((theme) => ({
     paper:{
-      width:'250px',
+      //width:'250px',
       height:'150px',
       color:'white',
-      backgroundColor:props.color
+      backgroundColor:props.color,
+      padding: '0.5rem'
     }
   }));
 
+  function changepage(){
+   
+    console.log(props)
+    //debugger;
+
+    if(props.name=== 'NEW' || props.name==='TODAY' || props.name==='UPCOMING' || props.name==='COMPLETED' || props.name==='NEARBY EXPERTS' || props.name==='CONFIRMED' || props.name==='PENDING' || props.name==='PAST'){
+      history.push('ServiceRequest');
+    }
+    else if(props.name==='COMMISION DUE'){
+      history.push('CommissionDue');
+
+    }
+    else if(props.name==='RATING'){
+      history.push('RatingAndReview');
+      
+    }
+    else if(props.name==='REVIEW'){
+      history.push('RatingAndReview');
+      
+    }
+
+
+  }
   const classes = useStyles();
+  console.log(props.name,props.quantity)
   return(
-    <Paper className={classes.paper} style={{padding:'5px'}} elevation={0}>
+    <Paper className={classes.paper} elevation={0} 
+    onClick={() => changepage() }>
       <Typography variant='subtitle1'>{props.caption}</Typography>
       <Typography variant='h5'>{props.name}</Typography>
-      <Grid container style={{marginTop:'20%'}}>
+      
+      {/*<Grid container style={{marginTop:'20%'}}>
         <Grid item xs={3}>
         <Typography variant='h5'>{props.rating}</Typography>
         </Grid>
         <Grid item xs={6} style={{marginLeft:'20%',textAlign:'right'}}>
           <Typography variant='h5'>{props.quantity}</Typography>
         </Grid>
+      </Grid>*/}
+      <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{marginTop: '1.5rem'}}>
+        <Typography variant="h5">{props.rating}</Typography>
+        <Typography variant="h5">{props.quantity}</Typography>
       </Grid>
     </Paper>
   );

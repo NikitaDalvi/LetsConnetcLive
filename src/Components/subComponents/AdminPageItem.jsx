@@ -10,10 +10,15 @@ function EmployeeTableItem(props){
           <Grid item xs='3' style={{paddingLeft:'5px'}}>
             <Avatar alt="Remy Sharp" src={props.DP} />
           </Grid>
-          <Grid item xs='9' style={{textAlign:'left',paddingTop:'5px'}}>
+          
+        </Grid>
+        </td>
+        <td>
+        <Grid container>
+        <Grid item xs='9' style={{paddingRight:'5px'}}>
             <Typography>{props.name}</Typography>
           </Grid>
-        </Grid>
+          </Grid>
         </td>
         <td>{props.email}</td>
         <td>{props.contact}</td>
