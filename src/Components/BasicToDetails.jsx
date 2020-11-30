@@ -284,6 +284,8 @@ function BasicDetails(props) {
       ServiceGiven: data.location,
       WorkingDays: data.workingDays,
       //services: [],
+      BufferTiming: buffer,
+      Fees : data.fees,
       ticket: currentUser.Ticket,
     };
 
@@ -323,8 +325,10 @@ function BasicDetails(props) {
         }
       }
       const res = await saveWorkingHours(modelData);
+      console.log(modelData)
       if (res === "success") {
         const result = await saveServices(postData);
+        console.log(postData)
         if (result === "success") {
           const servicesSaved = {
             type: 1,
@@ -365,7 +369,7 @@ function BasicDetails(props) {
           type: 1,
           ServiceCharge: type,
           ServiceGiven: data.location,
-          BufferTiming: buffer
+          BufferTiming: data.buffer
         };
         setUserStatus(servicesSaved);
         if (currentUser.isLocationsAdded) {
@@ -746,12 +750,11 @@ function BasicDetails(props) {
           </Tooltip>
         </Grid>)}
 
-        {data.type!=='assignment' && <Grid
+        <Grid
           item
           xs="2"
           style={{
             marginLeft: "15px",
-            display: data.type!=='assignment'? "" : "none",
           }}
         >
           <TextField
@@ -764,7 +767,7 @@ function BasicDetails(props) {
             label="Fees"
             variant="outlined"
           />
-        </Grid>}
+        </Grid>
 
         <Grid
           item

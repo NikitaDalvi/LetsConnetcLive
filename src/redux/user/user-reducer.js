@@ -113,6 +113,12 @@ const userReducer = (state=Initial_State, action) => {
       ExpertId: action.payload
     };
 
+    case UserActionTypes.SET_SERVICES_ADDED:
+      return{
+        ...state,
+        isServicesAdded:action.payload
+      };
+
     default:
       return state;
   }

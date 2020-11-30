@@ -82,3 +82,8 @@ export const setExpertId = value =>({
   type:UserActionTypes.SET_EXPERT_ID,
   payload:value
 });
+
+export const setServicesAdded = value => ({
+  type:UserActionTypes.SET_SERVICES_ADDED,
+  payload:value
+})

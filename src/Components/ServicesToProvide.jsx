@@ -28,6 +28,7 @@ import {
 import {
   setCurrentUser,
   setUserServiceStatus,
+  setServicesAdded,
 } from "../redux/user/user-actions";
 import {
   Snackbar,
@@ -80,7 +81,8 @@ function ServicesProvide(props) {
     setSavedServices,
     savedServices,
     clearService,
-    addServicesFromAPI
+    addServicesFromAPI,
+    setServicesAdded
   } = props;
 
   const [loading, setLoading] = useState(true);
@@ -843,14 +845,14 @@ function ServicesProvide(props) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={8}>
+             {/*<Grid item xs={8}>
                 <TextField
                   className={classes.text}
                   error={feesError}
                   style={{
                     marginBottom: "10px",
                     marginLeft: "8px",
-                    display: data.type === "Full-Time" ? "none" : "",
+                    display: data.type === "hour" ? "none" : "",
                   }}
                   id="outlined-basic"
                   name="fees"
@@ -859,7 +861,7 @@ function ServicesProvide(props) {
                   label={`Fees/${data.type}`}
                   variant="outlined"
                 />
-              </Grid>
+                </Grid>*/}
 
               <Grid item xs={12}>
                 <Button
@@ -867,7 +869,12 @@ function ServicesProvide(props) {
                   style={{ width: "98%", marginLeft: "10px" }}
                   onClick={() => {
                     addToList();
-                    saveToDatabaseDetails();
+                    saveToDatabaseDetails()
+                    .then(res => {
+                      if(res ==='success'){
+                        setServicesAdded(true);
+                      }
+                    });
                   }}
                   variant="contained"
                 >
@@ -951,6 +958,7 @@ const mapDispatchToProps = (dispatch) => ({
   setSavedServices: (value) => dispatch(setSavedServices(value)),
   setProgress: (value) => dispatch(setServicesProgress(value)),
   clearService: () => dispatch(clearService()),
+  setServicesAdded: value => dispatch(setServicesAdded(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicesProvide);

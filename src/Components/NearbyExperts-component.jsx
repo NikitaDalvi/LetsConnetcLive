@@ -297,7 +297,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
                 <RadioGroup aria-label="gender" name="gender1" value={radius} onChange={event => { setRadius(event.target.value); }}>
-                  <FormControlLabel value="0" control={<Radio />} label="> None" />
+                  <FormControlLabel value="100" control={<Radio />} label="> None" />
                   <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
                   <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
                   <FormControlLabel value='10' control={<Radio />} label="Under 10Km" />
