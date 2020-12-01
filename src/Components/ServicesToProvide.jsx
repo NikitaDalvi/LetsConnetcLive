@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 
 import React, { useState, useEffect } from "react";
 import Heading from "./subComponents/page-headings";
@@ -116,7 +117,7 @@ function ServicesProvide(props) {
       } else if (name === "type" && value === "Full-Time") {
         console.log("BBB");
         setOpen(true);
-  
+
         setSaveButtonEnable(location && fees && fees !== "null" && workingDays);
       } else if (name === "type" && value !== "Full-Time") {
         console.log("CCC");
@@ -130,7 +131,7 @@ function ServicesProvide(props) {
         );
       }
     }, 1000)
-    
+
     //setSaveButtonEnable(false)
     if (name === "service") {
 
@@ -165,18 +166,20 @@ function ServicesProvide(props) {
     };
     const res = await saveServiceDetails(postService);
     if (res) {
-      if (res.data) {
-        if (res.data.responseCode === 200) {
-          return "success";
-        } else {
-          return "fail";
-        }
-      }
+      return res;
+      // if (res.data) {
+      //   debugger;
+      //   if (res.data.responseCode === 200) {
+      //     return "success";
+      //   } else {
+      //     return "fail";
+      //   }
+      // }
     }
   }
 
   function addToList() {
-    
+
 
     // setRow(prevValue => [...prevValue, data]);
     if (data.location === "") {
@@ -273,13 +276,13 @@ function ServicesProvide(props) {
     const res = await deleteServiceDetails(postdeleteService);
     if (res) {
       if (res.data) {
-        
+
         if (res.data.responseCode === 200) {
 
-         
+
           return "success";
         } else {
-        
+
           return "fail";
         }
       }
@@ -316,10 +319,10 @@ function ServicesProvide(props) {
       ServiceProviderId: currentUser.Id,
       ticket: currentUser.Ticket,
     };
-    
+
 
     getBasicDetails(requestData);
-    
+
   }
 
   async function saveToDatabase(clearData) {
@@ -348,7 +351,7 @@ function ServicesProvide(props) {
       ticket: currentUser.Ticket,
     };
 
-    
+
 
     if (type === "Full_Time") {
       var days = 0;
@@ -491,8 +494,10 @@ function ServicesProvide(props) {
   };
 
   async function saveServiceDetails(postService) {
+    console.log(postService);
     const res = await axios.post(`${API.URL}AddServiceDetail`, postService);
     if (res) {
+          debugger;
       if (res.data) {
         if (res.data.responseCode === 200) {
           return "success";
@@ -569,7 +574,7 @@ function ServicesProvide(props) {
               ServiceTypeId: serviceTypeId,
               ticket: currentUser.Ticket,
             };
-            
+
             axios.post(`${API.URL}GetServices`, typeId).then((res) => {
               console.log(res);
               res.data.output.map((item) => AddToDropdown(item));
@@ -577,7 +582,7 @@ function ServicesProvide(props) {
                 ServiceProviderId: currentUser.Id,
                 ticket: currentUser.Ticket,
               };
-            
+
               axios
                 .post(
                   `${API.URL}GetServiceListByServiceProviderId`,
@@ -589,9 +594,9 @@ function ServicesProvide(props) {
                   addServicesFromAPI(res.data.output)
                 });
             });
-            
+
           }
-          
+
         });
       } else {
         console.log("fail");
@@ -642,7 +647,7 @@ function ServicesProvide(props) {
     },
   }));
 
-  
+
 
   const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -871,6 +876,7 @@ function ServicesProvide(props) {
                     addToList();
                     saveToDatabaseDetails()
                     .then(res => {
+                    //  debugger;
                       if(res ==='success'){
                         setServicesAdded(true);
                       }
@@ -883,11 +889,11 @@ function ServicesProvide(props) {
               </Grid>
             </Grid>
           </Grid>
-          
+
             <Grid item xs={8} className={classes.grid}>
               <Grid container>
                 {props.serviceList && props.serviceList.map((item, index) => (
-                  
+
 
                   <Grid item xs="8" className={classes.grid} key={index}>
                     <Paper className={classes.paper}>
@@ -919,7 +925,7 @@ function ServicesProvide(props) {
                     </Paper>
                   </Grid>
                 ))}
-                   
+
               </Grid>
               {props.serviceList && props.serviceList.length > 0 && (
                 <div
@@ -931,7 +937,7 @@ function ServicesProvide(props) {
                 ></div>
               )}
             </Grid>
-          
+
         </Grid>
       )}
     </div>
