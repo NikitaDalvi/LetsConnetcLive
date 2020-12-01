@@ -178,8 +178,6 @@ function ServiceRequest(props) {
 
    }
    else{
-     debugger
-     alert('HII 123')
     postData = {
       Id: currentUser.Id,
       ReviewedToId: spId, 

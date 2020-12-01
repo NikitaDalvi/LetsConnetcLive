@@ -94,9 +94,6 @@ useEffect(()=>{
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(name)
-  console.log(Address)
-
 
   const [modalStyle] = React.useState(getModalStyle);
   const body = (
@@ -105,7 +102,6 @@ useEffect(()=>{
           <Typography gutterBottom variant='h6'>{name}</Typography>
           <Typography gutterBottom variant='h6'>{Address}</Typography>
           <Rating style={{marginTop:'10px'}} name="read-only" value={rating} readOnly precision={0.5} size="large"/>
-        
         </div>
   );
   return(
