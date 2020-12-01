@@ -11,12 +11,13 @@ import UserProfile from "./UserProfile-component";
 import Commission from "./Commission-component";
 import MyServices from "./MyServices";
 import Settings from './Settings-components';
+import NotificationPost from './subComponents/notification-post';
 import NearbyExperts from './NearbyExperts-component';
 import UserDetails from './UserDetails-component';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setCurrentUser } from '../redux/user/user-actions';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme,Paper } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -57,6 +58,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import moment from "moment";
 import { API } from "../API";
 
 
@@ -145,6 +147,7 @@ function LoggedIn(props) {
   const [type, setType] = React.useState(2);
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(true);
+  const [unreads,setUnreads] = useState(0);
 
 
   const handleDrawerOpen = () => {
@@ -167,7 +170,18 @@ function LoggedIn(props) {
       console.log(Path);
       setPath(Path);
       setType(currentUser.UserRole);
-      setNotifications(["Hey, please complete your service profile !"]);
+      //setNotifications(["Hey, please complete your service profile !"]);
+      let notificationRequest = {
+        ReceiverId:currentUser.Id,
+        ticket:currentUser.Ticket
+      };
+      getAllNotifications(notificationRequest)
+      .then(res => {
+        setNotifications(res.data.output)
+        let uR = [];
+        res.data.output.map(item => item.NotificationStatus===true?uR.push(item):item);
+        setUnreads(uR.length);
+      });
     }
   }, [currentUser])
 
@@ -180,12 +194,31 @@ function LoggedIn(props) {
 
   }, []);
 
+  const getAllNotifications = async req => {
+    let result = await axios.post(`${API.URL}GetNotificationByRecieverId`,req);
+    return result;
+  }
+
   function GetServiceType() {
     return axios.get(`${API.URL}getServiceTypes`);
   }
 
   const handleClick = (event) => {
+    if(notifications.length>0){
+      let nonPublished = [];
+      notifications.map(item => item.NotificationStatus === true?nonPublished.push(item.Id):item);
+      updateNotifications({
+        NotificationId:nonPublished,
+        ticket:currentUser.Ticket
+      })
+      .then(res => setUnreads(0));
+    }
     setAnchorEl(event.currentTarget);
+  };
+
+  const updateNotifications = (req) => {
+    let result = axios.post(`${API.URL}UpdateNotificationStatusByNotificationId`,req);
+    return result;
   };
 
   const handleClose = () => {
@@ -231,7 +264,7 @@ function LoggedIn(props) {
           <img src={Logo}  onClick={() => imgClick()} />
 
           <PowerSettingsNewIcon type='button' onClick={() => { props.setCurrentUser(null); props.history.push('/'); }} style={{ color: 'black', position: 'absolute', right: '100px' }} />
-          <Badge badgeContent={notifications.length} color="secondary" style={{ color: 'black', position: 'absolute', right: '150px' }}>
+          <Badge badgeContent={unreads} color="secondary" style={{ color: 'black', position: 'absolute', right: '150px' }}>
             <NotificationsIcon type='button' onClick={handleClick} />
           </Badge>
           <Popover
@@ -248,8 +281,10 @@ function LoggedIn(props) {
               horizontal: 'center',
             }}
           >
-            {notifications.map((item, index) => (<div><Typography key={index} className={classes.typography}><ErrorOutlineIcon style={{ color: 'red' }} /> Test- {item}</Typography><Divider /></div>))}
-
+          <Paper   style={{width:'350px',minHeight:"200px",padding:'10px'}}>
+            {notifications&&notifications.map((item, index) => (<NotificationPost text={item.Message} time={moment(item.CreatedOn).fromNow()}/>))}
+            {notifications.length===0&&<Typography variant='subtitle1'>No notifications arrived yet!</Typography>}
+          </Paper>
           </Popover>
         </Toolbar>
       </AppBar>
@@ -302,7 +337,7 @@ function LoggedIn(props) {
                   <ListItemIcon style={{ paddingLeft: '20px' }}><NextWeekIcon /></ListItemIcon>
                   <ListItemText primary='My Services' />
                 </ListItem>
-                <ListItem button style={{ display: userType === 'Customer' ? '' : 'none' }} 
+                <ListItem button style={{ display: userType === 'Customer' ? '' : 'none' }}
                   //onClick={() => { handleExpansion(); }}
                   onClick={() => props.history.push('/UserPage/Customer/NearbyExperts')}
                   >
