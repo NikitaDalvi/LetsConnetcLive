@@ -152,6 +152,7 @@ function UserDetailPage({ expertId, currentUser }) {
    
     let isSequential = true
     sequentialSlots.forEach((item, index) => {
+
       if(sequentialSlots.length === 1 || (index === sequentialSlots.length - 1)){
         return isSequential
       }
@@ -165,14 +166,20 @@ function UserDetailPage({ expertId, currentUser }) {
     return isSequential
 
   }
+
+  const sorter = (a, b) => {
+    if(a < b) return -1
+    if(a > b) return 1
+    return 0
+  }
   
   const onTimeSlotSelect = (startTime, endTime, timeslotno, index) => {
 
     if(!sequentialSlots.includes(index)){
-      setSequentialSlots([...sequentialSlots, index].sort())
+      setSequentialSlots([...sequentialSlots, index].sort(sorter))
     }
     else{
-      setSequentialSlots(sequentialSlots.filter(item => item!=index).sort())
+      setSequentialSlots(sequentialSlots.filter(item => item!=index).sort(sorter))
     }
 
     setBookingHours(true);
