@@ -274,14 +274,14 @@ function LoggedIn(props) {
             onClose={handleClose}
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'center',
+              horizontal: 'left',
             }}
             transformOrigin={{
               vertical: 'top',
-              horizontal: 'center',
+              horizontal: 'left',
             }}
           >
-          <Paper   style={{width:'350px',minHeight:"200px",padding:'10px'}}>
+          <Paper   style={{width:'350px',minHeight:"200px",maxHeight:'300px',overflowY:'auto',padding:'10px'}}>
             {notifications&&notifications.map((item, index) => (<NotificationPost text={item.Message} time={moment(item.CreatedOn).fromNow()}/>))}
             {notifications.length===0&&<Typography variant='subtitle1'>No notifications arrived yet!</Typography>}
           </Paper>

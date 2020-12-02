@@ -12,6 +12,7 @@ import { Snackbar, Typography, makeStyles, TextField, Grid, Button, Container, B
 import MuiAlert from '@material-ui/lab/Alert';
 import { useMediaQuery } from 'react-responsive';
 import { API } from "../API";
+import loader from '../Images/loader.gif'
 
 function Login(props) {
 
@@ -29,15 +30,15 @@ function Login(props) {
 
   async function handleClick() {
   checkValidation()
-    
+
   }
 
   const checkForValidation = () => {
     const {EmailId, password} = input
-    return EmailId 
-            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(EmailId) 
-            && password 
-            
+    return EmailId
+            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(EmailId)
+            && password
+
   }
 
 
@@ -66,7 +67,7 @@ function Login(props) {
   console.log(res);
   if(res !== null){
     console.log(res.Status);
-  
+
     if(props.userType === 'Service-Provider'){
       debugger
       if(res.UserRole === 4 || res.UserRole === 5){
@@ -99,7 +100,7 @@ function Login(props) {
         }else{
           props.history.push('/UserPage/SPAdmin/MyEmployees');
         }
-  
+
         break;
         default:
             return;
@@ -152,17 +153,17 @@ function Login(props) {
   }
   // .then(res => res.data.output !== null ? setCurrentUser(res.data.output): console.log("invalid"))
   // .then(res => console.log(res.data.output.Id));
-  
-  
-  
+
+
+
   // console.log(props.currentUser);
   //
   // if(props.currentUser !== null){
   //   debugger
   //
   // }
-  
-  
+
+
     // if(input.username === "user" && input.password === "password"){
     //   setLogIn(true);
     //   if(userType==="new"){
@@ -181,11 +182,11 @@ function Login(props) {
     // }else{
     //   setLogIn(false);
     // }
-  
-  
-  
+
+
+
   }
-  
+
 
 
   const useStyles = makeStyles(theme => ({
@@ -282,7 +283,7 @@ function Login(props) {
           </Container>
         </form>
         <Backdrop className={classes.backdrop} open={loading} >
-          <CircularProgress color="inherit" />
+          <img src={loader} alt='loading' style={{opacity:'1'}}/>
         </Backdrop>
       </Container>
     </div>
@@ -323,4 +324,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
-  
