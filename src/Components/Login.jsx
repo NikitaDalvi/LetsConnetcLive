@@ -263,6 +263,9 @@ function Login(props) {
           {alert}
         </Alert>
       </Snackbar>
+      <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
+        <img src={loader} alt='loading' style={{opacity:'1'}} width='400' height='300'/>
+      </Backdrop>
       <Container style={{ width: "100%", marginTop: '100px' }}>
         <Typography className={classes.title} variant='h4'>Sign In</Typography>
         <Typography className={classes.title} variant='subtitle1'>{props.userType}</Typography>
@@ -282,9 +285,6 @@ function Login(props) {
             <a style={{ marginLeft: '300px' }} href='/forgotPassword'>Forgot Password?</a>
           </Container>
         </form>
-        <Backdrop className={classes.backdrop} open={loading} >
-          <img src={loader} alt='loading' style={{opacity:'1'}}/>
-        </Backdrop>
       </Container>
     </div>
   );
