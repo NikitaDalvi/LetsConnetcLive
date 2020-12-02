@@ -33,12 +33,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function ServiceRequestCard({amount,Id,userId,spId,dppath,name,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
+function ServiceRequestCard({amount,Id,userId,spId,dppath,name,emailId,contactNo,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
 {
 
 const [Date,setDate] = useState('');
 const [request,setRequest] = useState({});
 const [rate, setRate] = useState('');
+
+console.log(emailId);
+console.log(contactNo);
 
 
 useEffect(()=>{
@@ -94,18 +97,18 @@ useEffect(()=>{
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(name)
-  console.log(Address)
-
 
   const [modalStyle] = React.useState(getModalStyle);
+  
   const body = (
+
     <div style={modalStyle} className={classes.paper}>
           <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${dppath}`:`${process.env.REACT_APP_PROD_BASE_URL}${dppath}`} className={classes.large} />
           <Typography gutterBottom variant='h6'>{name}</Typography>
           <Typography gutterBottom variant='h6'>{Address}</Typography>
+          <Typography gutterBottom variant='h6'style={{display:status===1?'':'none'}}>{emailId}</Typography>
+          <Typography gutterBottom variant='h6'style={{display:status===1?'':'none'}}>{contactNo}</Typography>
           <Rating style={{marginTop:'10px'}} name="read-only" value={rating} readOnly precision={0.5} size="large"/>
-        
         </div>
   );
   return(

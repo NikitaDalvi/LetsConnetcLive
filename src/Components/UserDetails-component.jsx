@@ -149,8 +149,10 @@ function UserDetailPage({ expertId, currentUser }) {
   const [allRequest, setAllRequest] = React.useState([]);
 
   const checkForSequential = () => {
+   
     let isSequential = true
     sequentialSlots.forEach((item, index) => {
+
       if(sequentialSlots.length === 1 || (index === sequentialSlots.length - 1)){
         return isSequential
       }
@@ -164,14 +166,20 @@ function UserDetailPage({ expertId, currentUser }) {
     return isSequential
 
   }
+
+  const sorter = (a, b) => {
+    if(a < b) return -1
+    if(a > b) return 1
+    return 0
+  }
   
   const onTimeSlotSelect = (startTime, endTime, timeslotno, index) => {
 
     if(!sequentialSlots.includes(index)){
-      setSequentialSlots([...sequentialSlots, index].sort())
+      setSequentialSlots([...sequentialSlots, index].sort(sorter))
     }
     else{
-      setSequentialSlots(sequentialSlots.filter(item => item!=index).sort())
+      setSequentialSlots(sequentialSlots.filter(item => item!=index).sort(sorter))
     }
 
     setBookingHours(true);
@@ -289,71 +297,35 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
   const handleBooking = () => {
-
-
+    debugger
     if (bookAppointmentRequest.ServiceId !== null) {
       var request;
       var URL;
       switch (expertDetails.BasicDetails.ServiceCharge) {
         case 1:
-          
-          var check = 0
-
-          if (Slots.length > 1) {
-            Array.prototype.forEach.call(Slots, item => {
-              console.log(item)
-
-              Array.prototype.forEach.call(Slots, item1 => {
-               
-                console.log(item1)
-                if (item.timeslotno != item1.timeslotno && item.number != item1.timeslotno + 1 && item.number != item1.timeslotno - 1) {
-            
-                  alert('The squance must be in continues !!');
-
-                  check = 1;
-
-                }
-              });
-              if (check == 1) {
-               
-
+          URL = `${API.URL}RequestServiceProviderPerHr`;
+          request = {
+            ServiceProviderId: expertId,
+            ServiceSeekerId: currentUser.Id,
+            ServiceId: bookAppointmentRequest.ServiceId,
+            StartDate: bookAppointmentRequest.StartDate,
+            EndDate: bookAppointmentRequest.StartDate,
+            RequestedTimeSlot: bookAppointmentRequest.ServiceListDetails,
+            Ticket: currentUser.Ticket
+          };
+         
+            bookAppointment(request, URL)
+            .then(res => {
+              if (res) {
+                alert('Booking Successfull!');
+              } else {
+                alert('Booking unsuccessfull! Please Try again later!');
               }
-
             });
 
-          }
-
-          if (check = 0) {
-
-            URL = `${API.URL}RequestServiceProviderPerHr`;
-            setBookingHours(true);
-
-            request = {
-              ServiceProviderId: expertId,
-              ServiceSeekerId: currentUser.Id,
-              ServiceId: bookAppointmentRequest.ServiceId,
-              StartDate: bookAppointmentRequest.StartDate,
-              EndDate: bookAppointmentRequest.StartDate,
-              RequestedTimeSlot: bookAppointmentRequest.ServiceListDetails,
-              Ticket: currentUser.Ticket
-            };
-            bookAppointment(request, URL)
-              .then(res => {
-                if (res) {
-                  window.location.reload(true);
-                  alert('Requested Booking Successfully Done!');
-
-
-                } else {
-                  window.location.reload(true);
-                  alert('Booking unsuccessfull! Please Try again later!');
-                }
-              });
-          }
           break;
 
         case 2:
-
           const isNumber = Number.isInteger(Number(bookAppointmentRequest.Assignments));
           if (Number(bookAppointmentRequest.Assignments) < 1 || !isNumber) {
             alert('Invalid number of assignments !');
@@ -371,12 +343,8 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
-                window.location.reload(true);
-                alert('Requested Booking Successfully Done!');
-
-
+                alert('Booking Successfull!');
               } else {
-                window.location.reload(true);
                 alert('Booking unsuccessfull! Please Try again later!');
               }
             });
@@ -400,13 +368,10 @@ function UserDetailPage({ expertId, currentUser }) {
           bookAppointment(request, URL)
             .then(res => {
               if (res) {
-                window.location.reload(true);
-                alert('Requested Booking Successfully Done!');
+                alert('Booking Successfull!');
               } else {
-                window.location.reload(true);
                 alert('Booking unsuccessfull! Please Try again later!');
               }
-
             });
 
           break;
@@ -416,8 +381,6 @@ function UserDetailPage({ expertId, currentUser }) {
     } else {
       alert('please fill all the fields !');
     }
-    setCheckavaiable(false)
-
 
 
   };
@@ -474,7 +437,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
           </Paper>
         </Grid>
-        <Grid item xs='6' className={classes.profileSection}>
+        <Grid item xs='6' className={classes.prceofileSection}>
           <Paper elevation={2} className={classes.paper}>
             <Typography variant='h5'>Services</Typography>
             <br />

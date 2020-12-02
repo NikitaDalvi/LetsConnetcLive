@@ -247,11 +247,11 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
                 <RadioGroup aria-label="gender" name="gender1" value={ratingFilter} onChange={event => { setRatingFilter(event.target.value); }}>
-                  <FormControlLabel value="0" control={<Radio />} label="> None" />
-                  <FormControlLabel value="1" control={<Radio />} label="> 1" />
-                  <FormControlLabel value="2" control={<Radio />} label="> 2" />
-                  <FormControlLabel value="3" control={<Radio />} label="> 3" />
-                  <FormControlLabel value="4" control={<Radio />} label="> 4" />
+                  <FormControlLabel value="0" control={<Radio />} label=" All" />
+                  <FormControlLabel value="1" control={<Radio />} label=" 1 & More" />
+                  <FormControlLabel value="2" control={<Radio />} label=" 2 & More" />
+                  <FormControlLabel value="3" control={<Radio />} label=" 3 & More" />
+                  <FormControlLabel value="4" control={<Radio />} label=" 4 & More" />
                 </RadioGroup>
               </FormControl>
 

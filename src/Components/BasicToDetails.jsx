@@ -763,6 +763,7 @@ function BasicDetails(props) {
             id="outlined-basic"
             name="fees"
             onChange={handleChange}
+            disabled={feesDisable}
             value={data.fees}
             label="Fees"
             variant="outlined"
