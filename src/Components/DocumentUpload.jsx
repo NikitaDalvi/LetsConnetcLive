@@ -31,7 +31,7 @@ function DocumentUpload({
   history,
   subsType,
   user,
-  setRegisteredUserId,
+  setRegisteredUser,
   setProgress,
   setUser,
   setUserStatus,
@@ -253,6 +253,7 @@ function DocumentUpload({
       let res = await result.json();
       if (res) {
         setUserStatus(3);
+        setRegisteredUser(null);
         console.log(res);
         setUser(user);
         if (user.UserRole !== 6) {

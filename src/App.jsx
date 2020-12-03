@@ -22,14 +22,14 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import {connect} from 'react-redux';
 import {setCurrentUser,setIsHome} from './redux/user/user-actions';
 import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from './redux/user/user-selector';
+import {selectCurrentUser,selectRegisteredUser} from './redux/user/user-selector';
 import {withRouter} from 'react-router-dom';
 import MusicCard from './Components/player-component';
 
 
 class App extends React.Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
 
     };
@@ -44,7 +44,7 @@ render() {
   return(
 
        <div>
-     <Header/>
+    {this.props.registeredUser===null&&<Header/>}
      <Switch>
      <Route path="/" exact component={Home}/>
      <Route path="/Login=ServiceProvider" exact  render={()=>this.props.currentUser?(<Redirect to='/UserPage/ServiceProvider/Dashboard'/>):(<ServiceProviderLogin/>)}/>
@@ -60,11 +60,11 @@ render() {
      <Route path="/Terms" exact component={Terms}/>
      <Route path="/MusicCard" exact component={MusicCard}/>
 
-     
 
 
-     
-    
+
+
+
         <Route path="/Map" exact component={Map}/>
         <Route path="/SelectedCA" exact component={SelectedCA}/>
         <Route path="/Timeslot" exact component={Timeslot}/>
@@ -81,6 +81,7 @@ render() {
 }
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  registeredUser: selectRegisteredUser
 });
 
 const mapDispatchToProps = dispatch => ({
