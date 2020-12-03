@@ -2,25 +2,27 @@
 /*jshint -W087*/
 import React, { useState } from "react";
 
-import { Typography, makeStyles, TextField, Grid, Button, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
+import { Typography, makeStyles, TextField, Grid,Paper,Backdrop, Button, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@material-ui/core';
 import RegistrationLogo from '../Images/registration.png';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { selectUserType, selectRegisteredUser } from '../redux/user/user-selector';
 import { selectAllServiceTypes } from '../redux/service/service-selector';
-import { setProgress, setRegisteredUser } from '../redux/user/user-actions';
+import { setProgress,setRegisteredUser } from '../redux/user/user-actions';
 import { addServiceTypes, removeServiceTypes } from '../redux/service/service-actions';
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
 import { API } from "../API";
 import getStoredState from "redux-persist/es/getStoredState";
+import loader from '../Images/loader.gif'
+
 
 
 function RegistrationForm(props) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const { userType, serviceTypes, setProgress, setRegisteredUser, addServiceTypes, removeServiceTypes, registeredUser, history } = props;
-
+  const[loading,setLoading] = useState(false);
   const [inputText, setInput] = useState({
     serviceTypeId: '',
     serviceType: '',
@@ -48,8 +50,8 @@ function RegistrationForm(props) {
 
   async function handleClick() {
     console.log('hit');
+    setLoading(true);
     const { name, email, password, confirmPassword, mobile, serviceTypeId } = inputText;
-
 
     if (password === confirmPassword) {
       const registrationData = {
@@ -70,6 +72,7 @@ function RegistrationForm(props) {
         //const userId = userData.data.output.Id;
         if (userData.data.output !== null) {
           setRegisteredUser(userData.data.output);
+          
           history.push('/Registration/Subscription');
         }
       }
@@ -79,6 +82,7 @@ function RegistrationForm(props) {
   }
 
   const checkForValidation = () => {
+   
     const { name, email, password, mobile, confirmPassword, termsNConditionCheckbox} = inputText
     return name
             && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
@@ -96,7 +100,10 @@ function RegistrationForm(props) {
       }
     })
   }
-
+  function NewTab() { 
+    window.open( 
+      "/Terms", "_blank"); 
+} 
   function handleChange(event) {
     const { name, value } = event.target;
     setInput(prevValue => {
@@ -150,6 +157,12 @@ function RegistrationForm(props) {
       borderBottomRightRadius: '20px',
       color: 'white',
 
+      paper:{
+        width: '90%',
+        height: '100%',
+        padding:'20px',
+    
+      },
 
       '&:hover': {
         background: 'transparent',
@@ -231,9 +244,12 @@ function RegistrationForm(props) {
                 />
               </Grid>
               <Grid item xs={isMobile ? 12 : 5} style={{ paddingTop: '10px' }}>
-                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '13px', fontWeight: 'bold', textDecoration: 'underline' }} onClick={() => props.history.push('/Terms')}>Terms & Conditions.</span></p>
+                <p className='muted'><span style={{ fontSize: '12px' }}>I have read the </span><span style={{ fontSize: '13px', fontWeight: 'bold', textDecoration: 'underline' }} onClick={NewTab}>Terms & Conditions.</span></p>
               </Grid>
             </Grid>
+            <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
+            <img src={loader} alt='loading' style={{opacity:'1',display:loading?'':'none'}} className={classes.progress} width='200' height='200'/>
+            </Backdrop>
             <Button type='button' disabled={!checkForValidation()} onClick={handleClick} className={classes.btnSignUp}>Sign Up</Button>
           </form>
         </Grid>

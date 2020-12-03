@@ -7,6 +7,7 @@ import axios from 'axios';
 import MuiAlert from '@material-ui/lab/Alert';
 import {withRouter} from 'react-router-dom';
 import { API } from '../API';
+import loader from '../Images/loader.gif'
 
 const useStyles = makeStyles(theme =>({
   paper:{
@@ -98,7 +99,8 @@ const handleClose = (event, reason) => {
         <Grid item xs='6' style={{padding:'200px 20px'}}>
       <Slide direction="right" in={checked} {...(checked ? { timeout: 1000 } : {})}>
         <div>
-          <CircularProgress style={{color:'#FF5343',display:loading?'':'none'}} className={classes.progress}/>
+        <img src={loader} alt='loading' style={{opacity:'1',display:loading?'':'none'}} className={classes.progress} width='200' height='200'/>
+          
           <Paper elevation={0} className={classes.paper} style={{display:loading?'none':''}}>
           <div style={{display:success?'none':''}}>
           <Typography variant='h4' style={{color:'#FF5343'}}>Forgot Password?</Typography>

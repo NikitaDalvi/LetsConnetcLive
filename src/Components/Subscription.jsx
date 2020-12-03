@@ -5,7 +5,7 @@ import corporateUser from '../Images/Corporate-User.png';
 import Heading from "./subComponents/page-headings";
 import SubscriptionCard from "./subComponents/Subscription-Card";
 import { Modal, Form } from 'react-bootstrap';
-import { Typography, makeStyles, Grid, Button, Container, CircularProgress, Backdrop } from '@material-ui/core';
+import { Typography, makeStyles, Grid, Button, Container, Backdrop } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
@@ -14,7 +14,7 @@ import { setProgress, setIsHome, setSubscriptionType, setIndividualSub, setRegis
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
 import { API } from '../API'
-
+import loader from '../Images/loader.gif'
 
 function loadRazorPay(src) {
   return new Promise((resolve) => {
@@ -53,14 +53,7 @@ function Subscription(props) {
 
   useEffect(() => {
     setLoading(true);
-    // function getIndividualSub(){
-    //   return  axios.get('http://letnetworkdev.obtainbpm.com/api/getSubscription/0');
-    // }
-    //  getIndividualSub().then(result => {
-    //    setinitialData(result.data.output[0]);
-    //    // setIndividualSub(result.data.output[0]);
-    //  });
-    // setIndividualSub(IndividualSub.data.output);
+   
     if (userType === 'Service-Provider') {
       setProgress(50);
     } else {
@@ -91,19 +84,7 @@ function Subscription(props) {
               setCompany(corporate);
               setLoading(false);
             }
-            // axios.get(`https://localhost:44327/api/getSgetSubscriptionubscription/0`)
-            //       .then((res) => {
-            //           setinitialData(res.data);
-            //           axios.get(`https://localhost:44327/api/getSubscription/1`)
-            //             .then((res) => {
-            //               setCompany(res.data);
-            //               if(res.data.responseCode === 200){
-            //                 setLoading(false);
-            //               }else{
-            //                 console.log(res.data.responseCode);
-            //               }
-            //             });
-            //       });
+           
           });
       }
 
@@ -216,14 +197,11 @@ function Subscription(props) {
     const __DEV__ = document.domain === 'localhost';
     console.log(data);
     const options = {
-      //"key": __DEV__ ? 'rzp_test_4WUuA0rfz1EeJX' : 'production_key',
-      //"key": 'rzp_test_4WUuA0rfz1EeJX',
+   
       "key": 'rzp_test_nDfaBdpKMGXFdF',
-      //"amount": (initialData.Price- (initialData.Price * initialData.DiscountPercentage / 100)),
       "currency": result.currency,
       "name": "Subscription Purchase",
       "description": "Test Transaction",
-      //"image": "https://example.com/your_logo",
       "order_id": result.id,
       "handler": function (response) {
         console.log(response);
@@ -284,9 +262,6 @@ function Subscription(props) {
   console.log(initialData)
   return (
     <div>
-      <Backdrop className={classes.backdrop} open={loading} >
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <div style={{ paddingLeft: "center" }}>
 
         <Container style={{ textAlign: "center" }}>
@@ -297,16 +272,19 @@ function Subscription(props) {
           <Grid container style={{ textAlign: 'center', paddingLeft: isMobile ? '' : '180px' }} >
             <Grid item xs={isMobile ? 12 : 5}>
               <SubscriptionCard type='Individual' img={`${initialData.ImagePath}`} price={initialData.Price} discount={initialData.DiscountPercentage} link="/DocumentUpload=Individual" description={initialData.Description} />
+              <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
+                <img src={loader} alt='loading' style={{opacity:'1'}} width='200' height='200'/>
+              </Backdrop>
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>
             <Grid item xs={isMobile ? 12 : 5}>
               <SubscriptionCard type='Corporate' img={`${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
+              <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
+                <img src={loader} alt='loading' style={{opacity:'1'}} width='200' height='200'/>
+              </Backdrop>
               <a><Button className={classes.btnSelect} onClick={() => setModalShow(true)}>SELECT</Button></a>
             </Grid>
           </Grid>
-
-
-
           <Modal
             animation={false}
             show={modalShow}

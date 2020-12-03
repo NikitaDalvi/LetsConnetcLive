@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectExpertId, selectCurrentUser } from '../redux/user/user-selector';
 import axios from 'axios';
-import { Input, Container, Grid, makeStyles, Avatar, Typography, Paper, FormControl, InputLabel, MenuItem, Select, FormControlLabel, Checkbox, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Input, Container, Grid, makeStyles, Avatar, Typography, Paper,Backdrop, FormControl, InputLabel, MenuItem, Select, FormControlLabel, Checkbox, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import profile from '../Images/profile.jpg';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,6 +16,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { useMediaQuery } from 'react-responsive';
+import loader from '../Images/loader.gif'
 
 const useStyles = makeStyles((theme) => ({
   profileSection: {
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 function UserDetailPage({ expertId, currentUser }) {
   const [expertDetails, setExpertDetails] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [bookAppointmentRequest, setBookAppointmentRequest] = useState({
     ServiceId: '',
     ServiceListDetails: [],
@@ -297,6 +299,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
 
   const handleBooking = () => {
+    setLoading(true);
     debugger
     if (bookAppointmentRequest.ServiceId !== null) {
       var request;
@@ -316,6 +319,7 @@ function UserDetailPage({ expertId, currentUser }) {
          
             bookAppointment(request, URL)
             .then(res => {
+              setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
               } else {
@@ -532,6 +536,9 @@ function UserDetailPage({ expertId, currentUser }) {
                   Check Avalibilty
                 </Button>}
               </Grid>}
+              <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
+                <img src={loader} alt='loading' style={{opacity:'1'}} width='200' height='200'/>
+              </Backdrop>
               {setBooking && <Grid item xs={6}>
                 <Button className={classes.button} onClick={handleBooking} variant="contained" disabled={!checkForSequential()}>
                   BOOK NOW
