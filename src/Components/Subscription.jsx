@@ -41,12 +41,12 @@ function Subscription(props) {
   const [initialData, setinitialData] = useState({});
   const [company, setCompany] = useState({});
   const [selectedSub, setSelectedSub] = useState('');
- 
+
   //
   const handleChange = event => {
     setCompanyName(event.target.value);
 
-    
+
   };
 
   const { userType, setProgress, registeredUser, setCurrentUser,setSubscriptionType } = props;
@@ -135,9 +135,9 @@ function Subscription(props) {
 
   const SubsSelectionClick = (type, companyName) => {
     var updatedData;
-    
+
     setSubscriptionType(type);
-    
+
     if (props.userType === 'Service-Provider') {
       updatedData = {
         Id: props.registeredUser.Id,
@@ -184,9 +184,10 @@ function Subscription(props) {
       props.history.push('/Registration/KYC');
     } else {
       setCurrentUser(registeredUser);
+      setRegisteredUser(null);
       props.history.push('/UserPage/Customer/Dashboard');
     }
-    
+
   }
 
   async function updateUserRole(data) {
@@ -363,4 +364,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Subscription));
-
