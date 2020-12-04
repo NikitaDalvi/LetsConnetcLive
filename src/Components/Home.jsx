@@ -4,8 +4,8 @@ import homeVector from "../Images/Vector 2 (1).png";
 import img from "../Images/img.png";
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser, selectIsHome } from '../redux/user/user-selector';
-import { setIsHome, setCurrentUser, setUserType } from '../redux/user/user-actions';
+import { selectCurrentUser, selectIsHome,selectRegisteredUser } from '../redux/user/user-selector';
+import { setIsHome, setCurrentUser,setRegisteredUser, setUserType } from '../redux/user/user-actions';
 // import Content from "./subComponents/home-content";
 import { Typography, makeStyles, Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
@@ -14,7 +14,7 @@ import { useMediaQuery } from 'react-responsive';
 import { red, green } from "@material-ui/core/colors";
 import Tooltip from "@material-ui/core/Tooltip";
 
-function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) {
+function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,setRegisteredUser,registeredUser }) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   const useStyles = makeStyles(theme => ({
@@ -56,6 +56,12 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) 
       setIsHome(true);
     }
   }, [currentUser, setIsHome, history])
+
+  useEffect(()=>{
+    if(registeredUser){
+      setRegisteredUser(null)
+    }
+  },[registeredUser,setRegisteredUser]);
 
   const handleClick = (type) => {
     
@@ -140,13 +146,15 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history }) 
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  isHome: selectIsHome
+  isHome: selectIsHome,
+  registeredUser:selectRegisteredUser
 })
 
 const mapDispatchToProps = dispatch => ({
   setUserType: value => dispatch(setUserType(value)),
   setIsHome: value => dispatch(setIsHome(value)),
-  setCurrentUser: value => dispatch(setCurrentUser(value))
+  setCurrentUser: value => dispatch(setCurrentUser(value)),
+  setRegisteredUser: value => dispatch(setRegisteredUser(value))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
