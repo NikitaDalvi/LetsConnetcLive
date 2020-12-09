@@ -21,6 +21,53 @@ import Tooltip from "@material-ui/core/Tooltip";
 function Availability({ workingHours, currentUser, setWorkingHours, clearWorkingHours, setServiceStatus, setProgress, serviceTypeId }) {
 
 
+
+  const [serviceAdded, setServiceAdded] = React.useState(false);
+  const [chargeType, setChargeType] = React.useState(1);
+  const [buffer, setBuffer] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [selectedWorkingDays, setSelectedWorkingDays] = React.useState([]);
+  const [savedDays, setSavedDays] = React.useState([]);
+  React.useEffect(() => {
+    if (currentUser) {
+      setChargeType(currentUser.ServiceCharge);
+      setServiceAdded(currentUser.isServicesAdded);
+      const requestData = {
+        ServiceProviderId: currentUser.Id,
+        ticket: currentUser.Ticket
+      };
+      getWorkingHours(requestData)
+        .then(res => {
+          debugger;
+          console.log(res)
+          if (res) {
+            console.log(res);
+            if (res.length !== 0) {
+              clearWorkingHours();
+              res.map(day => {
+
+                setSavedDays(prevValue => {
+                  return [...prevValue, day.WorkingDays]
+                })
+
+              });
+              setWorkingHours(res);
+              console.log(res._BufferTiming)
+              if(res.length != 0){
+              setBuffer(res[0]._BufferTiming);
+            }
+            }
+
+          } else {
+
+          }
+
+        });
+    }
+
+  }, [currentUser, setWorkingHours]);
+
+
   const saveToDatabase = async () => {
 
     if (workingHours !== []) {
@@ -37,8 +84,8 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
             return newData
           })
         }
-       
-        
+
+
       };
 
       console.log(request);
@@ -64,65 +111,22 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
             setProgress(66);
           }
           getWorkingHours(requestData)
-            .then(result => 
+            .then(result =>
               setSelectedWorkingDays(result)
               );
         }
       }
     }
   };
-  const [serviceAdded, setServiceAdded] = React.useState(false);
-  const [chargeType, setChargeType] = React.useState(1);
-  const [buffer, setBuffer] = useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [selectedWorkingDays, setSelectedWorkingDays] = React.useState([]);
-  const [savedDays, setSavedDays] = React.useState([]);
-  React.useEffect(() => {
-    if (currentUser) {
-      setChargeType(currentUser.ServiceCharge);
-      setServiceAdded(currentUser.isServicesAdded);
-      const requestData = {
-        ServiceProviderId: currentUser.Id,
-        ticket: currentUser.Ticket
-      };
-      getWorkingHours(requestData)
-        .then(res => {
-          console.log(res)
-          if (res) {
-            console.log(res);
-            if (res.length !== 0) {
-              clearWorkingHours();
-              res.map(day => {
-                
-                setSavedDays(prevValue => {
-                  return [...prevValue, day.WorkingDays]
-                })
-                
-              });
-              setWorkingHours(res);
-              console.log(res._BufferTiming)
-              if(res.length != 0){
-              setBuffer(res[0]._BufferTiming);
-            }
-            }
-
-          } else {
-           
-          }
-
-        });
-    }
-
-  }, [currentUser, setWorkingHours]);
 
   const statusBuffer = (buffer) => {
     switch (buffer) {
       case 1:
         return "Buffer Time 30";
-  
+
       case 2:
         return "Buffer Time 60";
-    
+
         default:
         return "Buffer Time is not Set";
     }
@@ -199,11 +203,11 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
           </Snackbar>
           <div style={{ textAlign: 'left  ' }}>
             <br />
-            
+
            <Container style={{ width: '80%', marginLeft: '0' }}>
            {/*<Tooltip title={statusBuffer(buffer)}>
               <FormControl className={classes.formControl}>
-              
+
                 <InputLabel id="demo-simple-select-label">Buffer</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -224,16 +228,11 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
               <br />
               {
                 days.map((day, index) => (
-                  <DayTime key={index} alert={handleAlert} id={index} savedDays={savedDays} day={day} />
+                  <DayTime key={index} alert={handleAlert} id={index} savedDays={savedDays} day={day} typeId={serviceTypeId}/>
                 ))
               }
 
               <br />
-              <Link to="/UserPage/ServiceProvider/Dashboard" style={{ textDecoration: "none" }}>
-                <Button className={classes.button} style={{ width: '22%', margin: '5px' }} onClick={() => { saveToDatabase(); }} variant="contained" startIcon={<SaveAltIcon />}>
-                  Apply & Save
-             </Button>
-              </Link>
             </Container>
           </div>
         </div>

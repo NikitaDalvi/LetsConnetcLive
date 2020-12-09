@@ -11,6 +11,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Backdrop
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -35,6 +36,9 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { v4 as uuidv4 } from "uuid";
+import { API } from '../../API';
+import loader from '../../Images/loader.gif'
+import axios from 'axios';
 import moment from "moment";
 
 function DayTime({
@@ -46,12 +50,13 @@ function DayTime({
   removeTimeSlot,
   alert,
   savedDays,
-  removeAvailability
+  removeAvailability,
+  typeId
 }) {
   const [slot, setSlot] = useState({
     // ServiceProviderId:'',
     // ServiceTypeId:'',
-    
+
     WorkingDays: "",
     TimeSlotDetails: {
       StartTime: "",
@@ -75,6 +80,7 @@ function DayTime({
   const [error, setError] = useState(false);
   const [bufferError, setBufferError] = useState(false);
   const [existence, setExistence] = useState(false);
+  const [loading,setLoading] = useState(false);
 
   const handleCheck = (event) => {
     var checkBox = event.target;
@@ -88,7 +94,7 @@ function DayTime({
       setDisable(false);
     } else {
       removeAvailability(day);
-      setSlot({        
+      setSlot({
         WorkingDays: "",
         TimeSlotDetails: {
           StartTime: "",
@@ -206,9 +212,30 @@ function DayTime({
     }
 
     if (timeslots.length < 2) {
+      setLoading(true);
       console.log(slot);
+      let timeSlot={
+        StartTime:slot.TimeSlotDetails.StartTime,
+        EndTime:slot.TimeSlotDetails.EndTime
+      };
+      let req = {
+        ServiceTypeId:typeId,
+        WorkingDays:slot.WorkingDays,
+        TimeSlotDetails:timeSlot,
+        ticket:currentUser.Ticket
+      };
+      console.log(req);
+      AddSlot(req)
+      .then(res => {
+        console.log(res);
+        addWorkingHours(Slot);
+        setLoading(false);
+      })
+      .catch(err=> {
+        setLoading(false);
+        alert('Some error occured!');
+      });
 
-      addWorkingHours(Slot);
     } else {
       return alert();
     }
@@ -221,6 +248,11 @@ function DayTime({
     //   TimeSlot:null
     // });
   };
+
+  const AddSlot = async req => {
+    let result = await axios.post(`${API.URL}SaveWorkingHours`, req);
+    return result;
+  }
 
   const removeTimeslot = (Id) => {
     const object = {
@@ -246,7 +278,7 @@ function DayTime({
   }, [serviceTypeId, currentUser]);
 
   useEffect(() => {
-   
+
     if (day != null) {
       if (workingHours.length !== 0) {
         const Day = workingHours.find((item) => item.WorkingDays === day);
@@ -257,7 +289,7 @@ function DayTime({
               ...prevValue,
               WorkingDays: day,
             };
-           
+
           });
           setChecked(true);
           setDisable(false);
@@ -348,7 +380,7 @@ function DayTime({
                 />
               </FormControl>
             </Grid>
-            
+
             <Grid item xs={4}>
               <FormControl className={classes.formControl}>
                 <KeyboardTimePicker
@@ -358,7 +390,7 @@ function DayTime({
                   // label="End Time"
                   value={endTime}
                   onChange={onEndChange}
-                  
+
                   minutesStep={30}
                   KeyboardButtonProps={{
                     "aria-label": "change time",
@@ -396,6 +428,9 @@ function DayTime({
           </div>
         ))}
       </Grid>
+      <Backdrop className={classes.backdrop} open={loading} style={{ zIndex: '9999' }}>
+        <img src={loader} alt='loading' style={{ opacity: '1' }} width='200' height='200' />
+      </Backdrop>
     </Grid>
   );
 }
