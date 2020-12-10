@@ -59,6 +59,7 @@ function DayTime({
 
     WorkingDays: "",
     TimeSlotDetails: {
+      Id:null,
       StartTime: "",
       StartAMPM: "",
       EndTime: "",
@@ -97,6 +98,7 @@ function DayTime({
       setSlot({
         WorkingDays: "",
         TimeSlotDetails: {
+          Id:null,
           StartTime: "",
           StartAMPM: "",
           EndTime: "",
@@ -123,13 +125,13 @@ function DayTime({
 
   const onStartChange = (event) => {
     //const{value} = event.target;
+  //  const Day = workingHours.find((item) => item.WorkingDays === day);
     setStartTime(event);
     setSlot((prevValue) => {
       return {
         ...prevValue,
         TimeSlotDetails: {
           ...prevValue.TimeSlotDetails,
-          TimeslotId: uuidv4(),
           StartTime: moment(event).format("hh:mm A"),
         },
       };
@@ -228,7 +230,9 @@ function DayTime({
       AddSlot(req)
       .then(res => {
         console.log(res);
-        addWorkingHours(Slot);
+        let slot = Slot;
+        slot.TimeSlotDetails.Id = res.data.output.TimeSlotId;
+        addWorkingHours(slot);
         setLoading(false);
       })
       .catch(err=> {
@@ -252,17 +256,40 @@ function DayTime({
   const AddSlot = async req => {
     let result = await axios.post(`${API.URL}SaveWorkingHours`, req);
     return result;
-  }
+  };
 
   const removeTimeslot = (Id) => {
+    setLoading(true);
     const object = {
       day: day,
       Id: Id,
     };
 
-    removeTimeSlot(object);
-    setChecked(false);
+    let req = {
+      TimeSlotId:Id,
+      SerAvailibiltyId:slot.Id,
+      ticket:currentUser.Ticket
+    };
+    console.log(req);
+    removeSlot(req)
+    .then(res => {
+      console.log(res);
+      removeTimeSlot(object);
+      setChecked(false);
+        setLoading(false);
+    })
+    .catch(err => {
+        setLoading(false);
+      alert('error occured!');
+    });
 
+
+
+  };
+
+  const removeSlot = async req => {
+    let result = await axios.post(`${API.URL}DeleteTimeSlot`, req);
+    return result;
   };
 
   useEffect(() => {
@@ -282,12 +309,14 @@ function DayTime({
     if (day != null) {
       if (workingHours.length !== 0) {
         const Day = workingHours.find((item) => item.WorkingDays === day);
+        console.log(Day);
         if (Day != null) {
           setTimeslots(Day.TimeSlotDetails);
           setSlot((prevValue) => {
             return {
               ...prevValue,
               WorkingDays: day,
+              Id:Day.Id
             };
 
           });
@@ -421,7 +450,7 @@ function DayTime({
                 type="button"
                 color="secondary"
                 onClick={() => {
-                  removeTimeslot(item.TimeslotId);
+                  removeTimeslot(item.Id);
                 }}
               />
             </Typography>
