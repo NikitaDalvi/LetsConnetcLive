@@ -548,7 +548,7 @@ function ServicesProvide(props) {
 
   useEffect(() => {
     if (savedServices) {
-      console.log(savedServices);
+      console.log(props.serviceList);
       setSaveServices(savedServices);
     }
   }, [savedServices]);
@@ -902,8 +902,9 @@ function ServicesProvide(props) {
                           <Typography variant="h6">{item.service}</Typography>
                           <Typography variant="body1">
                             Rs{item.fees} /
-                            {item.type === "Full-Time" ? "day" : item.type}
+                              {item.type&&item.type === "Full-Time" ? "day" : `${item.type}`}
                           </Typography>
+                         
                         </Grid>
                         <Grid
                           item

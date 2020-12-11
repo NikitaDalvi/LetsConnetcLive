@@ -54,6 +54,7 @@ const userReducer = (state=Initial_State, action) => {
     };
 
     case UserActionTypes.SET_SUBSCRIPTION_TYPE:
+      debugger;
     return{
       ...state,
       subscriptionType: action.payload
