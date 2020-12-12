@@ -56,7 +56,9 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
               if(res.length != 0){
               setBuffer(res[0]._BufferTiming);
             }
-            }
+          }else{
+                          setWorkingHours([]);
+          }
 
           } else {
 
