@@ -61,6 +61,7 @@ function CommissionTable(props) {
 
   async function getCommissinData(data) {
     return await axios.post(`${API.URL}GetCommissionDueByServiceProviderId`, data);
+    
   }
 
   const getTotal = () => {
@@ -69,7 +70,7 @@ function CommissionTable(props) {
     
     for(let item of commision){
       console.log(sum + item.ServiceCharges)
-      sum = sum + item.ServiceCharges
+      sum = Math.round(sum + item.ServiceCharges)
     }
     return sum
     
@@ -86,7 +87,7 @@ function CommissionTable(props) {
                 <TableCell style={{ color : 'white'}} align="center">Customer</TableCell>
                 <TableCell style={{ color : 'white'}} align="center">Service</TableCell>
                 <TableCell style={{ color : 'white'}} align="center">Fees </TableCell>
-                <TableCell style={{ color : 'white'}} align="center">Commission (&#8377;)</TableCell>
+                <TableCell style={{ color : 'white'}} align="center">Commission</TableCell>
                 <TableCell style={{ color : 'white'}} align="center">Date of Service</TableCell>
                 <TableCell style={{ color : 'white'}} align="center">Actual Amount (&#8377;)</TableCell>
                 <TableCell style={{ color : 'white'}} align="center">Service Charge </TableCell>
@@ -101,7 +102,7 @@ function CommissionTable(props) {
                 <StyledTableCell align="center" >{item.SE}</StyledTableCell>
                 <StyledTableCell align="center">{item.Services}</StyledTableCell>
                 <StyledTableCell align="center">{item.Fees}</StyledTableCell>
-                <StyledTableCell align="center">{item.CommissionAmount}</StyledTableCell>
+                <StyledTableCell align="center">{item.CommissionAmount}{item.Type && item.Type===1 ?'%':item.type===2?'₹':null}</StyledTableCell>
                 <StyledTableCell align="center">{item.RequestedOn}</StyledTableCell>
                 <StyledTableCell align="center">{item.ActualAmount}</StyledTableCell>
                 <StyledTableCell align="center">{item.ServiceCharges}</StyledTableCell>
