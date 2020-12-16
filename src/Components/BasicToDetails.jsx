@@ -420,13 +420,13 @@ function BasicDetails(props) {
             setBuffer(output.BufferTiming ? output.BufferTiming : 1);
             if(output.ServiceCharge){
               setFeesDisable(true)
-              setBufferDisable(true)
+              
             }
            
 
             if(output.ServiceGiven){
               setPreferenceDisable(true)
-              setBufferDisable(true)
+              
             }
           }
           setData(previousValue => {
@@ -434,7 +434,7 @@ function BasicDetails(props) {
               ...previousValue,
               Id: output.Id,
               type: output.ServiceCharge == 0 ? "" : output.ServiceCharge == 1 ? "hour" : output.ServiceCharge == 2 ? "assignment" : output.ServiceCharge == 3 ? "Full-Time" : "",
-              location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':null,
+              location: output.ServiceGiven===1?'OnSite':output.ServiceGiven===2?'OffShore':output.ServiceGiven===3?'Remote':output.ServiceGiven===4?'onsiteorofflineboth':null,
               workingDays: output.WorkingDays===2?'Monday_To_Saturday':'Monday_To_Friday',
               fees: output.Fees
             }
@@ -722,6 +722,7 @@ function BasicDetails(props) {
               <MenuItem value="OffShore">MyOffice</MenuItem>
               <MenuItem value="OnSite">Onsite</MenuItem>
               <MenuItem value="Remote">Remote</MenuItem>
+              <MenuItem value="onsiteorofflineboth">onsite or offline both</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -763,7 +764,6 @@ function BasicDetails(props) {
             id="outlined-basic"
             name="fees"
             onChange={handleChange}
-            disabled={feesDisable}
             value={data.fees}
             label="Fees"
             variant="outlined"

@@ -38,15 +38,29 @@ function DocumentUpload({
   setUserType,
 }) {
   var SPitem = [];
-  if (subsType === "Individual") {
-    SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
-  } else {
-    SPitem = [
-      "Company PAN Card",
-      "Incorporation Certificate/Incorporation proof",
-      "Udhyog Adhaar",
-      "CA Certificate",
-    ];
+  if(user){
+    if(user.UserRole===2 || user.UserRole===4){
+      SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+    }else{
+      SPitem = [
+        "Company PAN Card",
+        "Incorporation Certificate/Incorporation proof",
+        "Udhyog Adhaar",
+        "CA Certificate",
+      ];
+    }
+  }else{
+    if (subsType === "Individual") {
+      SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+    } else {
+      SPitem = [
+        "Company PAN Card",
+        "Incorporation Certificate/Incorporation proof",
+        "Udhyog Adhaar",
+        "CA Certificate",
+      ];
+    }
+  
   }
 
   var Items;

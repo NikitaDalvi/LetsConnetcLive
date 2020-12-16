@@ -66,7 +66,8 @@ function Login(props) {
       console.log(res.Status);
 
       if (props.userType === 'Service-Provider') {
-        debugger
+        //debugger
+
         if (res.UserRole === 4 || res.UserRole === 5) {
           setSeverity('info');
           setAlert('These credentials belong to a Customer account. Please Login again !');
@@ -83,6 +84,11 @@ function Login(props) {
           case 2:
           case 5:
             setRegisteredUser(res);
+            if(res.UserRole===2){
+              setSubscriptionType('Individual');
+            }else{
+              setSubscriptionType('Corporate');
+            }
             props.history.push('/Registration/KYC');
             return;
           case 3:
@@ -104,6 +110,11 @@ function Login(props) {
         }
       } else {
         debugger
+        if(res.UserRole===3){
+          setSubscriptionType('Individual');
+        }else{
+          setSubscriptionType('Corporate');
+        }
         if (res.UserRole === 2 || res.UserRole === 3 || res.UserRole === 6) {
           setSeverity('info');
           setAlert('These credentials belong to a Service-Provider account. Please Login again !');

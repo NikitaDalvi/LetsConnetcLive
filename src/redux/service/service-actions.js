@@ -81,6 +81,11 @@ export const addRatingAndReviews = ratings => ({
   payload:ratings
 });
 
+export const addCommissionDue = commission => ({
+  type: serviceActionTypes.ADD_COMMISSIONDUE,
+  payload:commission
+});
+
 export const setServicesProgress = value => ({
   type: serviceActionTypes.SET_MY_SERVICES_PROGRESS,
   payload:value

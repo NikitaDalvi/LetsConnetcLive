@@ -16,16 +16,16 @@ function DashboardCard({history,...props}){
       padding: '0.5rem',
     }
   }));
-
+  console.log(props.name)
   function changepage(){
 
     console.log(props)
     //debugger;
 
-    if(props.name=== 'NEW' || props.name==='TODAY' || props.name==='UPCOMING' || props.name==='COMPLETED' || props.name==='NEARBY EXPERTS' || props.name==='CONFIRMED' || props.name==='PENDING' || props.name==='PAST'){
+    if(props.name=== 'NEW' || props.name==='TODAY' || props.name==='UPCOMING' || props.name==='COMPLETED'  || props.name==='CONFIRMED' || props.name==='PENDING' || props.name==='PAST'){
       history.push('ServiceRequest');
     }
-    else if(props.name==='COMMISION DUE'){
+    else if(props.name==='COMMISSION DUE'){
       history.push('CommissionDue');
 
     }
@@ -37,6 +37,11 @@ function DashboardCard({history,...props}){
       history.push('RatingAndReview');
 
     }
+    else if(props.name==='NEARBY EXPERT'){
+      history.push('NearbyExperts');
+
+    }
+
 
 
   }

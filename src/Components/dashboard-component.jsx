@@ -156,8 +156,12 @@ const Dashboard = (props) => {
               <DashboardCard
                 color="#e65888"
                 caption="Commission Due"
-                name="COMMISION DUE"
-                quantity="&#8377;1,11,000"
+                name="COMMISSION DUE"
+                quantity={
+                  dashboardDetails !== null
+                    ? dashboardDetails.CommissionDue
+                    : "50"
+                }
               />
             </Grid>
             <Grid item xs={3}>
@@ -165,7 +169,7 @@ const Dashboard = (props) => {
                 color="#c95ed6"
                 caption="Rating"
                 name="RATING"
-                rating={
+                quantity={
                   dashboardDetails !== null
                     ? `${dashboardDetails.AvgRating}`
                     : "5 &#10032;"
