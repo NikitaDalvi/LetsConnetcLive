@@ -3,23 +3,26 @@
 import 'date-fns';
 import React, { useState, useEffect } from "react";
 import userIcon from "../Images/user.jpg";
-import { Container, Avatar, makeStyles, TextField, FormControl, InputLabel, Select, MenuItem, Grid, Button, Snackbar, CircularProgress, Backdrop, Paper, Typography } from '@material-ui/core';
+import { Container, Avatar, makeStyles, TextField,Link, FormControl, InputLabel, Select, MenuItem, Grid, Button, Snackbar, CircularProgress, Backdrop, Paper, Typography, Input,InputAdornment,IconButton } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import MuiAlert from '@material-ui/lab/Alert';
+import PublishIcon from '@material-ui/icons/Publish';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser, selectUserType } from '../redux/user/user-selector';
-import { editCurrentUser, setProfilePicture } from '../redux/user/user-actions';
+import { editCurrentUser, setProfilePicture, editResume } from '../redux/user/user-actions';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 import EditIcon from '@material-ui/icons/Edit';
+import InfoIcon from '@material-ui/icons/Info';
+import {withRouter} from 'react-router-dom';
 import { API } from '../API';
 
 
@@ -82,7 +85,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function UserProfile({ currentUser, editUser, setDPPath, userType }) {
+function UserProfile({ currentUser, editUser, setDPPath, userType,history,editResume }) {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [data, setData] = useState({
@@ -112,6 +115,10 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
   const [editable1, setEditable1] = useState(false);
 
   const [editable2, setEditable2] = useState(false);
+
+  const [resume,setResume] = useState(null);
+
+  const [resumePath,setResumePath] = useState(null);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -149,7 +156,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
   const handleClick = async () => {
     setLoading(true);
     const res = await axios.post(`${API.URL}UpdateProfile`,data);
-    
+
     if (res != null) {
       console.log(res);
       if (res.data.responseCode === 200) {
@@ -166,7 +173,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
         if (address2.Address != '') {
           request.LocationDetails.push(address2);
         }
-       
+
         const result = await axios.post(`${API.URL}UpdateServiceProviderDescription`, request);
         if (result) {
           if (result.data.output === true) {
@@ -285,7 +292,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
   };
 
 
-  useEffect(() => {
+    useEffect(() => {
     if (currentUser != null) {
       const request = {
         UserId: currentUser.Id,
@@ -294,6 +301,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
       getProfileDetails(request)
         .then(res => {
+          console.log(res);
           setData({
             Id: res.data.output.UserBasicDetails.Id,
             FullName: res.data.output.UserBasicDetails.FullName,
@@ -304,8 +312,11 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
             ticket: currentUser.Ticket,
             DOB: res.data.output.UserBasicDetails.DOB,
             dppath: res.data.output.UserBasicDetails.dppath
-
           });
+          if(currentUser.ResumeName&&currentUser.ResumePath){
+            setResume(currentUser.ResumeName);
+            setResumePath(currentUser.ResumePath);
+          }
           if (res.data.output.LocationDetails.length !== 0) {
             setAddress1(res.data.output.LocationDetails[0]);
             setAdd1(res.data.output.LocationDetails[0].Address);
@@ -366,7 +377,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
 
 
   function handleAddressEdit(type) {
-    
+
     var address;
     if (type === 1) {
       if (add1) {
@@ -398,6 +409,53 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
     }
   }
 
+  async function handleResume(event){
+    setLoading(true);
+    const {value} = event.target;
+    var newValue = value.replace(/C:\\fakepath\\/i, '');
+    setResume(newValue);
+    let Resume = event.target.files[0];
+    let formdata = new FormData();
+    formdata.append('Files', Resume);
+
+    try {
+      let result = await fetch(
+        `${API.URL}UploadServiceProviderResume/${currentUser.Id}`,
+        {
+          method: "POST",
+          body: formdata,
+        }
+      );
+      result = await result.json();
+      if(result){
+        console.log(result);
+        if(result.responseCode === 200)
+        {
+        let resumeObject = {
+          path:result.output.Path,
+          name:result.output.fileName
+        };
+        editResume(resumeObject);
+        setLoading(false);
+        setSeverity('success');
+        setAlert('Resume uploaded successfully');
+        setOpen(true);}
+        else
+        {setLoading(false);
+        setSeverity('warning');
+        setAlert('Bad request !');
+        setOpen(true);}
+      }
+    } catch (e) {
+      setLoading(false);
+      setSeverity('error');
+      setAlert(e.message);
+      setOpen(true);
+    }
+
+
+  }
+
   return (
     <div style={{ paddingTop: '100px' }}>
       <Backdrop className={classes.backdrop} open={loading} >
@@ -411,7 +469,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
-          <Avatar alt="Remy Sharp" src={path} className={classes.large} />
+          <Avatar alt="Remy Sharp" src={`https://letnetworkdev.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />
@@ -453,6 +511,34 @@ function UserProfile({ currentUser, editUser, setDPPath, userType }) {
               </Grid>
             </Grid>
             <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: userType === 'Service-Provider' ? '' : 'none' }} label="Description" />
+            <br/>
+            <br/>
+            <FormControl style={{width:'330px'}}>
+                        <label htmlFor="resume-button-file">
+            <Input
+            value={resume}
+            label='resume'
+            placeholder='Resume'
+            id="standard-adornment-password"
+            disabled='true'
+            endAdornment={
+            <InputAdornment position="end">
+            <IconButton             component="span">
+              <PublishIcon/>
+            </IconButton>
+            </InputAdornment>
+          }
+            />
+                        </label>
+            <input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" />
+            </FormControl>
+            {resumePath&&
+              <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
+              <IconButton>
+              <InfoIcon/>
+            </IconButton>
+            </Link>
+          }
             {
               editable1 ?
                 (<Paper elevation={1} style={{ padding: '10px 10px', width: '400px', textAlign: 'left', margin: '8px 80px' }}>
@@ -583,10 +669,11 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   editUser: data => dispatch(editCurrentUser(data)),
-  setDPPath: path => dispatch(setProfilePicture(path))
+  setDPPath: path => dispatch(setProfilePicture(path)),
+  editResume: resume => dispatch(editResume(resume))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile));
 
 
 

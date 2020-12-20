@@ -11,6 +11,11 @@ export const editCurrentUser = user => ({
   payload:user
 });
 
+export const editResume = resume => ({
+  type:UserActionTypes.EDIT_RESUME,
+  payload:resume
+});
+
 export const setIsHome = value => ({
   type:UserActionTypes.SET_ISHOME,
   payload:value

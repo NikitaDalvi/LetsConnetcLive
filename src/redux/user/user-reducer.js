@@ -120,6 +120,12 @@ const userReducer = (state=Initial_State, action) => {
         currentUser:{...state.currentUser,isServicesAdded:action.payload}
       };
 
+    case UserActionTypes.EDIT_RESUME:
+    return{
+      ...state,
+      currentUser:{...state.currentUser,ResumeName:action.payload.name,ResumePath:action.payload.path}
+    };
+
     default:
       return state;
   }
