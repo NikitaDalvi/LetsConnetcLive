@@ -346,6 +346,7 @@ function UserDetailPage({ expertId, currentUser }) {
           };
           bookAppointment(request, URL)
             .then(res => {
+              setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
               } else {
@@ -371,6 +372,7 @@ function UserDetailPage({ expertId, currentUser }) {
           };
           bookAppointment(request, URL)
             .then(res => {
+              setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
               } else {

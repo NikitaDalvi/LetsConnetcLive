@@ -133,30 +133,7 @@ function CommissionTable(props) {
             Ticket:currentUser.Ticket,
             PaymentDetails:paymentDetails
           };
-          // const subscriptionDetails = {
-          //   UserId: registeredUser.Id,
-          //   SubscriptionDiscountId: type === 'Individual' ? initialData.DiscountId : company.DiscountId,
-          //   SubscriptionPricingHistoryId: type === 'Individual' ? initialData.HistoryId : company.HistoryId,
-          //   StartDate: new Date().toDateString(),
-          //   EndDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toDateString(),
-          // }
-          //
-          // const paymentDetails = {
-          //   RazorPaymentId: response.razorpay_payment_id,
-          //   OrderId: response.razorpay_order_id,
-          //   PaymentSignature: response.razorpay_signature,
-          //   Amount: result.amount / 100,
-          //   PaidFor: 1,
-          // }
-          //
-          // const request = {
-          //   SubscriptionDetails: subscriptionDetails,
-          //   Ticket: registeredUser.Ticket,
-          //   PaymentDetails: paymentDetails
-          // };
-          // //data = await axios.post(`https://localhost:44327/api/razorPay/${initialData.Price}`);
-          // console.log(request);
-          SaveCommissionPayment(request)
+            SaveCommissionPayment(request)
             .then(res => {
               setLoading(false);
               console.log(res);
