@@ -412,44 +412,53 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
   async function handleResume(event){
     setLoading(true);
     const {value} = event.target;
-    var newValue = value.replace(/C:\\fakepath\\/i, '');
-    setResume(newValue);
+    console.log(value);
     let Resume = event.target.files[0];
-    let formdata = new FormData();
-    formdata.append('Files', Resume);
+    if(Resume.type==='application/pdf'){
+      var newValue = value.replace(/C:\\fakepath\\/i, '');
+      setResume(newValue);
+      let formdata = new FormData();
+      formdata.append('Files', Resume);
 
-    try {
-      let result = await fetch(
-        `${API.URL}UploadServiceProviderResume/${currentUser.Id}`,
-        {
-          method: "POST",
-          body: formdata,
+      try {
+        let result = await fetch(
+          `${API.URL}UploadServiceProviderResume/${currentUser.Id}`,
+          {
+            method: "POST",
+            body: formdata,
+          }
+        );
+        result = await result.json();
+        if(result){
+          console.log(result);
+          if(result.responseCode === 200)
+          {
+          let resumeObject = {
+            path:result.output.Path,
+            name:result.output.fileName
+          };
+          editResume(resumeObject);
+          setLoading(false);
+          setSeverity('success');
+          setAlert('Resume uploaded successfully');
+          setOpen(true);}
+          else
+          {setLoading(false);
+          setSeverity('warning');
+          setAlert('Bad request !');
+          setOpen(true);}
         }
-      );
-      result = await result.json();
-      if(result){
-        console.log(result);
-        if(result.responseCode === 200)
-        {
-        let resumeObject = {
-          path:result.output.Path,
-          name:result.output.fileName
-        };
-        editResume(resumeObject);
+      } catch (e) {
         setLoading(false);
-        setSeverity('success');
-        setAlert('Resume uploaded successfully');
-        setOpen(true);}
-        else
-        {setLoading(false);
-        setSeverity('warning');
-        setAlert('Bad request !');
-        setOpen(true);}
+        setSeverity('error');
+        setAlert(e.message);
+        setOpen(true);
       }
-    } catch (e) {
+
+    }else{
       setLoading(false);
-      setSeverity('error');
-      setAlert(e.message);
+      setSeverity('warning');
+      setAlert('Please upload resume in .pdf format only!');
       setOpen(true);
     }
 
@@ -512,15 +521,17 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </Grid>
             <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: userType === 'Service-Provider' ? '' : 'none' }} label="Description" />
             <br/>
-            <br/>
-            <FormControl style={{width:'330px'}}>
-                        <label htmlFor="resume-button-file">
+          <label htmlFor="resume-button-file">
+            <FormControl style={{width:'280px'}}>
+            <InputLabel htmlFor="standard-adornment-password" shrink={!!resume}>Resume</InputLabel>
             <Input
             value={resume}
-            label='resume'
             placeholder='Resume'
             id="standard-adornment-password"
             disabled='true'
+            InputLabelProps={{
+              shrink: !!resume
+            }}
             endAdornment={
             <InputAdornment position="end">
             <IconButton             component="span">
@@ -528,10 +539,11 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </IconButton>
             </InputAdornment>
           }
+          helperText='upload resume in .pdf format only*'
             />
-                        </label>
-            <input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" />
             </FormControl>
+            </label>
+<input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" accept=".pdf"/>
             {resumePath&&
               <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
               <IconButton>
