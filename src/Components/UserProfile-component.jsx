@@ -15,7 +15,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser, selectUserType } from '../redux/user/user-selector';
-import { editCurrentUser, setProfilePicture, editResume } from '../redux/user/user-actions';
+import { editCurrentUser, setProfilePicture, editResume, editVideo } from '../redux/user/user-actions';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -85,7 +85,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function UserProfile({ currentUser, editUser, setDPPath, userType,history,editResume }) {
+function UserProfile({ currentUser, editUser, setDPPath, userType,history,editResume, editVideo }) {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [data, setData] = useState({
@@ -119,6 +119,10 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
   const [resume,setResume] = useState(null);
 
   const [resumePath,setResumePath] = useState(null);
+
+  const [video,setVideo] = useState(null);
+
+  const [videoPath,setVideoPath] = useState(null);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -317,6 +321,10 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             setResume(currentUser.ResumeName);
             setResumePath(currentUser.ResumePath);
           }
+          if(currentUser.IntroductoryVideoName&&currentUser.IntroductoryVideoPath){
+            setVideo(currentUser.IntroductoryVideoName);
+            setVideoPath(currentUser.IntroductoryVideoPath);
+          }
           if (res.data.output.LocationDetails.length !== 0) {
             setAddress1(res.data.output.LocationDetails[0]);
             setAdd1(res.data.output.LocationDetails[0].Address);
@@ -465,6 +473,63 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
 
   }
 
+  async function handleVideo(event){
+    setLoading(true);
+    const {value} = event.target;
+    //console.log(value);
+    let vid = event.target.files[0];
+    //console.log(vid);
+    if(vid.type==='video/mp4'){
+      var newValue = value.replace(/C:\\fakepath\\/i, '');
+      setVideo(newValue);
+      let formdata = new FormData();
+      formdata.append('Files', vid);
+
+      try {
+        let result = await fetch(
+          `${API.URL}UploadServiceProviderIntroductoryVideo/${currentUser.Id}`,
+          {
+            method: "POST",
+            body: formdata,
+          }
+        );
+        result = await result.json();
+        if(result){
+          console.log(result);
+          if(result.responseCode === 200)
+          {
+          let videoObject = {
+            path:result.output.Path,
+            name:result.output.fileName
+          };
+          editVideo(videoObject);
+          setLoading(false);
+          setSeverity('success');
+          setAlert('Video uploaded successfully');
+          setOpen(true);}
+          else
+          {setLoading(false);
+          setSeverity('warning');
+          setAlert('Bad request !');
+          setOpen(true);}
+        }
+      } catch (e) {
+        setLoading(false);
+        setSeverity('error');
+        setAlert(e.message);
+        setOpen(true);
+      }
+
+    }else{
+      setLoading(false);
+      setSeverity('warning');
+      setAlert('Please upload video in .mp4 format only!');
+      setOpen(true);
+    }
+
+
+  }
+
   return (
     <div style={{ paddingTop: '100px' }}>
       <Backdrop className={classes.backdrop} open={loading} >
@@ -551,6 +616,37 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </IconButton>
             </Link>
           }
+          <br/>
+        <label htmlFor="video-button-file">
+          <FormControl style={{width:'280px'}}>
+          <InputLabel htmlFor="standard-adornment-password" shrink={!!video}>Introductory Video</InputLabel>
+          <Input
+          value={video}
+          placeholder='Introductory Video'
+          id="standard-adornment-password"
+          disabled='true'
+          InputLabelProps={{
+            shrink: !!resume
+          }}
+          endAdornment={
+          <InputAdornment position="end">
+          <IconButton             component="span">
+            <PublishIcon/>
+          </IconButton>
+          </InputAdornment>
+        }
+        helperText='upload only video*'
+          />
+          </FormControl>
+          </label>
+<input onChange={handleVideo} style={{display:'none'}} id="video-button-file" type="file" accept="video/*"/>
+          {videoPath&&
+            <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">
+            <IconButton>
+            <InfoIcon/>
+          </IconButton>
+          </Link>
+        }
             {
               editable1 ?
                 (<Paper elevation={1} style={{ padding: '10px 10px', width: '400px', textAlign: 'left', margin: '8px 80px' }}>
@@ -682,7 +778,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   editUser: data => dispatch(editCurrentUser(data)),
   setDPPath: path => dispatch(setProfilePicture(path)),
-  editResume: resume => dispatch(editResume(resume))
+  editResume: resume => dispatch(editResume(resume)),
+  editVideo: video => dispatch(editVideo(video))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile));

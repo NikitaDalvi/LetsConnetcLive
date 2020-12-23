@@ -126,6 +126,12 @@ const userReducer = (state=Initial_State, action) => {
       currentUser:{...state.currentUser,ResumeName:action.payload.name,ResumePath:action.payload.path}
     };
 
+    case UserActionTypes.EDIT_VIDEO:
+    return{
+      ...state,
+      currentUser:{...state.currentUser,IntroductoryVideoName:action.payload.name,IntroductoryVideoPath:action.payload.path}
+    };
+
     default:
       return state;
   }

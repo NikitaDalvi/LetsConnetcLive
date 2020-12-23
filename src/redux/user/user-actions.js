@@ -16,6 +16,11 @@ export const editResume = resume => ({
   payload:resume
 });
 
+export const editVideo = video => ({
+  type:UserActionTypes.EDIT_VIDEO,
+  payload:video
+});
+
 export const setIsHome = value => ({
   type:UserActionTypes.SET_ISHOME,
   payload:value
