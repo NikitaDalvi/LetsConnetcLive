@@ -98,10 +98,10 @@ function ServiceRequest(props) {
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [cancelRequests, setCancelRequests] = useState([]);
-  
+
   const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
-  
+
 
   useEffect(() => {
     if (currentUser) {
@@ -116,7 +116,7 @@ function ServiceRequest(props) {
       }
 
       props.userType === "Service-Provider" ? delete request.ServiceSeekerId : delete request.ServiceProviderId
-      
+
       GetRequests(request)
         .then(res => {
           console.log(res);
@@ -124,27 +124,27 @@ function ServiceRequest(props) {
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
           setCancelRequests(res && res.cancelRequests);
-          
-         
-       
+
+
+
         })
     }
   }, [currentUser]);
 
-  
+
 
   async function GetRequests(data) {
     console.log(props.userType)
     console.log(data)
-    
+
 
     let apiUrl = (props.userType === 'Service-Provider'? 'RequestListByServiceProviderId' : 'GetServiceListBySEIdAndStatusforWeb')
     const result = await axios.post(`${API.URL}${apiUrl}`, data);
-  
+
     console.log(result);
     return result.data.output;
-  
-    
+
+
   }
 
   function formatDate(date) {
@@ -161,7 +161,7 @@ function ServiceRequest(props) {
     return [year, month, day].join('-');
   }
 
-  
+
 
   async function saveRatingReview(){
     //debugger;
@@ -180,14 +180,14 @@ function ServiceRequest(props) {
    else{
     postData = {
       Id: currentUser.Id,
-      ReviewedToId: spId, 
+      ReviewedToId: spId,
       ReviewedById :currentUser.Id,
       Rating:rate,
       Review: review,
       ticket: currentUser.Ticket,
-    }; 
+    };
    }
-  
+
      const res = await axios.post(`${API.URL}RateService`, postData);
      if (res) {
      if (res.data) {
@@ -195,8 +195,8 @@ function ServiceRequest(props) {
           window.location.reload(true);
           alert('Completed successfully!');
           return "success";
-        
-         
+
+
         } else {
           window.location.reload(true);
           alert('Fail!');
@@ -223,7 +223,7 @@ function ServiceRequest(props) {
     setserviceProviderId(spId);
     setName(Name);
     setOpen(true);
-    
+
   };
 
   const handleClose = () => {
@@ -235,7 +235,7 @@ function ServiceRequest(props) {
   const handleAppointmentStatus = (object) => {
     changeAppointmentStatus(object)
       .then(res => {
-        
+
         if (res.responseCode === 200 && object.Status === 1) {
           const appointment = newRequests.find(item => item.ServiceRequestId === object.RequestId);
           setConfirmedRequests(prevValue => {
@@ -243,11 +243,11 @@ function ServiceRequest(props) {
           });
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
           setNewRequests(appointments);
-          
+
 
           alert('Appointment confirmed successfully!');
           window.location.reload(true);
-         
+
           return;
         }
         if (res.responseCode === 200 && object.Status === 2) {
@@ -263,9 +263,9 @@ function ServiceRequest(props) {
           window.location.reload(true);
 
           alert('Appointment  Completed successfully!');
-         
+
           return;
-        } 
+        }
 
         if(res.responseCode ===200 && object.Status === 5){
           const appointments = newRequests.filter(item => item.ServiceRequestId === object.RequestId);
@@ -273,7 +273,7 @@ function ServiceRequest(props) {
           window.location.reload(true);
 
           alert('Appointment  Cancel successfully!');
-         
+
           return;
         }
 
@@ -295,6 +295,7 @@ function ServiceRequest(props) {
         label="Rate"
         endAdornment={<InputAdornment position="end">/5</InputAdornment>}
         type="number"
+        inputProps={{ min: 0, max: 5 }}
         value={rate}
         className={classes.rateArea}
         InputLabelProps={{
@@ -344,9 +345,9 @@ function ServiceRequest(props) {
               <div>
                 {newRequests && newRequests.map((item, index) => (<ServiceCard key={index} commissionId={item.CommissionId}  ticket={currentUser.Ticket} emailId={item.EmailId} contactNo={item.ContactNo} dppath={item.DPPath} Id={item.ServiceRequestId}  Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} name={item.RequestedBy} userType={currentUser&&currentUser.UserRole} amount={item.Amount} status={item.Status} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate}/>))}
               </div>
-              
+
             </CardContent>
-            
+
           </Card>
         </Grid>
         <Grid item xs={3}>
@@ -361,7 +362,7 @@ function ServiceRequest(props) {
               <div>
                 {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate === Today ? <ServiceCard key={index} commissionId={item.CommissionId} ticket={currentUser.Ticket} emailId={item.EmailId} contactNo={item.ContactNo} Address={item.Address} rating={item.Rating} dppath={item.DPPath} Id={item.ServiceRequestId} name={item.RequestedBy} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
-              
+
             </CardContent>
           </Card>
         </Grid>
@@ -377,7 +378,7 @@ function ServiceRequest(props) {
               <div>
                 {confirmedRequests && confirmedRequests.map((item, index) => (item.TimeList[0].StartDate !== Today ? <ServiceCard key={index} Id={item.ServiceRequestId} commissionId={item.CommissionId} ticket={currentUser.Ticket} name={item.RequestedBy} emailId={item.EmailId} contactNo={item.ContactNo} dppath={item.DPPath} Address={item.Address} rating={item.Rating} handleStatus={handleAppointmentStatus} amount={item.Amount} status={1} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} /> : ''))}
               </div>
-              
+
             </CardContent>
           </Card>
         </Grid>
@@ -393,10 +394,10 @@ function ServiceRequest(props) {
               <div>
                 {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} spId={item.ServiceProviderId} emailId={item.EmailId} contactNo={item.ContactNo} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} dppath={item.DPPath} Address={item.Address} rating={item.Rating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
-              
+
             </CardContent>
           </Card>
-          
+
   </Grid>
         <Modal
           open={open}
