@@ -902,7 +902,7 @@ function ServicesProvide(props) {
                           <Typography variant="h6">{item.service}</Typography>
                           <Typography variant="body1">
                             Rs{item.fees} /
-                              {item.type&&item.type === "Full-Time" ? "day" : `${item.type}`}
+                              {item.ServiceCharge && item.ServiceCharge === 1 ?'PerHr' : item.ServiceCharge === 2 ? 'Assignment':  item.ServiceCharge === 3 ? 'Full_Time' :null }
                           </Typography>
                          
                         </Grid>
