@@ -56,10 +56,10 @@ function UserDetailPage({ expertId, currentUser }) {
     StartDate: null,
     EndDate: null,
     WorkingDays: null,
-    
+
   });
 
-  
+
 
   const [alertmessage, setalert] = useState(null);
 
@@ -151,14 +151,14 @@ function UserDetailPage({ expertId, currentUser }) {
   const [allRequest, setAllRequest] = React.useState([]);
 
   const checkForSequential = () => {
-   
+
     let isSequential = true
     sequentialSlots.forEach((item, index) => {
 
       if(sequentialSlots.length === 1 || (index === sequentialSlots.length - 1)){
         return isSequential
       }
-      
+
       if(sequentialSlots[index - 1] && sequentialSlots[index + 1] && (item - sequentialSlots[index - 1] !== 1) || (sequentialSlots[index + 1] - item !== 1)){
         isSequential = false
         return isSequential
@@ -174,7 +174,7 @@ function UserDetailPage({ expertId, currentUser }) {
     if(a > b) return 1
     return 0
   }
-  
+
   const onTimeSlotSelect = (startTime, endTime, timeslotno, index) => {
 
     if(!sequentialSlots.includes(index)){
@@ -256,7 +256,7 @@ function UserDetailPage({ expertId, currentUser }) {
         else {
           setBookingHours(false);
         }
-        
+
         setalert(res.Message)
        // alert(res.Message)
 
@@ -316,12 +316,13 @@ function UserDetailPage({ expertId, currentUser }) {
             RequestedTimeSlot: bookAppointmentRequest.ServiceListDetails,
             Ticket: currentUser.Ticket
           };
-         
+
             bookAppointment(request, URL)
             .then(res => {
               setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
+                window.location.reload();
               } else {
                 alert('Booking unsuccessfull! Please Try again later!');
               }
@@ -420,7 +421,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
               <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{ marginTop: '2rem' }} item xs='4' className={classes.gridItem}>
               <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${expertDetails.BasicDetails.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${expertDetails.BasicDetails.DPPath}`} className={classes.large} />
-                
+
               </Grid>
               <Grid item xs="auto" style={{ padding: isMobile ? '30px 30px 0px 0px' : '30px 20px 0px' }}>
                 <Typography variant={isMobile ? 'h6' : 'h5'}>{expertDetails.BasicDetails.ServiceProvider}</Typography>
@@ -525,7 +526,7 @@ function UserDetailPage({ expertId, currentUser }) {
                           KeyboardButtonProps={{
                             'aria-label': 'change date',
                           }}
-                        />  
+                        />
                             )}
                             {alertmessage&&<Typography variant='subtitle1' style={{ padding: '30px 20px 0 0', color: 'red' }}>{alertmessage}</Typography>}
 
@@ -572,5 +573,3 @@ const mapStateToProps = createStructuredSelector({
 });
 
 export default connect(mapStateToProps)(UserDetailPage);
-
-

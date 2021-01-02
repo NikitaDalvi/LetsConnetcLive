@@ -543,7 +543,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
-          <Avatar alt="Remy Sharp" src={`https://letnetworkdev.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
+          <Avatar alt="Remy Sharp" src={currentUser&&`https://letnetworkdev.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />

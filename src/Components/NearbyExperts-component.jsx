@@ -58,23 +58,23 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     setLoading(true);
     console.log(radius);
     console.log(navigator.permissions.allow)
-    const getLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError, {maximumAge:60000, timeout: 10000, enableHighAccuracy: true});
-      } else {
-        alert('Geolocation is not supported by this browser.');
-      }
-    };
+    // const getLocation = () => {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(showPosition, showError, {maximumAge:60000, timeout: 10000, enableHighAccuracy: true});
+    //   } else {
+    //     alert('Geolocation is not supported by this browser.');
+    //   }
+    // };
     //if(radius!=="0"){
-      const showPosition = async (position) => {
+      const showPosition = async (lat,long) => {
         const request = {
           Radius: parseInt(radius),
-          Latitude: position.coords.latitude.toString(),
-          Longitude: position.coords.longitude.toString()
+          Latitude: lat.toString(),
+          Longitude: long.toString()
         }
         setLocation({
-          Latitude: position.coords.latitude.toString(),
-          Longitude: position.coords.longitude.toString()
+          Latitude: lat.toString(),
+          Longitude: long.toString()
         });
         // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
         getNearbyExperts(request)
@@ -88,7 +88,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               }
             }
           });
-  
+
       };
     // }else{
     //   setFilteredList(nearbyList);
@@ -97,7 +97,12 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
 
     if (currentUser) {
-      getLocation();
+      if(currentUser.LocationDetails){
+            showPosition(currentUser.LocationDetails[0].Latitude,currentUser.LocationDetails[0].Longitude);
+      }else{
+          showPosition(0,0);
+      }
+
       getServiceTypes();
     }
   }, [currentUser, radius]);
@@ -142,7 +147,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       let rating = parseInt(ratingFilter)
       var filteredResult = [];
       debugger;
-      nearbyList.map(service => 
+      nearbyList.map(service =>
         service.Rating>=rating?
         filteredResult.push(service)
         :
@@ -154,7 +159,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
   console.log(navigator.geolocation)
   function showError(error) {
-    
+
     switch (error.code) {
       case error.PERMISSION_DENIED:
         alert("User denied the request for Geolocation.");

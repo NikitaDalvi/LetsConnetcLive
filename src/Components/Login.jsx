@@ -61,7 +61,7 @@ function Login(props) {
     const { setCurrentUser, setUserType, setRegisteredUser } = props;
     const result = await axios.post(`${API.URL}login/loginUser`, input);
     const res = result.data.output;
-    console.log(res);
+    console.log(result);
     if (res !== null) {
       console.log(res.Status);
 
