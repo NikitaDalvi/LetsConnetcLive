@@ -3,7 +3,7 @@ const db = {
       {
         title: "Smells Like Teen Spirit",
         artist: "Nirvana",
-        videoId: "hTWKbfoikeg",
+        videoId: "3AYoipyqOkQ",
         rank: 1
       },
       {

@@ -46,10 +46,19 @@ function ExpertCard(props){
           <Grid item xs={6}>
                 <Rating style={{marginTop:'10px'}} name="read-only" value={props.rating} readOnly precision={0.1} />
           </Grid>
-          </Grid>
+          
           <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
             {props.address}
           </Typography>
+          </Grid>
+
+          <Grid item xs={6}>
+          <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
+            {props.videopath}
+          </Typography>
+          
+          </Grid>
+          
         </CardContent>
       </CardActionArea>
     </Card>
