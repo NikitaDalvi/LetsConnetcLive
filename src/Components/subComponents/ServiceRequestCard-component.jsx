@@ -151,9 +151,9 @@ useEffect(()=>{
       <div style={{display:status===1?'':'none', textAlign:'right'}}>
         <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'#FF1493',color:'white'}}>Done</Button>
       </div>
-      {!rating && <div style={{display:status===4?'':'none', textAlign:'right'}}>
+      {/**!rating &&**/} <div style={{display:status===4?'':'none', textAlign:'right'}}>
         <Button variant="contained"  onClick={()=>{handleModal(service,userId,spId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#FF1493',color:'white'}}>Rate and Review</Button>
-      </div>}
+      </div>
       
       <div style={{display:status===3&&(userType===4||userType===5)?'':'none', textAlign:'center'}}>
       {<Button  variant='contained' startIcon={<CancelOutlinedIcon/>}color='primary' onClick={()=>{handleStatus({...request,Status:5});}} size="small" className={classes.button}style={{backgroundColor:'#FF1493',color:'white'}}>Cancel Request</Button>}
