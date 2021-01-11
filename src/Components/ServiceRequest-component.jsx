@@ -192,7 +192,7 @@ function ServiceRequest(props) {
      if (res) {
      if (res.data) {
         if (res.data.responseCode === 200) {
-          window.location.reload(true);
+          
           alert('Completed successfully!');
           return "success";
 
