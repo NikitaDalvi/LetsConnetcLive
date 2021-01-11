@@ -40,13 +40,13 @@ function ExpertCard(props){
           <Grid container style={{marginBottom:'5px'}}>
           <Grid item xs={2} style={{paddingTop:'12px',textAlign:'center'}}>
                     <Typography variant="body2"  component="p">
-                    {props.rating}
+                    {props.rating.toFixed(1)}
                     </Typography>
           </Grid>
           <Grid item xs={6}>
                 <Rating style={{marginTop:'10px'}} name="read-only" value={props.rating} readOnly precision={0.1} />
           </Grid>
-          
+
           <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
             {props.address}
           </Typography>
@@ -56,9 +56,9 @@ function ExpertCard(props){
           <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
             {props.videopath}
           </Typography>
-          
+
           </Grid>
-          
+
         </CardContent>
       </CardActionArea>
     </Card>

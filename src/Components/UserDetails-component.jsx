@@ -430,7 +430,7 @@ function UserDetailPage({ expertId, currentUser }) {
             </Grid>
             <Grid container style={{ marginBottom: '20px' }}>
               <Grid item xs='2'>
-                <p style={{ width: "100%", height: '100%', fontSize: '20px', textAlign: 'right', padding: '5px' }}><span style={{ fontSize: '40px' }}>{expertDetails.BasicDetails.Rating}</span>/5</p>
+                <p style={{ width: "100%", height: '100%', fontSize: '20px', textAlign: 'right', padding: '5px' }}><span style={{ fontSize: '40px' }}>{expertDetails.BasicDetails.Rating.toFixed(1)}</span>/5</p>
               </Grid>
               <Grid item xs='4'>
                 <Rating name="read-only" value={expertDetails.BasicDetails.Rating} readOnly precision={0.1} style={{ marginTop: '20px' }} size="large" />
