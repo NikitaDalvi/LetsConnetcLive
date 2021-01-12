@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -185,15 +186,16 @@ function UserDetailPage({ expertId, currentUser }) {
     }
 
     setBookingHours(true);
+    debugger;
 
     const slot = {
-      StartTime: startTime,
-      EndTime: endTime,
+      StartTime: startTime.replace(".",":"),
+      EndTime: endTime.replace(".",":"),
       TimeSlotNo: timeslotno
     };
 
     const slots = [...Slots];
-    const existing = slots.find(item => item.StartTime === startTime && item.EndTime === endTime);
+    const existing = slots.find(item => item.StartTime === startTime.replace(".",":") && item.EndTime === endTime.replace(".",":"));
 
     if (existing) {
       const currentIndex = slots.indexOf(existing);
@@ -300,7 +302,6 @@ function UserDetailPage({ expertId, currentUser }) {
 
   const handleBooking = () => {
     setLoading(true);
-    debugger
     if (bookAppointmentRequest.ServiceId !== null) {
       var request;
       var URL;
@@ -316,7 +317,7 @@ function UserDetailPage({ expertId, currentUser }) {
             RequestedTimeSlot: bookAppointmentRequest.ServiceListDetails,
             Ticket: currentUser.Ticket
           };
-
+          console.log(request);
             bookAppointment(request, URL)
             .then(res => {
               setLoading(false);
