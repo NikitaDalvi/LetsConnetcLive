@@ -174,6 +174,9 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
     setOpen(true);
   };
 
+  const handleInvalidFormat = ()=>{
+    alert('Invalid Time Format!');
+  };
 
   const classes = useStyles();
 
@@ -230,7 +233,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
               <br />
               {
                 days.map((day, index) => (
-                  <DayTime key={index} alert={handleAlert} id={index} savedDays={savedDays} day={day} typeId={serviceTypeId}/>
+                  <DayTime key={index} alert={handleAlert} invalidFormat={handleInvalidFormat} id={index} savedDays={savedDays} day={day} typeId={serviceTypeId}/>
                 ))
               }
 

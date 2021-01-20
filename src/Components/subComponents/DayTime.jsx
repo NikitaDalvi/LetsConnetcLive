@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 import React, { useState, useEffect } from "react";
 import "date-fns";
 import {
@@ -51,7 +52,8 @@ function DayTime({
   alert,
   savedDays,
   removeAvailability,
-  typeId
+  typeId,
+  invalidFormat
 }) {
   const [slot, setSlot] = useState({
     // ServiceProviderId:'',
@@ -192,65 +194,81 @@ function DayTime({
     //   endTime: EndTime.slice(16,21),
     //   buffer: buffer
     // };
-    const Slot = {
-      ...slot,
-      TimeSlotDetails: {
-        StartTime: `${slot.TimeSlotDetails.StartTime} ${slot.TimeSlotDetails.StartAMPM}`,
-        EndTime: `${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`,
-      },
+    let min1 = slot.TimeSlotDetails.StartTime.split(':')[1];
+    let min2 = slot.TimeSlotDetails.EndTime.split(':')[1];
 
-    };
+    // let diff = null;
+    // if(parseInt(min1.split(' ')[0])>parseInt(min2.split(' ')[0])){
+    //         diff = parseInt(min1.split(' ')[0])-parseInt(min2.split(' ')[0]);
+    // }else{
+    //   diff = parseInt(min2.split(' ')[0])-parseInt(min1.split(' ')[0]);
+    // }
+    debugger;
 
-    console.log(Slot);
-    if (startTime === null || endTime === null) {
-      setError(true);
-      setChecked(false);
+      const Slot = {
+        ...slot,
+        TimeSlotDetails: {
+          StartTime: `${slot.TimeSlotDetails.StartTime} ${slot.TimeSlotDetails.StartAMPM}`,
+          EndTime: `${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`,
+        },
 
-      return;
-    } else {
-      setError(false);
-      setChecked(true);
-
-    }
-
-    if (timeslots.length < 2) {
-      setLoading(true);
-      console.log(slot);
-      let timeSlot={
-        StartTime:slot.TimeSlotDetails.StartTime,
-        EndTime:slot.TimeSlotDetails.EndTime
       };
-      let req = {
-        ServiceTypeId:typeId,
-        WorkingDays:slot.WorkingDays,
-        TimeSlotDetails:timeSlot,
-        ticket:currentUser.Ticket
-      };
-      console.log(req);
-      AddSlot(req)
-      .then(res => {
-        console.log(res);
-        let slot = Slot;
-        slot.TimeSlotDetails.Id = res.data.output.TimeSlotId;
-        addWorkingHours(slot);
-        setLoading(false);
-      })
-      .catch(err=> {
-        setLoading(false);
-        alert('Some error occured!');
+
+      console.log(Slot);
+      if (startTime === null || endTime === null) {
+        setError(true);
+        setChecked(false);
+
+        return;
+      } else {
+        setError(false);
+        setChecked(true);
+
+      }
+    if((parseInt(min1.split(' ')[0])===0||parseInt(min1.split(' ')[0])===30)&&(parseInt(min2.split(' ')[0])===0||parseInt(min2.split(' ')[0])===30)){
+      if (timeslots.length < 2) {
+        setLoading(true);
+        console.log(slot);
+        let timeSlot={
+          StartTime:slot.TimeSlotDetails.StartTime,
+          EndTime:slot.TimeSlotDetails.EndTime
+        };
+        let req = {
+          ServiceTypeId:typeId,
+          WorkingDays:slot.WorkingDays,
+          TimeSlotDetails:timeSlot,
+          ticket:currentUser.Ticket
+        };
+        console.log(req);
+        AddSlot(req)
+        .then(res => {
+          console.log(res);
+          let slot = Slot;
+          slot.TimeSlotDetails.Id = res.data.output.TimeSlotId;
+          addWorkingHours(slot);
+          setLoading(false);
+        })
+        .catch(err=> {
+          setLoading(false);
+          alert('Some error occured!');
+        });
+
+      } else {
+        return alert();
+      }
+    }else{
+            invalidFormat();
+          }
+
+
+      setSlot({
+        ServiceProviderId:'',
+        ServiceTypeId:'',
+        WorkingDays:'',
+        TimeSlot:null
       });
 
-    } else {
-      return alert();
-    }
 
-    //
-    // setSlot({
-    //   ServiceProviderId:'',
-    //   ServiceTypeId:'',
-    //   WorkingDays:'',
-    //   TimeSlot:null
-    // });
   };
 
   const AddSlot = async req => {
