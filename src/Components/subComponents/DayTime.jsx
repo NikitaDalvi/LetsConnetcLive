@@ -267,7 +267,8 @@ function DayTime({
         WorkingDays:'',
         TimeSlot:null
       });
-
+      setStartTime(null);
+      setEndTime(null);
 
   };
 
