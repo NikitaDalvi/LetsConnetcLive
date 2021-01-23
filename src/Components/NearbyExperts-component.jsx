@@ -1,4 +1,5 @@
 /*jshint esversion :9*/
+/*jshint -W087*/
 
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
@@ -17,7 +18,8 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   gridItem: {
-    margin: theme.spacing(0)
+    margin: theme.spacing(4),
+    //marginBottom:'10px'
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -53,6 +55,15 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   const [loading, setLoading] = useState(false);
   const [ratingFilter, setRatingFilter] = useState('');
   const [radius, setRadius] = useState('5');
+  const [locationFilter,setLocationFilter] = useState(0);
+  const [chargeFilter,setChargeFilter] = useState(0);
+  const [filterApplied,setFilterApplied] = useState([]);
+  const [filters,setFilters] = useState({
+    Rating:0,
+    ServiceType:null,
+    ServicesGiven:0,
+    ServicesCharge:0
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -83,16 +94,24 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               console.log(res.data);
               if (res.data.output) {
                 setLoading(false);
+                let filterResult = [];
+                if(filterApplied.length>0){
+                  if(filterApplied.ServiceType!==null){
+                    res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServiceType===filterApplied.ServiceType&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                  }else{
+                    res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                  }
+                }else{
+                    filterResult = res.data.output;
+                }
+                setFilteredList(filterResult);
                 setNearbyList(res.data.output);
-                setFilteredList(res.data.output);
               }
             }
           });
 
       };
-    // }else{
-    //   setFilteredList(nearbyList);
-    // }
+
 
 
 
@@ -197,40 +216,64 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   //     console.log(newChecked);
   // }
 
-
-  const handleChange = event => {
-    const { value } = event.target;
-    setSearchText(value);
+  const applyFilter = e => {
+    const{name,value} = e.target;
+    let currentList = filterApplied;
+        debugger;
+    if(value!==null&&value!=='0'){
+      if(!currentList.includes(name)){
+        currentList.push(name);
+      }
+    }else{
+        currentList = currentList.filter(item => item !== name);
+    }
+    let currentFilters = filters;
+    debugger;
+    if(name==='Rating'||name==='ServicesGiven'||name==='ServicesCharge'){
+          currentFilters[name] = parseInt(value);
+    }else{
+            currentFilters[name] = value;
+    }
+    setFilterApplied(currentList);
+    setFilters(currentFilters);
+    let filterResult = [];
+    if(currentList.length>0){
+      if(currentFilters.ServiceType!==null){
+        nearbyList.map(item => item.Rating >= currentFilters.Rating&&item.ServiceType===currentFilters.ServiceType&&item.ServicesGiven===currentFilters.ServicesGiven&&item.ServicesCharge===currentFilters.ServicesCharge?filterResult.push(item):item);
+      }else{
+        nearbyList.map(item => item.Rating >= currentFilters.Rating&&item.ServicesGiven===currentFilters.ServicesGiven&&item.ServicesCharge===currentFilters.ServicesCharge?filterResult.push(item):item);
+      }
+      // currentList.forEach((filter, i) => {
+      //   if(filter==='Rating'){
+      //     if(filterResult.length===0){
+      //             nearbyList.map(item => item[filter] >= currentFilters[filter]?filterResult.push(item):item);
+      //     }else{
+      //       filterResult.map(item => item[filter] >= currentFilters[filter]?filterResult.push(item):item);
+      //     }
+      //   }else{
+      //     nearbyList.map(item => item[filter] === currentFilters[filter]?filterResult.push(item):item);
+      //   }
+      // });
+    }else{
+        filterResult = nearbyList;
+    }
+    setFilteredList(filterResult);
   };
 
-  const handleSearch = () => {
-    setLoading(true);
-    const request = {
-      searchQuery: searchText,
-      Latitude: location.Latitude,
-      Longitude: location.Longitude,
-      Radius: 5
-    };
-
-    search(request)
-      .then(res => { setLoading(false); setNearbyList(res); });
-  }
-
-  async function search(data) {
-    const result = await axios.post(`${API.URL}searchServiceProviders`, data);
-    return result.data.output;
-  }
 
 
-  const serviceFilterChange = (value) => {
-    const filters = [...selectedServices];
-    const currentIndex = filters.indexOf(value);
-    if (currentIndex !== -1) {
-      filters.splice(currentIndex, 1);
-    } else {
-      filters.push(value);
+
+  const handleLocation = e => {
+    const {value} = e.target;
+    console.log(value);
+    setLocationFilter(parseInt(value));
+    if(value==='0'){
+      setFilteredList(nearbyList);
+      return;
     }
-    setSelectedServices(filters);
+    let filtered = [];
+    nearbyList.map(item => item.ServicesGiven === parseInt(value)? filtered.push(item):item);
+    setFilteredList(filtered);
   };
 
 
@@ -240,7 +283,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Grid container>
-        <Grid item xs='3' className={classes.gridItem} >
+        <Grid item xs='2' className={classes.gridItem} style={{zIndex:'999'}}>
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -251,19 +294,19 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
-                <RadioGroup aria-label="gender" name="gender1" value={ratingFilter} onChange={event => { setRatingFilter(event.target.value); }}>
-                  <FormControlLabel value="0" control={<Radio />} label=" All" />
-                  <FormControlLabel value="1" control={<Radio />} label=" 1 & More" />
-                  <FormControlLabel value="2" control={<Radio />} label=" 2 & More" />
-                  <FormControlLabel value="3" control={<Radio />} label=" 3 & More" />
-                  <FormControlLabel value="4" control={<Radio />} label=" 4 & More" />
+                <RadioGroup aria-label="gender" name="Rating" value={filters.Rating} onChange={applyFilter}>
+                  <FormControlLabel value={0}  control={<Radio />} label=" All" />
+                  <FormControlLabel value={1} control={<Radio />} label=" 1 & More" />
+                  <FormControlLabel value={2} control={<Radio />} label=" 2 & More" />
+                  <FormControlLabel value={3} control={<Radio />} label=" 3 & More" />
+                  <FormControlLabel value={4} control={<Radio />} label=" 4 & More" />
                 </RadioGroup>
               </FormControl>
 
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-        <Grid item xs='3' className={classes.gridItem} >
+        <Grid item xs='2' className={classes.gridItem} >
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -273,24 +316,19 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               <Typography className={classes.heading}>Filter by Services</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <div style={{ width: '100%' }}>
-                {serviceTypes.map(item =>
-                  <React.Fragment>
-                    <Checkbox
-                      color="primary"
-                      onChange={() => { serviceFilterChange(item.Service) }}
-                      inputProps={{ 'aria-label': 'secondary checkbox' }}
-                    />
-                    <span style={{ paddingTop: '10px' }}>{item.Service}</span>
-                  </React.Fragment>
-                )}
+              <FormControl component="fieldset">
+                <RadioGroup aria-label="gender" name="ServiceType" value={filters.ServiceType} onChange={applyFilter}>
+                  <FormControlLabel value={null}  control={<Radio />} label=" All" />
+                  <FormControlLabel value='Doctor' control={<Radio />} label="Doctor" />
+                  <FormControlLabel value='CA' control={<Radio />} label="CA" />
+                </RadioGroup>
+              </FormControl>
 
-              </div>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
 
-        <Grid item xs='3' className={classes.gridItem} >
+        <Grid item xs='2' className={classes.gridItem} >
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -312,27 +350,48 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanel>
         </Grid>
 
-        <Grid item xs='3' className={classes.gridItem} >
-          <FormControl className={clsx(classes.margin, classes.textField, classes.panel)} variant="filled">
-            <InputLabel htmlFor="filled-adornment-password">Search</InputLabel>
-            <FilledInput
-              id="filled-adornment-password"
-              type='text'
-              onChange={handleChange}
-              value={searchText}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle search"
-                    edge="end"
-                    onClick={() => { handleSearch() }}
-                  >
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+        <Grid item xs='2' className={classes.gridItem} >
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Filter by Location</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <FormControl component="fieldset">
+              <RadioGroup aria-label="ServicesGiven" name="ServicesGiven" value={filters.ServicesGiven} onChange={applyFilter}>
+                <FormControlLabel value={0} control={<Radio />} label="> All" />
+                <FormControlLabel value={1} control={<Radio />} label="On Site" />
+                <FormControlLabel value={2} control={<Radio />} label="Off Shore" />
+                <FormControlLabel value={3} control={<Radio />} label="Remote" />
+                <FormControlLabel value={4} control={<Radio />} label="Both(On Site and Off Shore)" />
+              </RadioGroup>
+            </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+        <Grid item xs='2' className={classes.gridItem} >
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Filter by Charge</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <FormControl component="fieldset">
+              <RadioGroup aria-label="charge" name="ServicesCharge" value={filters.ServicesCharge} onChange={applyFilter}>
+                <FormControlLabel value={0} control={<Radio />} label="> All" />
+                <FormControlLabel value={1} control={<Radio />} label="per Hour" />
+                <FormControlLabel value={2} control={<Radio />} label="per Assignment" />
+                <FormControlLabel value={3} control={<Radio />} label="Full Time" />
+              </RadioGroup>
+            </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         </Grid>
       </Grid>
       <Grid container>
