@@ -1,0 +1,271 @@
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+nav{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    height: 70px;
+}
+
+.navbar-nav{
+  width: 100%;
+
+}
+
+.banner-title{
+  color: white;
+}
+
+.nav-item{
+  padding: 15px;
+  margin-right: 10px;
+
+}
+
+.nav-item a{
+  padding: 8px;
+  color:  #C104C9;
+}
+
+.nav-item a:hover{
+  background-color: #C104C9;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none!important;
+  border-color: black;
+  transition: 1s;
+}
+
+.dropdown-item:hover{
+    background-color: #C104C9;
+    transition: 1s;
+}
+
+.jumbotron{
+  /* background-blend-mode: color-dodge; */
+  margin-top: 20px;
+  background-size: cover;
+  height: 500px;
+  box-shadow: 5px 10px 8px rgba(0, 0, 0, 0.3)
+  /* background-repeat: no-repeat;
+  background-position: center; */
+}
+
+.home-content{
+  margin-bottom: 50px;
+  padding: 20px;
+}
+
+.content-paragraph{
+  text-align: center;
+  padding: 30px;
+  color:#C104C9;
+}
+
+.login-container{
+  padding: 20px;
+  margin-top: 100px;
+  margin-bottom: 200px;
+  width: 30%;
+  height: 380px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.login-title{
+  text-align: center;
+  margin-bottom: 20px;
+  color: #C104C9;
+}
+
+#login-btn{
+  color: white;
+  background-color: #C104C9;
+  border-radius: 5px;
+}
+
+#login-btn:hover{
+  color: #C104C9;
+  background-color: white;
+  border: 1px solid #C104C9;
+  transition: 1s;
+}
+
+.hidden{
+  display: none;
+}
+
+.show{
+  display: block;
+  transition: 5s;
+}
+
+.register-container{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding-top: 30px;
+  text-align: center;
+  margin-top: 200px;
+  margin-bottom: 200px;
+  width: 500px;
+  height: 300px;
+}
+
+.register-heading{
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+
+.btn-flat{
+    border-radius: 5px;
+    border: 1px solid #C104C9;
+    color: #C104C9;
+    width: 150px;
+    height: 38px;
+}
+
+
+
+.btn-flat:hover{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.professional-container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top:100px;
+margin-bottom: 200px;
+margin-left: 500px;
+width: 600px;
+padding-bottom: 20px;
+}
+
+.common-heading{
+  font-size: 40px;
+}
+
+.prof-reg-row{
+  margin-bottom: 10px;
+}
+
+
+.subs-container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top: 50px;
+margin-bottom: 200px;
+width: 380px;
+padding-bottom: 20px;
+}
+
+.messageContainer{
+  margin-top: 200px;
+  margin-bottom: 300px;
+  text-align: center;
+  color: #C104C9;
+}
+
+
+.Services-Container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top:100px;
+margin-bottom: 200px;
+width: 1000px;
+padding-bottom: 20px;
+}
+
+.service-table{
+  width: 80%;
+  margin-left: 80px;
+}
+
+.Availability-Container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top:100px;
+margin-bottom: 200px;
+width: 700px;
+padding-bottom: 20px;
+}
+
+.SPAdmin-container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top:50px;
+margin-bottom: 50px;
+padding-bottom: 20px;
+}
+
+
+.admin-table{
+  width: 80%;
+  margin-left: 10px;
+  margin-bottom: 300px;
+}
+
+.card-mainContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.dashboard-card-container{
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  color:#C104C9;
+border-radius: 5px;
+padding-top: 50px;
+text-align: center;
+width: 300px;
+height: 150px;
+padding-bottom: 20px;
+transition: 0.5s;
+}
+
+.dashboard-card-container:hover{
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
+}
+
+.profile-container{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+border-radius: 5px;
+padding-top: 30px;
+text-align: center;
+margin-top:100px;
+margin-bottom: 200px;
+width: 500px;
+padding-bottom: 20px;
+}
+
+.ProfilePicture{
+  width: 150px;
+  border-radius: 100%;
+}
+
+footer{
+    box-shadow: 0 0 0 10 rgba(0, 0, 0, 0.3);
+  height: 70px;
+  padding: 20px;
+  margin-bottom: 0;
+}
+
+footer p{
+text-align: center;
+}
