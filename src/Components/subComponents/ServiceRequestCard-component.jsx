@@ -123,7 +123,7 @@ useEffect(()=>{
          <Typography variant='h6'>{Date}</Typography>
          <span >{service}</span>
         {timeslots.map((item,index)=>(
-          <div style={{display:service!=='Accounting' ?'':'none'}}className={classes.gridItem} key={index}>
+          <div className={classes.gridItem} key={index}>
               <span>&#10093; {item.StartTime}-{item.EndTime}</span>
               <br/>
           </div>
