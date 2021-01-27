@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '30px'
   },
 
-  
+
 }));
 
 
@@ -47,7 +47,7 @@ console.log(contactNo);
 useEffect(()=>{
 
   if(date){
-   
+
     const Date = date.split('-');
     var mon  =  Date[1];
     mon = parseInt(mon);
@@ -72,13 +72,13 @@ useEffect(()=>{
 
   const classes = useStyles();
 
- 
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
-    
+
   };
-  
+
   function getModalStyle() {
 
 
@@ -99,7 +99,7 @@ useEffect(()=>{
   };
 
   const [modalStyle] = React.useState(getModalStyle);
-  
+
   const body = (
 
     <div style={modalStyle} className={classes.paper}>
@@ -113,7 +113,7 @@ useEffect(()=>{
   );
   return(
     <div>
-         
+
          <Typography variant='h6'>{name}</Typography>
          <InfoIcon
           className={classes.icon}
@@ -128,10 +128,10 @@ useEffect(()=>{
               <br/>
           </div>
         ))}
-         
-        
+
+
         <br/>
-          
+
       <Grid container className={classes.grid} style={{display:status===3 && (userType===2||userType===3)?'':'none'}}>
       <div style={{display:'grid',gridTemplateColumns:'50% 50%',columnGap:'5px',width:'100%'}}>
           <Button variant="contained" startIcon={<CheckCircleOutlineIcon/>} onClick={()=>{handleStatus({...request,Status:1});}} style={{backgroundColor:'#ff4da6',color:'white'}}>Accept</Button>
@@ -151,14 +151,14 @@ useEffect(()=>{
       <div style={{display:status===1?'':'none', textAlign:'right'}}>
         <Button variant="contained" startIcon={<DoneAllIcon/>} onClick={()=>{handleStatus({...request,Status:4});}} style={{border:'1px solid #2e7d32',backgroundColor:'#FF1493',color:'white'}}>Done</Button>
       </div>
-      {/**!rating &&**/} <div style={{display:status===4?'':'none', textAlign:'right'}}>
+      {/**!rating &&**/} <div style={{display:status===4&&!rating?'':'none', textAlign:'right'}}>
         <Button variant="contained"  onClick={()=>{handleModal(service,userId,spId);}} startIcon={<RateReviewIcon/>} style={{backgroundColor:'#FF1493',color:'white'}}>Rate and Review</Button>
       </div>
-      
+
       <div style={{display:status===3&&(userType===4||userType===5)?'':'none', textAlign:'center'}}>
       {<Button  variant='contained' startIcon={<CancelOutlinedIcon/>}color='primary' onClick={()=>{handleStatus({...request,Status:5});}} size="small" className={classes.button}style={{backgroundColor:'#FF1493',color:'white'}}>Cancel Request</Button>}
       </div>
-      
+
 
     </div>
   );

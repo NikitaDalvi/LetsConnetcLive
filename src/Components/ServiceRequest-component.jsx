@@ -191,20 +191,11 @@ function ServiceRequest(props) {
      const res = await axios.post(`${API.URL}RateService`, postData);
      if (res) {
      if (res.data) {
-        if (res.data.responseCode === 200) {
-          
           alert('Completed successfully!');
           return "success";
-
-
-        } else {
-          window.location.reload(true);
-          alert('Fail!');
-         return "fail";
-        }
       }
      }
-
+      window.location.reload(true);
     console.log(res);
 
 
