@@ -7,10 +7,15 @@ import img from "../Images/sr-header1.png";
 
 
 function NearbyExperts() {
-  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   return (
       <div>
-          <img src={img} style={{height:'450px', width:'900px',textAlign: 'center'}} />
+          <img src={img} style={{
+          display: "flex",
+          justifyContent: "center",
+          height:"80%",
+          width:"80%"
+
+        }} />
 
       </div>
   );
