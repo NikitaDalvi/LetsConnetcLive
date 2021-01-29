@@ -64,12 +64,12 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
   },[registeredUser,setRegisteredUser]);
 
   const handleClick = (type) => {
-    
+
     history.push('/Registration/Form')
   }
 
   const videoClick = () => {
-    
+
     history.push('/MusicCard')
   }
 
@@ -80,16 +80,16 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
     <div>
       <img src={homeVector} style={{ top: '0', left: '240px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
       <div className='row mb-5' >
-        <div className={isMobile ? 'col-lg-12' : 'col-lg-4'}>
+        <div className={isMobile ? 'col-lg-12' : 'col-lg-4'} >
           <Typography className={classes.TypographyBrand} variant="h6" gutterBottom>
             Let's Connect
       </Typography>
           <Typography className={classes.TypographyStart} variant="h5" gutterBottom>
             Your Business / Profession
       </Typography>
-     
-              
-      <Button className={classes.buttonLeft} onClick={() => { videoClick() }}>&#10095;</Button>
+
+
+      <Button className={classes.buttonLeft} style={{marginBottom:isMobile?'50px':"",marginTop:isMobile?'50px':""}} onClick={() => { videoClick() }}>&#10095;</Button>
         </div>
         <div className={isMobile ? 'col-lg-12' : 'col-lg-8'} style={{ textAlign: 'right' }}>
           <img src={img} />

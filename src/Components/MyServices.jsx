@@ -128,7 +128,7 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
 
   console.log('Location.......:', currentUser && currentUser.isServicesAdded)
   return (
-    <Container>
+    <Container style={{height:'100vh'}}>
       <CircularProgressWithLabel value={progress} />
       <Typography className={classes.root}>
         <Link onClick={handleBasic} color="inherit" className={classes.link} style={{ color: focus === 'BasicDetails' ? '' : 'Gray' }}>

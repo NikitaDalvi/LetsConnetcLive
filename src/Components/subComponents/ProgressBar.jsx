@@ -12,8 +12,7 @@ function Progressbar({type,progress}){
     percent={progress}
     filledBackground='linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)'
     height={6}
-    width={isMobile?250:400}
-    
+    width={isMobile?350:400}
     >
     <Step transition="scale">
      {({ accomplished }) => (

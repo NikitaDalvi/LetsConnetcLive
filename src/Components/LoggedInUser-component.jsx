@@ -283,7 +283,7 @@ function LoggedIn(props) {
           >
           <Paper   style={{width:'350px',minHeight:"200px",maxHeight:'300px',overflowY:'auto',padding:'10px'}}>
             {notifications&&notifications.map((item, index) => (<NotificationPost text={item.Message} time={moment(item.CreatedOn).fromNow()}/>))}
-            {notifications.length===0&&<Typography variant='subtitle1'>No notifications arrived yet!</Typography>}
+            {notifications&&notifications.length===0&&<Typography variant='subtitle1'>No notifications arrived yet!</Typography>}
           </Paper>
           </Popover>
         </Toolbar>
