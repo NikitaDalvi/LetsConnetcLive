@@ -59,10 +59,14 @@ import MuiAlert from "@material-ui/lab/Alert";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { API } from "../API";
 import { setDate } from "date-fns/esm";
+import { useMediaQuery } from 'react-responsive';
 
 let tempAddToListData = [];
 
 function ServicesProvide(props) {
+
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
   const [data, setData] = useState({
     Id: localStorage.getItem("serviceId") || "",
     location: localStorage.getItem("location") || "",
@@ -806,7 +810,7 @@ function ServicesProvide(props) {
 
       {showServiceAssignmentSection && (
         <Grid container>
-          <Grid item xs={3} className={classes.grid}>
+          <Grid item xs={isMobile?12:3} className={classes.grid}>
             <Grid container>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -833,7 +837,7 @@ function ServicesProvide(props) {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={isMobile?12:8}>
                 <TextField
                   className={classes.text}
                   error={feesError}
@@ -890,12 +894,12 @@ function ServicesProvide(props) {
             </Grid>
           </Grid>
 
-            <Grid item xs={8} className={classes.grid}>
+            <Grid item xs={isMobile?12:8} className={classes.grid}>
               <Grid container>
                 {props.serviceList && props.serviceList.map((item, index) => (
 
 
-                  <Grid item xs="8" className={classes.grid} key={index}>
+                  <Grid item xs={isMobile?12:8} className={classes.grid} key={index}>
                     <Paper className={classes.paper}>
                       <Grid container>
                         <Grid item xs="8">
@@ -904,7 +908,7 @@ function ServicesProvide(props) {
                             Rs{item.fees} /
                               {item.ServiceCharge && item.ServiceCharge === 1 ?'PerHr' : item.ServiceCharge === 2 ? 'Assignment':  item.ServiceCharge === 3 ? 'Full_Time' :null }
                           </Typography>
-                         
+
                         </Grid>
                         <Grid
                           item
@@ -931,7 +935,7 @@ function ServicesProvide(props) {
               {props.serviceList && props.serviceList.length > 0 && (
                 <div
                   style={{
-                    width: "65%",
+                    width: isMobile?'100%':"65%",
                     textAlign: "right",
                     paddingRight: "150px",
                   }}

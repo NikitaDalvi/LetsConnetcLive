@@ -72,7 +72,7 @@ function RegistrationForm(props) {
         //const userId = userData.data.output.Id;
         if (userData.data.output !== null) {
           setRegisteredUser(userData.data.output);
-          
+
           history.push('/Registration/Subscription');
         }
       }
@@ -82,7 +82,7 @@ function RegistrationForm(props) {
   }
 
   const checkForValidation = () => {
-   
+
     const { name, email, password, mobile, confirmPassword, termsNConditionCheckbox} = inputText
     return name
             && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
@@ -100,10 +100,10 @@ function RegistrationForm(props) {
       }
     })
   }
-  function NewTab() { 
-    window.open( 
-      "/Terms", "_blank"); 
-} 
+  function NewTab() {
+    window.open(
+      "/Terms", "_blank");
+}
   function handleChange(event) {
     const { name, value } = event.target;
     setInput(prevValue => {
@@ -132,18 +132,18 @@ function RegistrationForm(props) {
     },
     fromControl: {
       margin: theme.spacing(1),
-      width: '60%',
+      width: isMobile?'300px':'60%',
     },
     label: {
       fontSize: '15px',
 
     },
     select: {
-      width: '350px',
+      width: isMobile?'300px':'350px',
 
     },
     textField: {
-      width: '350px'
+      width: isMobile?'300px':'350px'
     },
     btnSignUp: {
       margin: theme.spacing(1),
@@ -161,7 +161,7 @@ function RegistrationForm(props) {
         width: '90%',
         height: '100%',
         padding:'20px',
-    
+
       },
 
       '&:hover': {
@@ -182,7 +182,7 @@ function RegistrationForm(props) {
 
       <Grid container spacing={2}>
         <Grid item xs={isMobile ? 12 : 7} style={{ textAlign: 'right' }}>
-          <img src={RegistrationLogo} />
+          <img src={RegistrationLogo} style={{width:isMobile?'80%':'',marginRight:isMobile?'50px':''}} />
         </Grid>
         <Grid item xs={isMobile ? 12 : 5}>
           <Grid container className={classes.title}>

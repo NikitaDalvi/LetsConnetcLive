@@ -2,8 +2,10 @@ import React,{useState} from "react";
 //import Input from "./Input"
 import {TextField,FormControl,InputAdornment,IconButton,OutlinedInput,makeStyles,Grid,Button} from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useMediaQuery } from 'react-responsive';
 
 function UploadItem(props){
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 const [file,setFile] = React.useState('');
   const useStyles = makeStyles(theme =>({
     formControl:{
@@ -11,7 +13,7 @@ const [file,setFile] = React.useState('');
       width:'75%'
     },
     inputFile:{
-      width:'300px',
+      width:isMobile?'200px':'300px',
       border:file!==''?'2px solid #07C306':'',
     }
 

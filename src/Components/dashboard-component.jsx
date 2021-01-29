@@ -14,6 +14,7 @@ import axios from "axios";
 import { API } from "../API";
 import { red, green } from "@material-ui/core/colors";
 import Tooltip from "@material-ui/core/Tooltip";
+import { useMediaQuery } from 'react-responsive';
 const useStyles = makeStyles((theme) => ({
   grid: {
     width: "100%",
@@ -56,6 +57,7 @@ const statusMapping = (statusCode) => {
 };
 
 const Dashboard = (props) => {
+      const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   const [dashboardDetails, setDashboardDetails] = useState({});
   const [dashboardCustomerDetails, setdashboardCustomerDetails] = useState({});
   const { currentUser, dashBoardCounts, setDashBoardCounts, userType } = props;
@@ -107,7 +109,7 @@ const Dashboard = (props) => {
           </center>
 
           <Grid container spacing={2} className={classes.grid}>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#e65888"
                 caption="Service Request"
@@ -119,7 +121,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#c95ed6"
                 caption="Service Request"
@@ -131,7 +133,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#e65888"
                 caption="Service Request"
@@ -142,7 +144,7 @@ const Dashboard = (props) => {
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#c95ed6"
                 caption="Service Request"
@@ -152,7 +154,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#e65888"
                 caption="Commission Due"
@@ -164,7 +166,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#c95ed6"
                 caption="Rating"
@@ -174,15 +176,15 @@ const Dashboard = (props) => {
                     ? `${dashboardDetails.AvgRating}`
                     : "5 &#10032;"
                 }
-               
+
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#e65888"
                 caption="Review"
                 name="REVIEW"
-                
+
                 quantity={
                   dashboardDetails !== null
                     ? dashboardDetails.ReviewCount
@@ -191,7 +193,7 @@ const Dashboard = (props) => {
               />
             </Grid>
           </Grid>
-          
+
         </Container>
         <br />
         <br />
@@ -210,8 +212,8 @@ const Dashboard = (props) => {
     return (
       <div>
         <Container>
-          <Grid container spacing={2} className={classes.grid}>
-            <Grid item xs={3}>
+          <Grid container spacing={isMobile?0:2} className={classes.grid}>
+            <Grid item xs={isMobile?'12':"3"}>
             <DashboardCard
                 color="#e65888"
                 caption="Nearby Experts"
@@ -223,7 +225,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#c85ed8"
                 caption="Service Requests"
@@ -235,7 +237,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#e65888"
                 caption="Service Request"
@@ -248,7 +250,7 @@ const Dashboard = (props) => {
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
               <DashboardCard
                 color="#c85ed8"
                 caption="Service Request"
@@ -260,7 +262,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
 
               <DashboardCard
                 color="#e65888"
@@ -274,7 +276,7 @@ const Dashboard = (props) => {
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={isMobile?'12':"3"}>
 
               <DashboardCard
                 color="#c85ed8"
@@ -287,7 +289,7 @@ const Dashboard = (props) => {
                 }
               />
             </Grid>
-            
+
           </Grid>
         </Container>
         <br />

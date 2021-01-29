@@ -247,7 +247,7 @@ function Login(props) {
                 <Button type='button' disabled={!checkForValidation()} onClick={handleClick} className={classes.btnSignIn}>Sign In</Button>
               </Grid>
             </Grid>
-            <a style={{ marginLeft: '300px' }} href='/forgotPassword'>Forgot Password?</a>
+            <a style={{ marginLeft:isMobile?'110px':'300px' }} href='/forgotPassword'>Forgot Password?</a>
           </Container>
         </form>
       </Container>

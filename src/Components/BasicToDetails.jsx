@@ -58,11 +58,15 @@ import MuiAlert from "@material-ui/lab/Alert";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { API } from "../API";
 import { setDate } from "date-fns/esm";
+import { useMediaQuery } from 'react-responsive';
 
 let tempAddToListData = [];
 
 
 function BasicDetails(props) {
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
   const [data, setData] = useState({
     Id: localStorage.getItem("serviceId") || null,
     location: localStorage.getItem("location") || null,
@@ -114,8 +118,8 @@ function BasicDetails(props) {
       };
     });
 
-   
-    
+
+
     //setSaveButtonEnable(false)
     if (name === "service") {
 
@@ -163,7 +167,7 @@ function BasicDetails(props) {
   }
 
   function addToList() {
-    
+
 
     // setRow(prevValue => [...prevValue, data]);
     if (data.location === "") {
@@ -223,8 +227,8 @@ function BasicDetails(props) {
     setShowApplySave(true);
   }
 
-  
- 
+
+
   function getBasicDetailsService(){
 
     var type = "";
@@ -255,10 +259,10 @@ function BasicDetails(props) {
       ServiceProviderId: currentUser.Id,
       ticket: currentUser.Ticket,
     };
-    
+
 
     getBasicDetails(requestData);
-    
+
   }
 
   async function saveToDatabase(clearData) {
@@ -289,7 +293,7 @@ function BasicDetails(props) {
       ticket: currentUser.Ticket,
     };
 
-    
+
 
     if (type === "Full_Time") {
       var days = 0;
@@ -400,7 +404,7 @@ function BasicDetails(props) {
       }
     }
     console.log(res);
-   
+
   }
 
   console.log(data)
@@ -414,19 +418,19 @@ function BasicDetails(props) {
           const output = res.data.output
           console.log(output)
           if(output){
-          
+
             setShowServiceAssignmentSection(true);
-           
+
             setBuffer(output.BufferTiming ? output.BufferTiming : 1);
             if(output.ServiceCharge){
               setFeesDisable(true)
-              
+
             }
-           
+
 
             if(output.ServiceGiven){
               setPreferenceDisable(true)
-              
+
             }
           }
           setData(previousValue => {
@@ -459,7 +463,7 @@ function BasicDetails(props) {
     }
   }
 
- 
+
   async function saveWorkingHours(workingHours) {
     const res = await axios.post(`${API.URL}AddWorkingHours`, workingHours);
     if (res) {
@@ -492,7 +496,7 @@ function BasicDetails(props) {
     }else{
       setSaveButtonEnable(true);
     }
-   
+
   } else if (data.type === "assignment") {
     console.log("CCC");
     if(data.location && data.type){
@@ -500,7 +504,7 @@ function BasicDetails(props) {
     }else{
       setSaveButtonEnable(true);
     }
-    
+
   } else {
     console.log("DDD");
     if(data.type&&data.location&&(data.fees!==''||data.fees!==null)&&buffer){
@@ -545,7 +549,7 @@ function BasicDetails(props) {
               ServiceTypeId: serviceTypeId,
               ticket: currentUser.Ticket,
             };
-            
+
             axios.post(`${API.URL}GetServices`, typeId).then((res) => {
               console.log(res);
               res.data.output.map((item) => AddToDropdown(item));
@@ -553,7 +557,7 @@ function BasicDetails(props) {
                 ServiceProviderId: currentUser.Id,
                 ticket: currentUser.Ticket,
               };
-            
+
               axios
                 .post(
                   `${API.URL}GetServiceListByServiceProviderId`,
@@ -565,9 +569,9 @@ function BasicDetails(props) {
                   addServicesFromAPI(res.data.output)
                 });
             });
-            
+
           }
-          
+
         });
       } else {
         console.log("fail");
@@ -618,7 +622,7 @@ function BasicDetails(props) {
     },
   }));
 
-  
+
 
   const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -657,10 +661,10 @@ function BasicDetails(props) {
     switch (buffer) {
       case 1:
         return "Buffer Time 30";
-  
+
       case 2:
         return "Buffer Time 60";
-    
+
         default:
         return "Buffer Time is not Set";
     }
@@ -676,7 +680,7 @@ function BasicDetails(props) {
       </Snackbar>
 
        <Grid container>
-      <Grid item xs="2">
+      <Grid item xs={isMobile?'12':"2"}>
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Select fees as per
@@ -701,7 +705,7 @@ function BasicDetails(props) {
           </FormControl>
         </Grid>
 
-        <Grid item xs="2" style={{ marginLeft: "15px" }}>
+        <Grid xs={isMobile?'12':"2"} style={{ marginLeft:isMobile?'':"15px" }}>
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Select Preference
@@ -727,7 +731,7 @@ function BasicDetails(props) {
           </FormControl>
         </Grid>
 
-        {data.type==='hour' && (<Grid item xs="2" style={{ marginLeft: "15px" }}>
+        {data.type==='hour' && (<Grid item xs={isMobile?'12':"2"} style={{ marginLeft:isMobile?'':"15px" }}>
         <Tooltip title={statusBuffer(buffer)}>
         <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label" shrink={buffer}>
@@ -740,12 +744,12 @@ function BasicDetails(props) {
                   onChange={(event) => { setBuffer(event.target.value) }}
                   name="buffer"
                   disabled={bufferDisable}
-                  
+
                 >
-                  
+
                   <MenuItem value={1}>30</MenuItem>
                   <MenuItem value={2}>60</MenuItem>
-                
+
             </Select>
           </FormControl>
           </Tooltip>
@@ -753,10 +757,8 @@ function BasicDetails(props) {
 
         <Grid
           item
-          xs="2"
-          style={{
-            marginLeft: "15px",
-          }}
+          xs={isMobile?'12':"2"}
+          style={{ marginLeft:isMobile?'':"15px" }}
         >
           <TextField
             className={classes.text}
@@ -772,9 +774,9 @@ function BasicDetails(props) {
 
         <Grid
           item
-          xs="2"
+          xs={isMobile?'12':"2"}
           style={{
-            marginLeft: "8px",
+            marginLeft:isMobile?'':"8px",
             display: data.type === "Full-Time" ? "" : "none",
           }}
         >
@@ -800,7 +802,7 @@ function BasicDetails(props) {
           </FormControl>
         </Grid>
 
-        <Grid item xs={2} style={{ margin: "auto", marginLeft: "5%" }}>
+        <Grid item xs={isMobile?'12':"2"} style={{ margin: "auto", marginLeft:isMobile?'':"5%"}}>
           <Button
             className={classes.button}
             disabled={saveButtonEnable}

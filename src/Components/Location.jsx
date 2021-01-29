@@ -44,12 +44,16 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import MuiAlert from "@material-ui/lab/Alert";
 import { API } from "../API";
+import { useMediaQuery } from 'react-responsive';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 function Location(props) {
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
   const [data, setData] = useState({
     entryId: "",
     ServiceProviderId: "",
@@ -319,7 +323,7 @@ function Location(props) {
       marginTop: theme.spacing(1),
     },
     table: {
-      minWidth: "500px",
+      minWidth: isMobile?'':"500px",
     },
     tableBtn: {
       margin: theme.spacing(1),
@@ -384,7 +388,7 @@ function Location(props) {
         </Alert>
       </Snackbar>
       <Grid container>
-        <Grid item xs={3} className={classes.grid}>
+        <Grid item xs={isMobile?12:3} className={classes.grid}>
           <Grid container>
             <PlacesAutocomplete
               value={address}
@@ -460,7 +464,7 @@ function Location(props) {
             </PlacesAutocomplete>
           </Grid>
         </Grid>
-        <Grid item xs={8} className={classes.grid}>
+        <Grid item xs={isMobile?12:8} className={classes.grid}>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
               <TableHead>
@@ -511,7 +515,7 @@ function Location(props) {
             <div style={{ width: "100%", textAlign: "right" }}>
               <Button
                 className={classes.button}
-                style={{ width: "22%", margin: "5px" }}
+                style={{ width: isMobile?'50%':"22%", margin: "5px" }}
                 variant="contained"
                 onClick={() => {
                   saveToDatabase();
