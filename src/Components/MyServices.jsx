@@ -13,6 +13,7 @@ import { selectCurrentUser } from '../redux/user/user-selector';
 import { selectMyServicesProgress } from '../redux/service/service-selector';
 import { setServicesProgress } from '../redux/service/service-actions';
 import { withRouter } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,10 +44,11 @@ CircularProgressWithLabel.propTypes = {
 
 
 function CircularProgressWithLabel({ value }) {
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
   return (
     <div>
-      <Grid container style={{ width: '50%' }}>
-        <Grid item xs='1'>
+      <Grid container style={{ width: isMobile?'100%':'50%' }}>
+        <Grid item xs={isMobile?2:1}>
           <Box position="relative" display="inline-flex" style={{ marginTop: '2%' }}>
             <CircularProgress variant="static" value={value} style={{ color: value === 0 ? '#E7031E' : value < 34 ? '#FEFD07' : value < 100 && value > 34 ? '#FE8A07' : '#1AD502' }} />
             <Box
@@ -65,7 +67,7 @@ function CircularProgressWithLabel({ value }) {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs='4' style={{ paddingTop: '5px' }}>
+        <Grid item xs={isMobile?10:4} style={{ paddingTop: '5px' }}>
           <Typography variant='h6'>Complete</Typography>
         </Grid>
       </Grid>

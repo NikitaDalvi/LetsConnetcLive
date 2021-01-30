@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUserType, selectCurrentUser } from '../redux/user/user-selector';
+import { useMediaQuery } from 'react-responsive';
 import axios from 'axios';
 import { API } from '../API';
 
@@ -64,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
 const data = [
 ]
 function ServiceRequest(props) {
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   //   function rand() {
   //   return Math.round(Math.random() * 20) - 10;
@@ -325,7 +328,7 @@ function ServiceRequest(props) {
       </AppBar>
       <hr />
       <Grid container className={classes.grid}>
-        <Grid item xs={3}>
+        <Grid item xs={isMobile?12:3} style={{marginBottom:isMobile?'10px':""}}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
@@ -341,7 +344,7 @@ function ServiceRequest(props) {
 
           </Card>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={isMobile?12:3} style={{marginBottom:isMobile?'10px':""}}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
@@ -357,7 +360,7 @@ function ServiceRequest(props) {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={isMobile?12:3} style={{marginBottom:isMobile?'10px':""}}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}
@@ -373,7 +376,7 @@ function ServiceRequest(props) {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={isMobile?12:3} style={{marginBottom:isMobile?'10px':""}}>
           <Card className={classes.root}>
             <CardHeader
               className={classes.CardHeader}

@@ -17,10 +17,11 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { API } from '../API';
 import Tooltip from "@material-ui/core/Tooltip";
+import { useMediaQuery } from 'react-responsive';
 
 function Availability({ workingHours, currentUser, setWorkingHours, clearWorkingHours, setServiceStatus, setProgress, serviceTypeId }) {
 
-
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   const [serviceAdded, setServiceAdded] = React.useState(false);
   const [chargeType, setChargeType] = React.useState(1);
@@ -38,7 +39,6 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
       };
       getWorkingHours(requestData)
         .then(res => {
-          debugger;
           console.log(res)
           if (res) {
             console.log(res);
@@ -148,7 +148,7 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
       color: 'white'
     },
     formControl: {
-      margin: theme.spacing(1),
+      margin: isMobile?'0':theme.spacing(1),
       minWidth: 120,
     },
     selectEmpty: {
@@ -203,10 +203,10 @@ function Availability({ workingHours, currentUser, setWorkingHours, clearWorking
               Only 2 timeslots can be added per day !
       </Alert>
           </Snackbar>
-          <div style={{ textAlign: 'left  ' }}>
+          <div style={{ textAlign:isMobile?'center':'left  ' }}>
             <br />
 
-           <Container style={{ width: '80%', marginLeft: '0' }}>
+           <Container style={{ width: isMobile?'100%':'80%', marginLeft: '0' }}>
            {/*<Tooltip title={statusBuffer(buffer)}>
               <FormControl className={classes.formControl}>
 
