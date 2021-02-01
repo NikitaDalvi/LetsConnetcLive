@@ -543,7 +543,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
-          <Avatar alt="Remy Sharp" src={currentUser&&`https://letnetworkdev.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
+          <Avatar alt="Remy Sharp" src={currentUser&&`https://LetnetworkLive.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />
@@ -610,7 +610,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </label>
 <input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" accept=".pdf"/>
             {resumePath&&
-              <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
+              <Link href={`${process.env.NODE_ENV === 'production'?'https://LetnetworkLive.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
               <IconButton>
               <InfoIcon/>
             </IconButton>
@@ -641,7 +641,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
           </label>
 <input onChange={handleVideo} style={{display:'none'}} id="video-button-file" type="file" accept="video/*"/>
           {videoPath&&
-            <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">
+            <Link href={`${process.env.NODE_ENV === 'production'?'https://lLetnetworkLive.obtainbpm.com':`https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">
             <IconButton>
             <InfoIcon/>
           </IconButton>
