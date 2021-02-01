@@ -8,27 +8,10 @@ import { selectCurrentUser } from "../../redux/user/user-selector";
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import loader from '../../Images/loader.gif'
+import { useMediaQuery } from 'react-responsive';
 
 
-const useStyles = makeStyles((theme) => ({
-  table: {
-    minWidth: 650,
-  },
-  button: {
-    width: '20%',
-    height: '50px',
-    background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-    color: 'white'
-  },
-  btnContainer: {
-    width: '100%',
-    margin: theme.spacing(1),
-    textAlign: 'right',
-    paddingRight: '8px'
 
-  }
-
-}));
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -55,6 +38,28 @@ function loadRazorPay(src) {
 }
 
 function CommissionTable(props) {
+
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: isMobile?100:650,
+    },
+    button: {
+      width: '20%',
+      height: '50px',
+      background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+      color: 'white'
+    },
+    btnContainer: {
+      width: '100%',
+      margin: theme.spacing(1),
+      textAlign: 'right',
+      paddingRight: '8px'
+
+    }
+
+  }));
 
   const classes = useStyles();
   const [commision, setCommission] = useState([]);
@@ -164,7 +169,7 @@ function CommissionTable(props) {
 
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='sm'>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>

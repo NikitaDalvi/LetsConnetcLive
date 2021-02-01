@@ -179,7 +179,7 @@ function LoggedIn(props) {
       .then(res => {
         setNotifications(res.data.output)
         let uR = [];
-        res.data.output.map(item => item.NotificationStatus===true?uR.push(item):item);
+        res.data.output&&res.data.output.map(item => item.NotificationStatus===true?uR.push(item):item);
         setUnreads(uR.length);
       });
     }

@@ -41,6 +41,7 @@ import { API } from '../../API';
 import loader from '../../Images/loader.gif'
 import axios from 'axios';
 import moment from "moment";
+import { useMediaQuery } from 'react-responsive';
 
 function DayTime({
   workingHours,
@@ -84,6 +85,8 @@ function DayTime({
   const [bufferError, setBufferError] = useState(false);
   const [existence, setExistence] = useState(false);
   const [loading,setLoading] = useState(false);
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
   const handleCheck = (event) => {
     var checkBox = event.target;
@@ -376,7 +379,7 @@ function DayTime({
     <Grid container>
       <Grid item xs={2}>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={isMobile?6:3}>
             <Checkbox
               onChange={handleCheck}
               checked={checked}
@@ -409,10 +412,10 @@ function DayTime({
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={isMobile?12:9}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile?5:4}>
               <FormControl className={classes.formControl}>
                 <KeyboardTimePicker
                   margin="normal"
@@ -429,7 +432,7 @@ function DayTime({
               </FormControl>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={isMobile?5:4}>
               <FormControl className={classes.formControl}>
                 <KeyboardTimePicker
                   margin="normal"

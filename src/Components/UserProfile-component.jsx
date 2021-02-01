@@ -23,61 +23,11 @@ import PlacesAutocomplete, {
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
 import {withRouter} from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import { API } from '../API';
 
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    width: '120px',
-    height: '120px',
 
-    marginBottom: '40px',
-    transition: '0.8s',
-
-    '&:hover': {
-      filter: 'grayscale(100%)',
-      cursor: 'pointer',
-
-    }
-  },
-  container: {
-    textAlign: 'center',
-    marginBottom: '100px'
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  innerContainer: {
-    width: '60%',
-    marginLeft: '20%',
-    marginBottom: '20px'
-  },
-  button: {
-    width: '30%',
-    height: '50px',
-    borderColor: '#FF5343',
-    //background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-    color: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-    marginTop: '20px'
-  },
-  input: {
-    display: 'none'
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  }
-
-}));
 
 
 
@@ -86,6 +36,61 @@ function Alert(props) {
 }
 
 function UserProfile({ currentUser, editUser, setDPPath, userType,history,editResume, editVideo }) {
+
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    large: {
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+      width: '120px',
+      height: '120px',
+
+      marginBottom: '40px',
+      transition: '0.8s',
+
+      '&:hover': {
+        filter: 'grayscale(100%)',
+        cursor: 'pointer',
+
+      }
+    },
+    container: {
+      textAlign: 'center',
+      marginBottom: '100px'
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    innerContainer: {
+      width: isMobile?'80%':'60%',
+      marginLeft:isMobile?'10%':'20%',
+      marginBottom: '20px'
+    },
+    button: {
+      width: '30%',
+      height: '50px',
+      borderColor: '#FF5343',
+      //background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+      color: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+      marginTop: '20px'
+    },
+    input: {
+      display: 'none'
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    }
+
+  }));
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [data, setData] = useState({
