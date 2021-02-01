@@ -60,7 +60,7 @@ function DocumentUpload({
         "CA Certificate",
       ];
     }
-
+  
   }
 
   var Items;
@@ -87,7 +87,7 @@ function DocumentUpload({
   const [CACertificate, setCACertificate] = React.useState({
     file: null,
     type: 4,
-    number: '123456789',
+    number: "",
   });
 
   const [panCard, setPanCard] = React.useState({
@@ -253,7 +253,7 @@ function DocumentUpload({
     }
 
     console.log(allDocuments);
-    allDocuments.forEach(async (document, i) => {
+    allDocuments.map(async (document) => {
       let formdata = new FormData();
       formdata.append("Files", document.file);
       formdata.append("AddedById", user.Id);
@@ -279,12 +279,8 @@ function DocumentUpload({
         }
       }
 
-      console.log(res);
+      console.log(res)
     });
-
-    // allDocuments.map(async (document) => {
-    //
-    // });
   };
 
   const useStyles = makeStyles((theme) => ({
