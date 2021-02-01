@@ -158,6 +158,8 @@ function DocumentUpload({
       case "CA Certificate":
         if (name === "file") {
           let file = event.target.files[0];
+                    console.log(file);
+
           setCACertificate((prevValue) => {
             return {
               ...prevValue,
