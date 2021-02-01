@@ -31,7 +31,8 @@ import {
 import {
   addAvailability,
   removeTimeslot,
-  removeAvailability
+  removeAvailability,
+  setServicesProgress
 } from "../../redux/service/service-actions";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -54,7 +55,8 @@ function DayTime({
   savedDays,
   removeAvailability,
   typeId,
-  invalidFormat
+  invalidFormat,
+  setProgress
 }) {
   const [slot, setSlot] = useState({
     // ServiceProviderId:'',
@@ -249,6 +251,11 @@ function DayTime({
           let slot = Slot;
           slot.TimeSlotDetails.Id = res.data.output.TimeSlotId;
           addWorkingHours(slot);
+          if (currentUser.isLocationsAdded) {
+            setProgress(100);
+          } else {
+            setProgress(66);
+          }
           setLoading(false);
         })
         .catch(err=> {
@@ -495,7 +502,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   addWorkingHours: (slot) => dispatch(addAvailability(slot)),
   removeTimeSlot: (slot) => dispatch(removeTimeslot(slot)),
-  removeAvailability: (day)=> dispatch(removeAvailability(day))
+  removeAvailability: (day)=> dispatch(removeAvailability(day)),
+    setProgress: value => dispatch(setServicesProgress(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DayTime);

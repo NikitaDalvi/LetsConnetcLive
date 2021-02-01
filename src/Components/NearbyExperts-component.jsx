@@ -12,35 +12,41 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../redux/user/user-selector';
 import { selectNearbySPList } from '../redux/service/service-selector';
 import { setNearbySPList } from '../redux/service/service-actions';
+import { useMediaQuery } from 'react-responsive';
 import { API } from '../API';
 import clsx from 'clsx';
 
 
-const useStyles = makeStyles(theme => ({
-  gridItem: {
-    margin: theme.spacing(4),
-    //marginBottom:'10px'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-  panel: {
-    width: '15%',
-    margin: theme.spacing(1),
-    zIndex: '500',
-    position: 'fixed'
-  },
-  textField: {
-    width: '30ch',
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-}));
 
 
 function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+    const useStyles = makeStyles(theme => ({
+      gridItem: {
+        margin: theme.spacing(4),
+        //marginBottom:'10px'
+      },
+      heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+      },
+      panel: {
+        width: isMobile?'50%':'15%',
+        margin: theme.spacing(1),
+        zIndex: '500',
+        position: 'fixed'
+      },
+      textField: {
+        width: '30ch',
+      },
+      margin: {
+        margin: theme.spacing(1),
+      },
+    }));
+
+
   const classes = useStyles();
   const [serviceTypes, setServiceTypes] = useState([]);
   const [nearbyList, setNearbyList] = useState([]);
@@ -283,7 +289,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Grid container>
-        <Grid item xs='2' className={classes.gridItem} style={{zIndex:'999'}}>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:'999'}}>
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -306,7 +312,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-        <Grid item xs='2' className={classes.gridItem} >
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'996':''}}>
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -328,7 +334,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanel>
         </Grid>
 
-        <Grid item xs='2' className={classes.gridItem} >
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'994':''}}>
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -350,7 +356,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanel>
         </Grid>
 
-        <Grid item xs='2' className={classes.gridItem} >
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'992':''}}>
         <ExpansionPanel className={classes.panel}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -372,7 +378,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanelDetails>
         </ExpansionPanel>
         </Grid>
-        <Grid item xs='2' className={classes.gridItem} >
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'990':''}}>
         <ExpansionPanel className={classes.panel}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -395,7 +401,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         </Grid>
       </Grid>
       <Grid container>
-        {filteredList.map(item => <Grid item xs='3' className={classes.gridItem}>
+        {filteredList.map(item => <Grid item xs={isMobile?'12':'3'} className={classes.gridItem}>
           <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdev.obtainbpm.com/${item && item.DPPath}`} address={item && item.Address} resumename={item && item.ResumePath} videopath={item && item.IntroductoryVideoPath} />
         </Grid>)}
       </Grid>
