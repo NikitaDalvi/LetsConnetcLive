@@ -19,32 +19,7 @@ import {
 import { useMediaQuery } from 'react-responsive';
 import loader from '../Images/loader.gif'
 
-const useStyles = makeStyles((theme) => ({
-  profileSection: {
-    padding: theme.spacing(1),
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    width: '120px',
-    height: '120px',
-  },
-  paper: {
-    padding: theme.spacing(2),
-  },
-  container: {
-    marginBottom: theme.spacing(1),
-  },
-  formControl: {
-    minWidth: 200,
-  },
-  button: {
-    width: '100%',
-    height: '50px',
-    background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-    color: 'white'
-  }
-}));
+
 
 function UserDetailPage({ expertId, currentUser }) {
   const [expertDetails, setExpertDetails] = useState(null);
@@ -408,8 +383,36 @@ function UserDetailPage({ expertId, currentUser }) {
     });
   };
 
-  const classes = useStyles();
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+
+  const useStyles = makeStyles((theme) => ({
+    profileSection: {
+      padding: theme.spacing(1),
+      width:isMobile?'350px':''
+    },
+    large: {
+      width: theme.spacing(7),
+      height: theme.spacing(7),
+    },
+    paper: {
+      padding: theme.spacing(2),
+    },
+    container: {
+      marginBottom: theme.spacing(1),
+    },
+    formControl: {
+      minWidth: 200,
+    },
+    button: {
+      width: '100%',
+      height: '50px',
+      background: 'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+      color: 'white'
+    }
+  }));
+
+    const classes = useStyles();
   console.log('Service Charge value:', expertDetails && expertDetails.BasicDetails && expertDetails.BasicDetails.ServiceCharge)
   console.log('IS Sequential:', checkForSequential())
   if (expertDetails !== null) {
@@ -420,21 +423,20 @@ function UserDetailPage({ expertId, currentUser }) {
           <Paper elevation={2} className={classes.paper}>
             <Grid container style={{ marginBottom: '20px' }}>
 
-              <Grid container direction="row" justify="space-between" alignItems="flex-end" style={{ marginTop: '2rem' }} item xs='4' className={classes.gridItem}>
-              <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${expertDetails.BasicDetails.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${expertDetails.BasicDetails.DPPath}`} className={classes.large} />
-
+              <Grid container direction="row" justify="space-between" alignItems={isMobile?'flex-start':"flex-end"} style={{ marginTop: '2rem' }} item xs={isMobile?'2':'4'} className={classes.gridItem}>
+              <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${expertDetails.BasicDetails.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${expertDetails.BasicDetails.DPPath}`} className={isMobile?'':classes.large} />
               </Grid>
-              <Grid item xs="auto" style={{ padding: isMobile ? '30px 30px 0px 0px' : '30px 20px 0px' }}>
+              <Grid item xs={isMobile?'10':"auto"} style={{ padding: isMobile ? '30px 10px 0px 10px' : '30px 20px 0px' }}>
                 <Typography variant={isMobile ? 'h6' : 'h5'}>{expertDetails.BasicDetails.ServiceProvider}</Typography>
                 <Typography variant={isMobile ? 'h6' : 'h5'}>{expertDetails.BasicDetails.ServiceType}</Typography>
               </Grid>
             </Grid>
             <Grid container style={{ marginBottom: '20px' }}>
-              <Grid item xs='2'>
-                <p style={{ width: "100%", height: '100%', fontSize: '20px', textAlign: 'right', padding: '5px' }}><span style={{ fontSize: '40px' }}>{expertDetails.BasicDetails.Rating.toFixed(1)}</span>/5</p>
+              <Grid item xs={isMobile?'12':'2'}>
+                <p style={{ width: "100%", height: '100%', fontSize: '20px', textAlign:isMobile?'left':'right', padding: isMobile?'':'5px' }}><span style={{ fontSize: '40px' }}>{expertDetails.BasicDetails.Rating.toFixed(1)}</span>/5</p>
               </Grid>
               <Grid item xs='4'>
-                <Rating name="read-only" value={expertDetails.BasicDetails.Rating} readOnly precision={0.1} style={{ marginTop: '20px' }} size="large" />
+                <Rating name="read-only" value={expertDetails.BasicDetails.Rating} readOnly precision={0.1} style={{ marginTop: isMobile?'':'20px' }} size="large" />
               </Grid>
             </Grid>
             <Typography variant='h6'>About me:</Typography>
@@ -445,7 +447,7 @@ function UserDetailPage({ expertId, currentUser }) {
 
           </Paper>
         </Grid>
-        <Grid item xs='6' className={classes.prceofileSection}>
+        <Grid item xs={isMobile?'12':'6'} className={classes.profileSection}>
           <Paper elevation={2} className={classes.paper}>
             <Typography variant='h5'>Services</Typography>
             <br />

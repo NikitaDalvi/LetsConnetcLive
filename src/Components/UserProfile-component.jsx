@@ -548,7 +548,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
-          <Avatar alt="Remy Sharp" src={currentUser&&`https://letnetworkdev.obtainbpm.com${currentUser.DPPath}`} className={classes.large} />
+          {currentUser&&<Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327/${currentUser.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`} className={classes.large} />}
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />
@@ -591,7 +591,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </Grid>
             <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: userType === 'Service-Provider' ? '' : 'none' }} label="Description" />
             <br/>
-          <label htmlFor="resume-button-file">
+        { userType!=='Customer'&&<label htmlFor="resume-button-file">
             <FormControl style={{width:'280px'}}>
             <InputLabel htmlFor="standard-adornment-password" shrink={!!resume}>Resume</InputLabel>
             <Input
@@ -612,7 +612,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
           helperText='upload resume in .pdf format only*'
             />
             </FormControl>
-            </label>
+            </label>}
 <input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" accept=".pdf"/>
             {resumePath&&
               <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
@@ -622,8 +622,8 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             </Link>
           }
           <br/>
-        <label htmlFor="video-button-file">
-          <FormControl style={{width:'280px'}}>
+        {userType!=='Customer'&&<label htmlFor="video-button-file">
+        <FormControl style={{width:'280px'}}>
           <InputLabel htmlFor="standard-adornment-password" shrink={!!video}>Introductory Video</InputLabel>
           <Input
           value={video}
@@ -643,7 +643,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
         helperText='upload only video*'
           />
           </FormControl>
-          </label>
+          </label>}
 <input onChange={handleVideo} style={{display:'none'}} id="video-button-file" type="file" accept="video/*"/>
           {videoPath&&
             <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdev.obtainbpm.com':`https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">

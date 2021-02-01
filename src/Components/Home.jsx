@@ -28,7 +28,7 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
       textAlign: isMobile ? 'left' : 'right',
     },
     buttonRight: {
-      marginLeft: isMobile ? '42%' : '400px',
+      marginLeft: isMobile ? '42%' : '80%',
       width: '60px',
       height: '60px',
       background: 'linear-gradient(239.6deg, #BB60FC 2.39%, #FF5343 82.96%)',
@@ -38,7 +38,7 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
       marginBottom: isMobile ? '20px' : ''
     },
     buttonLeft: {
-      marginLeft: '210px',
+      marginLeft: isMobile?'210px':'350px',
       width: '60px',
       height: '60px',
       background: 'linear-gradient(239.6deg, #BB60FC 2.39%, #FF5343 82.96%)',
@@ -78,7 +78,7 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
 
   return (
     <div>
-      <img src={homeVector} style={{ top: '0', left: '240px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
+      <img src={homeVector} style={{position:'absolute',top: '0', left: '500px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
       <div className='row mb-5' >
         <div className={isMobile ? 'col-lg-12' : 'col-lg-4'} >
           <Typography className={classes.TypographyBrand} variant="h6" gutterBottom>

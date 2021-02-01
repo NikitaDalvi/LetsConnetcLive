@@ -74,10 +74,9 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       width:isMobile?'100%':""
     },
     toolbar: {
-      alignContent:isMobile?'': 'flex-end',
-      marginRight:isMobile?'':theme.spacing(20),
+      alignContent:isMobile?'':'flex-end',
+      marginRight:isMobile?'':theme.spacing(15),
       height: '100px',
-      width:'100%'
     },
     commonButton: {
       color: isHome ? 'white' : 'black',
@@ -96,11 +95,11 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       height: '45px'
     },
     imgLogo: {
-      marginRight: isMobile ? '' : '800px',
+      marginRight: isMobile ? '50px' : '800px',
 
     },
     nested: {
-      paddingLeft: theme.spacing(3),
+      paddingLeft: theme.spacing(4),
     },
   }));
   const classes = useStyles();
@@ -135,13 +134,10 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       <AppBar position="static" className={classes.appbar}>
         <Box display="flex" justifyContent="flex-end" >
           <Toolbar className={classes.toolbar}>
-
+            <img src={Logo} className={classes.imgLogo}  onClick={() => imgClick()} />
             {isMobile ?
               <React.Fragment>
-                <div style={{display:'flex',justifyContent:'space-between',width:'100%'}}>
-                <img src={Logo} className={classes.imgLogo}  onClick={() => imgClick()} />
                 <IconButton disabled={currentUser && currentUser.Status !== 6} onClick={() => { setOpen(true); }} style={{marginRight:'0px'}}><MenuIcon /></IconButton>
-                </div>
                 <Drawer anchor='top' open={open} onClose={() => { setOpen(false); }}>
                   <List>
                     <ListItem button onClick={() => { history.push('/'); setIsHome(true); }}>
@@ -183,10 +179,8 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
               </React.Fragment>
               :
               <div>
-                          <img src={Logo} className={classes.imgLogo}  onClick={() => imgClick()} />
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/'); setIsHome(true); }}>Home</Button>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/About'); setIsHome(false); }}>About</Button>
-
                 <Button aria-controls="simple-menu" name='btn-register' aria-haspopup="true" className={classes.commonButton} color="inherit" onClick={(event) => { handleClick(event); }}>Register</Button>
                 <Button aria-controls="simple-menu" name='btn-login' aria-haspopup="true" className={classes.commonButton} color="inherit" onClick={(event) => { handleClick(event); }}>Login</Button>
                 <Menu
