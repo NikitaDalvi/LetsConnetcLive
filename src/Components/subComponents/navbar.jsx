@@ -75,7 +75,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
     },
     toolbar: {
       alignContent:isMobile?'':'flex-end',
-      marginRight:isMobile?'':theme.spacing(15),
+      marginRight:isMobile?'':theme.spacing(14),
       height: '100px',
     },
     commonButton: {
@@ -95,7 +95,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
       height: '45px'
     },
     imgLogo: {
-      marginRight: isMobile ? '50px' : '800px',
+      marginRight: isMobile ? '50px' : '600px',
 
     },
     nested: {
@@ -132,7 +132,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
     <div className={classes.root}>
 
       <AppBar position="static" className={classes.appbar}>
-        <Box display="flex" justifyContent="flex-end" >
+        <Box display="flex" justifyContent="flex-start" >
           <Toolbar className={classes.toolbar}>
             <img src={Logo} className={classes.imgLogo}  onClick={() => imgClick()} />
             {isMobile ?
@@ -178,7 +178,7 @@ const Navbar = ({ currentUser, history, setCurrentUser, ClearDropdown, isHome, s
                 </Drawer>
               </React.Fragment>
               :
-              <div>
+              <div style={{width:'100%'}}>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/'); setIsHome(true); }}>Home</Button>
                 <Button className={classes.commonButton} color="inherit" onClick={() => { history.push('/About'); setIsHome(false); }}>About</Button>
                 <Button aria-controls="simple-menu" name='btn-register' aria-haspopup="true" className={classes.commonButton} color="inherit" onClick={(event) => { handleClick(event); }}>Register</Button>
