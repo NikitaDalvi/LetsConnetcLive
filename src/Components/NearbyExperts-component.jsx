@@ -67,8 +67,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   const [filters,setFilters] = useState({
     Rating:0,
     ServiceType:null,
-    ServicesGiven:0,
-    ServicesCharge:0
+    ServiceGiven:0,
+    ServiceCharge:0
   });
 
   useEffect(() => {
@@ -226,7 +226,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     const{name,value} = e.target;
     let currentList = filterApplied;
         debugger;
-    if(value!==null&&value!=='0'){
+    if(value!==null&&value!=='0'&&value!==''){
       if(!currentList.includes(name)){
         currentList.push(name);
       }
@@ -235,19 +235,32 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     }
     let currentFilters = filters;
     debugger;
-    if(name==='Rating'||name==='ServicesGiven'||name==='ServicesCharge'){
+    if(name==='Rating'||name==='ServiceGiven'||name==='ServiceCharge'){
           currentFilters[name] = parseInt(value);
     }else{
-            currentFilters[name] = value;
+      if(value===""){
+        currentFilters[name] = null;
+      }else{
+        currentFilters[name] = value;
+      }
+
     }
     setFilterApplied(currentList);
     setFilters(currentFilters);
-    let filterResult = [];
+    let filterResult = nearbyList;
     if(currentList.length>0){
-      if(currentFilters.ServiceType!==null){
-        nearbyList.map(item => item.Rating >= currentFilters.Rating&&item.ServiceType===currentFilters.ServiceType&&item.ServicesGiven===currentFilters.ServicesGiven&&item.ServicesCharge===currentFilters.ServicesCharge?filterResult.push(item):item);
-      }else{
-        nearbyList.map(item => item.Rating >= currentFilters.Rating&&item.ServicesGiven===currentFilters.ServicesGiven&&item.ServicesCharge===currentFilters.ServicesCharge?filterResult.push(item):item);
+      debugger;
+      if(currentList.includes('ServiceType')&&currentFilters.ServiceType!==null){
+        filterResult=filterResult.filter(item => item.ServiceType===currentFilters.ServiceType);
+      }
+      if(currentList.includes('ServiceCharge')&&currentFilters.ServiceCharge!==0){
+        filterResult=filterResult.filter(item => item.ServiceCharge===currentFilters.ServiceCharge);
+      }
+      if(currentList.includes('ServiceGiven')&&currentFilters.ServiceGiven!==0){
+        filterResult=filterResult.filter(item => item.ServiceGiven===currentFilters.ServiceGiven);
+      }
+      if(currentList.includes('Rating')&&currentFilters.Rating!==0){
+        filterResult=filterResult.filter(item => item.Rating>=currentFilters.Rating);
       }
       // currentList.forEach((filter, i) => {
       //   if(filter==='Rating'){
@@ -260,8 +273,6 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       //     nearbyList.map(item => item[filter] === currentFilters[filter]?filterResult.push(item):item);
       //   }
       // });
-    }else{
-        filterResult = nearbyList;
     }
     setFilteredList(filterResult);
   };
@@ -367,7 +378,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <FormControl component="fieldset">
-              <RadioGroup aria-label="ServicesGiven" name="ServicesGiven" value={filters.ServicesGiven} onChange={applyFilter}>
+              <RadioGroup aria-label="ServiceGiven" name="ServicesGiven" value={filters.ServiceGiven} onChange={applyFilter}>
                 <FormControlLabel value={0} control={<Radio />} label="> All" />
                 <FormControlLabel value={1} control={<Radio />} label="On Site" />
                 <FormControlLabel value={2} control={<Radio />} label="Off Shore" />
@@ -389,7 +400,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <FormControl component="fieldset">
-              <RadioGroup aria-label="charge" name="ServicesCharge" value={filters.ServicesCharge} onChange={applyFilter}>
+              <RadioGroup aria-label="charge" name="ServiceCharge" value={filters.ServiceCharge} onChange={applyFilter}>
                 <FormControlLabel value={0} control={<Radio />} label="> All" />
                 <FormControlLabel value={1} control={<Radio />} label="per Hour" />
                 <FormControlLabel value={2} control={<Radio />} label="per Assignment" />
