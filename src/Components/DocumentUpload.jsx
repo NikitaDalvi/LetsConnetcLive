@@ -87,7 +87,7 @@ function DocumentUpload({
   const [CACertificate, setCACertificate] = React.useState({
     file: null,
     type: 4,
-    number: "12345",
+    number: '123456789',
   });
 
   const [panCard, setPanCard] = React.useState({
@@ -134,7 +134,7 @@ function DocumentUpload({
         break;
 
       case "Adhaar Card":
-        if (name === "file") {
+      if (name === "file") {
           let file = event.target.files[0];
           console.log(file.name);
           setAdhaarCard((prevValue) => {
