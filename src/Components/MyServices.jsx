@@ -105,21 +105,36 @@ function MyServices({ history, progress, setProgress, currentUser, ...props }) {
 
   React.useEffect(() => {
     if (currentUser != null) {
-      if (currentUser.isLocationsAdded && currentUser.isServicesAdded && currentUser.isWorkingHoursAdded) {
-        setProgress(100);
-        return;
-      }
-      if ((currentUser.isServicesAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isServicesAdded)) {
-        setProgress(66);
-        return;
-      }
-      if (currentUser.isServicesAdded || currentUser.isLocationsAdded || currentUser.isWorkingHoursAdded) {
-        setProgress(34)
-        return;
-      }
-      if (!currentUser.isServicesAdded && !currentUser.isLocationsAdded && !currentUser.isWorkingHoursAdded) {
-        setProgress(0);
-        return;
+      if(currentUser.UserRole===1){
+        if (currentUser.isLocationsAdded && currentUser.isServicesAdded && currentUser.isWorkingHoursAdded) {
+          setProgress(100);
+          return;
+        }
+        if ((currentUser.isServicesAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isServicesAdded)) {
+          setProgress(66);
+          return;
+        }
+        if (currentUser.isServicesAdded || currentUser.isLocationsAdded || currentUser.isWorkingHoursAdded) {
+          setProgress(34)
+          return;
+        }
+        if (!currentUser.isServicesAdded && !currentUser.isLocationsAdded && !currentUser.isWorkingHoursAdded) {
+          setProgress(0);
+          return;
+        }
+      }else{
+        if ((currentUser.isServicesAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isLocationsAdded) || (currentUser.isWorkingHoursAdded && currentUser.isServicesAdded)) {
+          setProgress(100);
+          return;
+        }
+        if (currentUser.isServicesAdded || currentUser.isLocationsAdded || currentUser.isWorkingHoursAdded) {
+          setProgress(66)
+          return;
+        }
+        if (!currentUser.isServicesAdded && !currentUser.isLocationsAdded && !currentUser.isWorkingHoursAdded) {
+          setProgress(0);
+          return;
+        }
       }
     }
 

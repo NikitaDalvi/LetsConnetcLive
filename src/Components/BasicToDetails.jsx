@@ -295,7 +295,7 @@ function BasicDetails(props) {
 
 
 
-    if (type === "Full_Time") {
+    if (type === "Full_Time" || type==='assignment') {
       var days = 0;
       const modelData = {
         WorkingHours: [],
@@ -307,7 +307,7 @@ function BasicDetails(props) {
         EndTime: "18:30",
         BufferTime: "0",
       };
-      if (data.workingDays === "Monday_To_Friday") {
+      if (data.workingDays === "Monday_To_Friday" || type==='assignment') {
         for (var i = 0; i < 5; i++) {
           var hoursData = {
             ServiceProviderId: currentUser.Id,

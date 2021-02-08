@@ -181,13 +181,20 @@ function Location(props) {
             ServiceGiven: currentUser.ServiceGiven,
           };
           setUserStatus(locationsSaved);
-          if (currentUser.isServicesAdded && currentUser.isWorkingHoursAdded) {
-            setProgress(100);
-            return;
-          }
-          if (currentUser.isServicesAdded) {
-            setProgress(66);
-            return;
+          if(currentUser.UserRole===1){
+            if (currentUser.isServicesAdded && currentUser.isWorkingHoursAdded) {
+              setProgress(100);
+              return;
+            }
+            if (currentUser.isServicesAdded) {
+              setProgress(66);
+              return;
+            }
+          }else{
+            if (currentUser.isServicesAdded) {
+              setProgress(100);
+              return;
+            }
           }
         }
       } else {
