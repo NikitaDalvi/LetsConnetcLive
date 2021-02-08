@@ -105,7 +105,7 @@ const userReducer = (state=Initial_State, action) => {
     case UserActionTypes.SET_COMPANY_DETAILS:
     return{
       ...state,
-      registeredUser:{...state.registeredUser,CompanyName:action.payload.companyName,CompanyId:action.payload.companyId}
+      registeredUser:{...state.registeredUser,CompanyName:action.payload.companyName,CompanyId:action.payload.companyId,UserRole:6}
     };
 
     case UserActionTypes.SET_EXPERT_ID:

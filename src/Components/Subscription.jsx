@@ -53,7 +53,7 @@ function Subscription(props) {
 
   useEffect(() => {
     setLoading(true);
-   
+
     if (userType === 'Service-Provider') {
       setProgress(50);
     } else {
@@ -84,7 +84,7 @@ function Subscription(props) {
               setCompany(corporate);
               setLoading(false);
             }
-           
+
           });
       }
 
@@ -196,7 +196,7 @@ function Subscription(props) {
     const __DEV__ = document.domain === 'localhost';
     console.log(data);
     const options = {
-   
+
       "key": 'rzp_test_nDfaBdpKMGXFdF',
       "currency": result.currency,
       "name": "Subscription Purchase",

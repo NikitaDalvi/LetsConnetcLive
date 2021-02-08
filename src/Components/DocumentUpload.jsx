@@ -60,7 +60,7 @@ function DocumentUpload({
         "CA Certificate",
       ];
     }
-  
+
   }
 
   var Items;
@@ -87,7 +87,7 @@ function DocumentUpload({
   const [CACertificate, setCACertificate] = React.useState({
     file: null,
     type: 4,
-    number: "",
+    number: "12345",
   });
 
   const [panCard, setPanCard] = React.useState({
