@@ -104,6 +104,7 @@ function ServiceRequest(props) {
 
   const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
+  const [requestId,setRequestId] = useState(null);
 
 
   useEffect(() => {
@@ -177,6 +178,7 @@ function ServiceRequest(props) {
       Rating:rate,
       Review: review,
       ticket: currentUser.Ticket,
+      ServiceId:requestId
     };
 
    }
@@ -188,6 +190,7 @@ function ServiceRequest(props) {
       Rating:rate,
       Review: review,
       ticket: currentUser.Ticket,
+      ServiceId:requestId
     };
    }
 
@@ -210,12 +213,13 @@ function ServiceRequest(props) {
     console.log(value);
   }
 
-  const handleOpen = (Name,id,spId) => {
+  const handleOpen = (Name,id,spId,requestId) => {
     debugger
     console.log(spId);
     setSeekerId(id);
     setserviceProviderId(spId);
     setName(Name);
+    setRequestId(requestId);
     setOpen(true);
 
   };
