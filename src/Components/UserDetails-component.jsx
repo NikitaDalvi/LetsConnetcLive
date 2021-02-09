@@ -326,6 +326,8 @@ function UserDetailPage({ expertId, currentUser }) {
               setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
+                window.location.reload();
+
               } else {
                 alert('Booking unsuccessfull! Please Try again later!');
               }
@@ -352,6 +354,8 @@ function UserDetailPage({ expertId, currentUser }) {
               setLoading(false);
               if (res) {
                 alert('Booking Successfull!');
+                window.location.reload();
+
               } else {
                 alert('Booking unsuccessfull! Please Try again later!');
               }
