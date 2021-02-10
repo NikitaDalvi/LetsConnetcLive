@@ -178,7 +178,8 @@ function ServiceRequest(props) {
       Rating:rate,
       Review: review,
       ticket: currentUser.Ticket,
-      AppointId:requestId
+      AppointId:requestId,
+      feedbackType:2
     };
 
    }
@@ -190,7 +191,8 @@ function ServiceRequest(props) {
       Rating:rate,
       Review: review,
       ticket: currentUser.Ticket,
-      AppointId:requestId
+      AppointId:requestId,
+      feedbackType:1
     };
    }
 
