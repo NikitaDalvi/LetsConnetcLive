@@ -102,6 +102,9 @@ function ServiceRequest(props) {
   const [completedRequests, setCompletedRequests] = useState([]);
   const [cancelRequests, setCancelRequests] = useState([]);
 
+  const [RRSpId, setRRSpId] = useState('');
+  const [RRCustomerId, setRRCustomerId] = useState('');
+
   const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
   const [requestId,setRequestId] = useState(null);
@@ -124,10 +127,15 @@ function ServiceRequest(props) {
       GetRequests(request)
         .then(res => {
           console.log(res);
+          console.log(res.CompeletedRequest.RRBySPId);
+
           setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
           setCancelRequests(res && res.cancelRequests);
+          setRRSpId(res && res.RRBySPId);
+          setSeekerId(res && res.RRByCustomerId)
+
 
 
 
@@ -310,8 +318,9 @@ function ServiceRequest(props) {
       <br />
       <br />
       <TextField multiline rows={4} label='review' onChange={e => setReview(e.target.value)} value={review} variant='outlined' style={{ width: '100%' }} />
-      <br />
+      <br />{
       <Button startIcon={<DoneIcon />} style={{backgroundColor:'#ff4da6',color:'white'}} variant='contained' className={classes.button} onClick={()=>saveRatingReview()}>Submit</Button>
+      }
       <Button startIcon={<CloseIcon />} variant='contained' style={{backgroundColor:'#FF1493',color:'white'}} onClick={handleClose} className={classes.button}>Close</Button>
     </div>
   );
