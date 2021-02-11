@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function ServiceRequestCard({amount,Id,userId,spId,dppath,name,emailId,contactNo,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating})
+function ServiceRequestCard({amount,Id,userId,spId,dppath,name,emailId,contactNo,service,handleModal,timeslots,date,status,userType,handleStatus,ticket,commissionId,Address,rating,RRBySPId,RRByCustomerId})
 {
 
 const [Date,setDate] = useState('');
