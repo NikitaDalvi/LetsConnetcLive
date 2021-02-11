@@ -316,10 +316,10 @@ function ServiceRequest(props) {
     </div>
   );
 
-  console.log(newRequests);
-  console.log(Today);
-  console.log(confirmedRequests);
-  console.log(completedRequests);
+  // console.log(newRequests);
+  // console.log(Today);
+  // console.log(confirmedRequests);
+  // console.log(completedRequests);
 
 
   return (

@@ -68,32 +68,26 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     Rating:0,
     ServiceType:null,
     ServiceGiven:0,
-    ServiceCharge:0
+    ServiceCharge:0,
+    radius:'5'
   });
 
   useEffect(() => {
     setLoading(true);
     console.log(radius);
     console.log(navigator.permissions.allow)
-    // const getLocation = () => {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(showPosition, showError, {maximumAge:60000, timeout: 10000, enableHighAccuracy: true});
-    //   } else {
-    //     alert('Geolocation is not supported by this browser.');
-    //   }
-    // };
-    //if(radius!=="0"){
+
       const showPosition = async (lat,long) => {
         const request = {
           Radius: parseInt(radius),
           Latitude: lat.toString(),
           Longitude: long.toString()
-        }
+        };
         setLocation({
           Latitude: lat.toString(),
           Longitude: long.toString()
         });
-        // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
+
         getNearbyExperts(request)
           .then(res => {
             if (res) {
@@ -131,6 +125,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       getServiceTypes();
     }
   }, [currentUser, radius]);
+
+
 
 
   // async function getNearbyExperts(){
@@ -222,7 +218,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   //     console.log(newChecked);
   // }
 
-  const applyFilter = e => {
+  const applyFilter = async e => {
+    setLoading(true);
     const{name,value} = e.target;
     let currentList = filterApplied;
         debugger;
@@ -262,19 +259,38 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       if(currentList.includes('Rating')&&currentFilters.Rating!==0){
         filterResult=filterResult.filter(item => item.Rating>=currentFilters.Rating);
       }
-      // currentList.forEach((filter, i) => {
-      //   if(filter==='Rating'){
-      //     if(filterResult.length===0){
-      //             nearbyList.map(item => item[filter] >= currentFilters[filter]?filterResult.push(item):item);
-      //     }else{
-      //       filterResult.map(item => item[filter] >= currentFilters[filter]?filterResult.push(item):item);
-      //     }
-      //   }else{
-      //     nearbyList.map(item => item[filter] === currentFilters[filter]?filterResult.push(item):item);
-      //   }
-      // });
+      if(currentList.includes('radius')&&currentFilters.radius!=='0'){
+        let response = await handleNearby(currentFilters.radius);
+        console.log(response);
+        let array = [];
+        response.forEach((item, i) => {
+          let finding = filterResult.find(filtered => filtered.ServiceProviderId === item.ServiceProviderId);
+          if(finding){
+            array.push(finding);
+          }
+        });
+        filterResult = array;
+      }
     }
     setFilteredList(filterResult);
+    setLoading(false);
+  };
+
+
+
+  const handleNearby = async(radius) => {
+    const request = {
+      Radius: parseInt(radius),
+      Latitude: currentUser.LocationDetails[0].Latitude.toString(),
+      Longitude: currentUser.LocationDetails[0].Longitude.toString()
+    };
+    setLocation({
+      Latitude: currentUser.LocationDetails[0].Latitude.toString(),
+      Longitude: currentUser.LocationDetails[0].Longitude.toString()
+    });
+
+    let response = await getNearbyExperts(request);
+    return response.data.output;
   };
 
 
@@ -330,7 +346,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>Filter by Services</Typography>
+              <Typography className={classes.heading}>Filter by Profession</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
@@ -356,7 +372,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
-                <RadioGroup aria-label="gender" name="gender1" value={radius} onChange={event => { setRadius(event.target.value); }}>
+                <RadioGroup aria-label="gender" name="radius" value={filters.radius} onChange={applyFilter}>
                   <FormControlLabel value="100" control={<Radio />} label="> None" />
                   <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
                   <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
@@ -378,12 +394,11 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <FormControl component="fieldset">
-              <RadioGroup aria-label="ServiceGiven" name="ServicesGiven" value={filters.ServiceGiven} onChange={applyFilter}>
+              <RadioGroup aria-label="ServiceGiven" name="ServiceGiven" value={filters.ServiceGiven} onChange={applyFilter}>
                 <FormControlLabel value={0} control={<Radio />} label="> All" />
                 <FormControlLabel value={1} control={<Radio />} label="On Site" />
-                <FormControlLabel value={2} control={<Radio />} label="Off Shore" />
-                <FormControlLabel value={3} control={<Radio />} label="Remote" />
-                <FormControlLabel value={4} control={<Radio />} label="Both(On Site and Off Shore)" />
+                <FormControlLabel value={3} control={<Radio />} label="Virtual" />
+                <FormControlLabel value={4} control={<Radio />} label="Both(On Site and Virtual)" />
               </RadioGroup>
             </FormControl>
           </ExpansionPanelDetails>
