@@ -401,7 +401,7 @@ function ServiceRequest(props) {
             <CardContent className={classes.CardContent}>
 
               <div>
-                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} Id={item.ServiceRequestId} userId={item.ServiceSeekerId} spId={item.ServiceProviderId} emailId={item.EmailId} contactNo={item.ContactNo} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} dppath={item.DPPath} Address={item.Address} rating={item.Rating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
+                {completedRequests && completedRequests.map((item, index) => (<ServiceCard key={index} userType={props.userType&&props.userType} Id={item.ServiceRequestId} reviewed={props.userType==='Service-Provider'?item.RRBySPId:item.RRByCustomerId} userId={item.ServiceSeekerId} spId={item.ServiceProviderId} emailId={item.EmailId} contactNo={item.ContactNo} commissionId={item.CommissionId} ServiceSeekerId={item.ServiceSeekerId} dppath={item.DPPath} Address={item.Address} rating={item.SPRating?item.SPRating:item.CustomerRating} ticket={currentUser.Ticket} name={item.RequestedBy} amount={item.Amount} status={4} handleStatus={handleAppointmentStatus} service={item.Service} timeslots={item.TimeList} date={item.TimeList[0].StartDate} handleModal={handleOpen} />))}
               </div>
 
             </CardContent>
