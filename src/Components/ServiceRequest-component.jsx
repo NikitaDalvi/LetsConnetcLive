@@ -101,10 +101,6 @@ function ServiceRequest(props) {
   const [confirmedRequests, setConfirmedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [cancelRequests, setCancelRequests] = useState([]);
-
-  const [RRSpId, setRRSpId] = useState('');
-  const [RRCustomerId, setRRCustomerId] = useState('');
-
   const [spId, setserviceProviderId] = useState('');
   const [seekerId,setSeekerId] = useState('');
   const [requestId,setRequestId] = useState(null);
@@ -127,15 +123,10 @@ function ServiceRequest(props) {
       GetRequests(request)
         .then(res => {
           console.log(res);
-          console.log(res.CompeletedRequest.RRBySPId);
-
           setNewRequests(res && res.NewReqest);
           setConfirmedRequests(res && res.OnBoardedRequest);
           setCompletedRequests(res && res.CompeletedRequest);
           setCancelRequests(res && res.cancelRequests);
-          setRRSpId(res && res.RRBySPId);
-          setSeekerId(res && res.RRByCustomerId)
-
 
 
 
