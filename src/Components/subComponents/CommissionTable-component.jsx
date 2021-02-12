@@ -169,7 +169,7 @@ function CommissionTable(props) {
 
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth={isMobile?'sm':'lg'}>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
