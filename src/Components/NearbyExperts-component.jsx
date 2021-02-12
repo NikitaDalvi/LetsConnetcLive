@@ -398,7 +398,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
                 <FormControlLabel value={0} control={<Radio />} label="> All" />
                 <FormControlLabel value={1} control={<Radio />} label="On Site" />
                 <FormControlLabel value={3} control={<Radio />} label="Virtual" />
-                <FormControlLabel value={4} control={<Radio />} label="Both(On Site and Virtual)" />
+                <FormControlLabel value={4} control={<Radio />} label="OnSite/Virtual" />
               </RadioGroup>
             </FormControl>
           </ExpansionPanelDetails>
