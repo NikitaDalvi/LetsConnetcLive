@@ -2,12 +2,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {setExpertId} from '../../redux/user/user-actions';
-import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid} from '@material-ui/core'
+import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid,IconButton,Link} from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import profile from '../../Images/profile.jpg';
 import {withRouter} from 'react-router-dom';
-
+import InfoIcon from '@material-ui/icons/Info';
 const useStyles = makeStyles(theme =>({
   root:{
     maxWidth:'90%',
@@ -47,17 +47,26 @@ function ExpertCard(props){
                 <Rating style={{marginTop:'10px'}} name="read-only" value={props.rating} readOnly precision={0.1} />
           </Grid>
 
-          <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
-            {props.address}
-          </Typography>
+          </Grid>
+          
+          <Grid item xs={6}>
+         
+          
+              <Link href={`${process.env.NODE_ENV === 'production' ? 'https://letnetworkdevstaging.obtainbpm.com' : `https://localhost:44327`}${props.videopath}`} rel="noopener" target="_blank">
+                <IconButton>
+                  <InfoIcon />
+                </IconButton>
+              </Link>
           </Grid>
 
           <Grid item xs={6}>
-          <Typography variant="body2"  component="p" style={{paddingLeft:'10px'}}>
-            {props.videopath}
+              
+          <Typography variant="h6"  component="p">
+            {props.ServiceGiven}
           </Typography>
 
           </Grid>
+
 
         </CardContent>
       </CardActionArea>

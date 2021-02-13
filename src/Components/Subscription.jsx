@@ -49,7 +49,7 @@ function Subscription(props) {
 
   };
 
-  const { userType, setProgress, registeredUser, setCurrentUser,setSubscriptionType } = props;
+  const { userType, setProgress, registeredUser, setCurrentUser,setSubscriptionType} = props;
 
   useEffect(() => {
     setLoading(true);
@@ -185,8 +185,9 @@ function Subscription(props) {
     var data = null;
     if (type === "Individual") {
        let PriceAfterDiscount = Math.round(initialData.Price- (initialData.Price * initialData.DiscountPercentage / 100))
+       let PriceAfterGST = Math.round(PriceAfterDiscount * 18 / 100)
        console.log()
-      data = await axios.post(`${API.URL}razorPay/${PriceAfterDiscount}`);
+      data = await axios.post(`${API.URL}razorPay/${PriceAfterGST}`);
     } else {
       let CompanyAfterDiscount = Math.round(company.Price- (company.Price * company.DiscountPercentage / 100))
       data = await axios.post(`${API.URL}razorPay/${CompanyAfterDiscount}`);
@@ -277,7 +278,7 @@ function Subscription(props) {
               <a><Button className={classes.btnSelect} onClick={() => { displayRazorPay("Individual"); }}>SELECT</Button></a>
             </Grid>
             <Grid item xs={isMobile ? 12 : 5}>
-              <SubscriptionCard type='Corporate' img={`${company.ImagePath}`} price={company.Price} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
+              <SubscriptionCard type='Corporate' img={`${company.ImagePath}`} price={company.Price}PriceAfterGST={company.PriceAfterGST} discount={company.DiscountPercentage} link="/DocumentUpload=Company" description={company.Description} handleClick={props.SubsSelectionClick} />
               <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
                 <img src={loader} alt='loading' style={{opacity:'1'}} width='200' height='200'/>
               </Backdrop>

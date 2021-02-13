@@ -419,6 +419,7 @@ function UserDetailPage({ expertId, currentUser }) {
     const classes = useStyles();
   console.log('Service Charge value:', expertDetails && expertDetails.BasicDetails && expertDetails.BasicDetails.ServiceCharge)
   console.log('IS Sequential:', checkForSequential())
+  
   if (expertDetails !== null) {
     return (
     <Container>
@@ -448,7 +449,7 @@ function UserDetailPage({ expertId, currentUser }) {
             <Typography variant='h6'>How do I charge?</Typography>
 
             <Typography variant='body1'>{expertDetails.BasicDetails.ServiceCharge ? `I charge per ${expertDetails.BasicDetails.ServiceCharge === 1 ? 'Hour' : expertDetails.BasicDetails.ServiceCharge === 2 ? 'Assignment' : `FullDay(${expertDetails.BasicDetails.WorkingDays===1?'Mon-Fri':'Mon-Sat'})`}` : ''}.</Typography>
-
+            
           </Paper>
         </Grid>
         <Grid item xs={isMobile?'12':'6'} className={classes.profileSection}>

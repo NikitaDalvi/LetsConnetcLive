@@ -199,10 +199,12 @@ function ServiceRequest(props) {
      if (res) {
      if (res.data) {
           alert('Completed successfully!');
+          window.location.reload(true);
+
           return "success";
+         
       }
      }
-      window.location.reload(true);
     console.log(res);
 
 

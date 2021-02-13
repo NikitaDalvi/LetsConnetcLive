@@ -431,7 +431,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       </Grid>
       <Grid container>
         {filteredList.map(item => <Grid item xs={isMobile?'12':'3'} className={classes.gridItem}>
-          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} address={item && item.Address} resumename={item && item.ResumePath} videopath={item && item.IntroductoryVideoPath} />
+          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} ServiceGiven={item && item.ServiceGiven===1?'Onsite':item && item.ServiceGiven===2?'Remote':item && item.ServiceGiven===2?'onsiteorofflineboth': null}  resumename={`https://letnetworkdevstaging.obtainbpm.com/${item && item.ResumePath}`} videopath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.IntroductoryVideoPath} `} />
         </Grid>)}
       </Grid>
     </Container>

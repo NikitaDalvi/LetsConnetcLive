@@ -3,7 +3,7 @@
 import 'date-fns';
 import React, { useState, useEffect } from "react";
 import userIcon from "../Images/user.jpg";
-import { Container, Avatar, makeStyles, TextField,Link, FormControl, InputLabel, Select, MenuItem, Grid, Button, Snackbar, CircularProgress, Backdrop, Paper, Typography, Input,InputAdornment,IconButton } from '@material-ui/core';
+import { Container, Avatar, makeStyles, TextField, Link, FormControl, InputLabel, Select, MenuItem, Grid, Button, Snackbar, CircularProgress, Backdrop, Paper, Typography, Input, InputAdornment, IconButton } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -22,7 +22,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { API } from '../API';
 
@@ -35,7 +35,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function UserProfile({ currentUser, editUser, setDPPath, userType,history,editResume, editVideo }) {
+function UserProfile({ currentUser, editUser, setDPPath, userType, history, editResume, editVideo }) {
 
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
@@ -70,8 +70,8 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
       minWidth: 120,
     },
     innerContainer: {
-      width: isMobile?'80%':'60%',
-      marginLeft:isMobile?'10%':'20%',
+      width: isMobile ? '80%' : '60%',
+      marginLeft: isMobile ? '10%' : '20%',
       marginBottom: '20px'
     },
     button: {
@@ -104,7 +104,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
     ticket: {},
     detailedAddress1: '',
     detailedAddress2: '',
-    dppath : ''
+    dppath: ''
   });
 
   const [path, setPath] = useState(userIcon);
@@ -121,13 +121,13 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
 
   const [editable2, setEditable2] = useState(false);
 
-  const [resume,setResume] = useState(null);
+  const [resume, setResume] = useState(null);
 
-  const [resumePath,setResumePath] = useState(null);
+  const [resumePath, setResumePath] = useState(null);
 
-  const [video,setVideo] = useState(null);
+  const [video, setVideo] = useState(null);
 
-  const [videoPath,setVideoPath] = useState(null);
+  const [videoPath, setVideoPath] = useState(null);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -164,7 +164,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
 
   const handleClick = async () => {
     setLoading(true);
-    const res = await axios.post(`${API.URL}UpdateProfile`,data);
+    const res = await axios.post(`${API.URL}UpdateProfile`, data);
 
     if (res != null) {
       console.log(res);
@@ -301,7 +301,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
   };
 
 
-    useEffect(() => {
+  useEffect(() => {
     if (currentUser != null) {
       const request = {
         UserId: currentUser.Id,
@@ -322,11 +322,11 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
             DOB: res.data.output.UserBasicDetails.DOB,
             dppath: res.data.output.UserBasicDetails.dppath
           });
-          if(currentUser.ResumeName&&currentUser.ResumePath){
+          if (currentUser.ResumeName && currentUser.ResumePath) {
             setResume(currentUser.ResumeName);
             setResumePath(currentUser.ResumePath);
           }
-          if(currentUser.IntroductoryVideoName&&currentUser.IntroductoryVideoPath){
+          if (currentUser.IntroductoryVideoName && currentUser.IntroductoryVideoPath) {
             setVideo(currentUser.IntroductoryVideoName);
             setVideoPath(currentUser.IntroductoryVideoPath);
           }
@@ -342,13 +342,13 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
           const dateTime = new Date(res.data.output.UserBasicDetails.DOB);
           setSelectedDate(dateTime);
           let path;
-          if(!process.env.NODE_ENV||process.env.NODE_ENV==='development'){
+          if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             //alert(true);
             path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
-          }else{
+          } else {
             path = `${process.env.REACT_APP_PROD_BASE_URL}${res.data.output.UserBasicDetails.DPPath}`
           }
-           //path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
+          //path = `https://localhost:44327/${res.data.output.UserBasicDetails.DPPath}`
           setPath(path);
         })
 
@@ -356,31 +356,31 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
   }, [currentUser])
 
   async function getProfileDetails(data) {
-  const result = await axios.post(`${API.URL}getProfileDetails`, data);
+    const result = await axios.post(`${API.URL}getProfileDetails`, data);
     return result;
   }
 
   function checkvalidation() {
 
     if (data) {
-      console.log('data',data)
+      console.log('data', data)
       console.log('UserType', userType)
       return userType && userType.toUpperCase() === 'SERVICE-PROVIDER' ?
         (data.Description
-        && data.Description.length > 0) : true
-        && data.FullName
-        && data.FullName.length > 0
-        && data.Gender
-        && data.Gender.length > 0
-        && data.EmailId
-        && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
-        && data.ContactNo
-        && /^\d{10}$/.test(data.ContactNo)
-        && data.DOB
-        && data.DOB.length > 0
-        && userType ==='Customer' ?
-        (data.detailedAddress1
-        && data.detailedAddress1.length>0) : true
+          && data.Description.length > 0) : true
+            && data.FullName
+            && data.FullName.length > 0
+            && data.Gender
+            && data.Gender.length > 0
+            && data.EmailId
+            && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.EmailId)
+            && data.ContactNo
+            && /^\d{10}$/.test(data.ContactNo)
+            && data.DOB
+            && data.DOB.length > 0
+            && userType === 'Customer' ?
+          (data.detailedAddress1
+            && data.detailedAddress1.length > 0) : true
     }
     else {
       console.log('data1')
@@ -422,12 +422,12 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
     }
   }
 
-  async function handleResume(event){
+  async function handleResume(event) {
     setLoading(true);
-    const {value} = event.target;
+    const { value } = event.target;
     console.log(value);
     let Resume = event.target.files[0];
-    if(Resume.type==='application/pdf'){
+    if (Resume.type === 'application/pdf') {
       var newValue = value.replace(/C:\\fakepath\\/i, '');
       setResume(newValue);
       let formdata = new FormData();
@@ -442,24 +442,25 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
           }
         );
         result = await result.json();
-        if(result){
+        if (result) {
           console.log(result);
-          if(result.responseCode === 200)
-          {
-          let resumeObject = {
-            path:result.output.Path,
-            name:result.output.fileName
-          };
-          editResume(resumeObject);
-          setLoading(false);
-          setSeverity('success');
-          setAlert('Resume uploaded successfully');
-          setOpen(true);}
-          else
-          {setLoading(false);
-          setSeverity('warning');
-          setAlert('Bad request !');
-          setOpen(true);}
+          if (result.responseCode === 200) {
+            let resumeObject = {
+              path: result.output.Path,
+              name: result.output.fileName
+            };
+            editResume(resumeObject);
+            setLoading(false);
+            setSeverity('success');
+            setAlert('Resume uploaded successfully');
+            setOpen(true);
+          }
+          else {
+            setLoading(false);
+            setSeverity('warning');
+            setAlert('Bad request !');
+            setOpen(true);
+          }
         }
       } catch (e) {
         setLoading(false);
@@ -468,7 +469,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
         setOpen(true);
       }
 
-    }else{
+    } else {
       setLoading(false);
       setSeverity('warning');
       setAlert('Please upload resume in .pdf format only!');
@@ -478,13 +479,13 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
 
   }
 
-  async function handleVideo(event){
+  async function handleVideo(event) {
     setLoading(true);
-    const {value} = event.target;
+    const { value } = event.target;
     //console.log(value);
     let vid = event.target.files[0];
     //console.log(vid);
-    if(vid.type==='video/mp4'){
+    if (vid.type === 'video/mp4') {
       var newValue = value.replace(/C:\\fakepath\\/i, '');
       setVideo(newValue);
       let formdata = new FormData();
@@ -499,24 +500,25 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
           }
         );
         result = await result.json();
-        if(result){
+        if (result) {
           console.log(result);
-          if(result.responseCode === 200)
-          {
-          let videoObject = {
-            path:result.output.Path,
-            name:result.output.fileName
-          };
-          editVideo(videoObject);
-          setLoading(false);
-          setSeverity('success');
-          setAlert('Video uploaded successfully');
-          setOpen(true);}
-          else
-          {setLoading(false);
-          setSeverity('warning');
-          setAlert('Bad request !');
-          setOpen(true);}
+          if (result.responseCode === 200) {
+            let videoObject = {
+              path: result.output.Path,
+              name: result.output.fileName
+            };
+            editVideo(videoObject);
+            setLoading(false);
+            setSeverity('success');
+            setAlert('Video uploaded successfully');
+            setOpen(true);
+          }
+          else {
+            setLoading(false);
+            setSeverity('warning');
+            setAlert('Bad request !');
+            setOpen(true);
+          }
         }
       } catch (e) {
         setLoading(false);
@@ -525,7 +527,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
         setOpen(true);
       }
 
-    }else{
+    } else {
       setLoading(false);
       setSeverity('warning');
       setAlert('Please upload video in .mp4 format only!');
@@ -548,7 +550,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
-          {currentUser&&<Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327/${currentUser.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`} className={classes.large} />}
+          {currentUser && <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? `https://localhost:44327/${currentUser.DPPath}` : `${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`} className={classes.large} />}
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />
@@ -590,68 +592,68 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
               </Grid>
             </Grid>
             <TextField id="outlined-multiline-static" multiline placeholder='Tell people about what you will provide' variant='outlined' rows={5} name='Description' value={data.Description} InputLabelProps={{ shrink: true, }} onChange={handleChange} style={{ width: '60%', marginBottom: '10px', display: userType === 'Service-Provider' ? '' : 'none' }} label="Description" />
-            <br/>
-        { userType!=='Customer'&&<label htmlFor="resume-button-file">
-            <FormControl style={{width:'280px'}}>
-            <InputLabel htmlFor="standard-adornment-password" shrink={!!resume}>Resume</InputLabel>
-            <Input
-            value={resume}
-            placeholder='Resume'
-            id="standard-adornment-password"
-            disabled='true'
-            InputLabelProps={{
-              shrink: !!resume
-            }}
-            endAdornment={
-            <InputAdornment position="end">
-            <IconButton             component="span">
-              <PublishIcon/>
-            </IconButton>
-            </InputAdornment>
-          }
-          helperText='upload resume in .pdf format only*'
-            />
-            </FormControl>
+            <br />
+            {userType !== 'Customer' && <label htmlFor="resume-button-file">
+              <FormControl style={{ width: '280px' }}>
+                <InputLabel htmlFor="standard-adornment-password" shrink={!!resume}>Resume</InputLabel>
+                <Input
+                  value={resume}
+                  placeholder='Resume'
+                  id="standard-adornment-password"
+                  disabled='true'
+                  InputLabelProps={{
+                    shrink: !!resume
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton component="span">
+                        <PublishIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  helperText='upload resume in .pdf format only*'
+                />
+              </FormControl>
             </label>}
-<input onChange={handleResume} style={{display:'none'}} id="resume-button-file" type="file" accept=".pdf"/>
-            {resumePath&&
-              <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdevstaging.obtainbpm.com':`https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
-              <IconButton>
-              <InfoIcon/>
-            </IconButton>
-            </Link>
-          }
-          <br/>
-        {userType!=='Customer'&&<label htmlFor="video-button-file">
-        <FormControl style={{width:'280px'}}>
-          <InputLabel htmlFor="standard-adornment-password" shrink={!!video}>Introductory Video</InputLabel>
-          <Input
-          value={video}
-          placeholder='Introductory Video'
-          id="standard-adornment-password"
-          disabled='true'
-          InputLabelProps={{
-            shrink: !!resume
-          }}
-          endAdornment={
-          <InputAdornment position="end">
-          <IconButton             component="span">
-            <PublishIcon/>
-          </IconButton>
-          </InputAdornment>
-        }
-        helperText='upload only video*'
-          />
-          </FormControl>
-          </label>}
-<input onChange={handleVideo} style={{display:'none'}} id="video-button-file" type="file" accept="video/*"/>
-          {videoPath&&
-            <Link href={`${process.env.NODE_ENV === 'production'?'https://letnetworkdevstaging.obtainbpm.com':`https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">
-            <IconButton>
-            <InfoIcon/>
-          </IconButton>
-          </Link>
-        }
+            <input onChange={handleResume} style={{ display: 'none' }} id="resume-button-file" type="file" accept=".pdf" />
+            {resumePath &&
+              <Link href={`${process.env.NODE_ENV === 'production' ? 'https://letnetworkdevstaging.obtainbpm.com' : `https://localhost:44327`}${resumePath}`} rel="noopener" target="_blank">
+                <IconButton>
+                  <InfoIcon />
+                </IconButton>
+              </Link>
+            }
+            <br />
+            {userType !== 'Customer' && <label htmlFor="video-button-file">
+              <FormControl style={{ width: '280px' }}>
+                <InputLabel htmlFor="standard-adornment-password" shrink={!!video}>Introductory Video</InputLabel>
+                <Input
+                  value={video}
+                  placeholder='Introductory Video'
+                  id="standard-adornment-password"
+                  disabled='true'
+                  InputLabelProps={{
+                    shrink: !!resume
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton component="span">
+                        <PublishIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  helperText='upload only video*'
+                />
+              </FormControl>
+            </label>}
+            <input onChange={handleVideo} style={{ display: 'none' }} id="video-button-file" type="file" accept="video/*" />
+            {videoPath &&
+              <Link href={`${process.env.NODE_ENV === 'production' ? 'https://letnetworkdevstaging.obtainbpm.com' : `https://localhost:44327`}${videoPath}`} rel="noopener" target="_blank">
+                <IconButton>
+                  <InfoIcon />
+                </IconButton>
+              </Link>
+            }
             {
               editable1 ?
                 (<Paper elevation={1} style={{ padding: '10px 10px', width: '400px', textAlign: 'left', margin: '8px 80px' }}>
@@ -707,7 +709,7 @@ function UserProfile({ currentUser, editUser, setDPPath, userType,history,editRe
                     </Grid>
                   </Grid>
 
-                </Paper>) : (<Typography style={{ margin: '10px 0',display: userType === 'Customer' ? '' : 'none' }} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={() => { setEditable1(true); }} /></Typography>)}
+                </Paper>) : (<Typography style={{ margin: '10px 0', display: userType === 'Customer' ? '' : 'none' }} variant='body1'>Address 1:  {address1.Address}  <EditIcon onClick={() => { setEditable1(true); }} /></Typography>)}
 
             {
               editable2 ?
