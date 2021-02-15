@@ -329,6 +329,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       <Backdrop className={classes.backdrop} open={loading} >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Typography className={classes.heading}>Filter by</Typography>
       <Grid container>
         <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:'999'}}>
           <ExpansionPanel className={classes.panel}>
@@ -337,7 +338,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>Filter by Rating</Typography>
+              <Typography className={classes.heading}>Rating</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
@@ -360,7 +361,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>Filter by Profession</Typography>
+              <Typography className={classes.heading}>Profession</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
@@ -376,13 +377,15 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         </Grid>
 
         <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'994':''}}>
+       
+        
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>Filter by Distance</Typography>
+              <Typography className={classes.heading}>Distance</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <FormControl component="fieldset">
@@ -404,7 +407,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography className={classes.heading}>Filter by Location</Typography>
+            <Typography className={classes.heading}>Location</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <FormControl component="fieldset">
@@ -425,7 +428,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography className={classes.heading}>Filter by Charge</Typography>
+            <Typography className={classes.heading}>Charge</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <FormControl component="fieldset">
@@ -465,7 +468,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       </Grid>
       <Grid container>
         {filteredList.map(item => <Grid item xs={isMobile?'12':'3'} className={classes.gridItem}>
-          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdev.obtainbpm.com/${item && item.DPPath}`} address={item && item.Address} resumename={item && item.ResumePath} videopath={item && item.IntroductoryVideoPath} />
+          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} address={item && item.Address} resumename={item && item.ResumePath} videopath={item && item.IntroductoryVideoPath} />
         </Grid>)}
       </Grid>
     </Container>
