@@ -2,7 +2,7 @@
 /*jshint -W087*/
 
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpertCard from './subComponents/ExpertCard-component';
@@ -71,6 +71,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     ServiceCharge:0,
     radius:'5'
   });
+  const [services,setServices] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -112,6 +113,10 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
       };
 
+      async function fillServices(){
+        let result = await getServices();
+        setServices(result.data.output);
+      }
 
 
 
@@ -123,10 +128,14 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       }
 
       getServiceTypes();
+          fillServices();
     }
   }, [currentUser, radius]);
 
 
+  useEffect(()=>{
+    console.log(services[0]);
+  },[services]);
 
 
   // async function getNearbyExperts(){
@@ -137,17 +146,22 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     return setServiceTypes(res.data.output);
   }
 
-  useEffect(() => {
-    if (selectedServices.length !== 0) {
-      var filteredResult = [];
-      //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+  const getServices = async () => {
+    const res = await axios.post(`${API.URL}GetServices`,{ServiceTypeId:null,ticket:currentUser.Ticket});
+    return res;
+  };
 
-      selectedServices.forEach(item=>{
-        nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
-      })
-      setFilteredList(filteredResult);
-    }
-  }, [selectedServices]);
+  // useEffect(() => {
+  //   if (selectedServices.length !== 0) {
+  //     var filteredResult = [];
+  //     //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+  //
+  //     selectedServices.forEach(item=>{
+  //       nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
+  //     })
+  //     setFilteredList(filteredResult);
+  //   }
+  // }, [selectedServices]);
 
   // useEffect(()=>{
   //
@@ -422,6 +436,29 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
                 <FormControlLabel value={3} control={<Radio />} label="Full Time" />
               </RadioGroup>
             </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'990':''}}>
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Filter by Service</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{display:'block'}}>
+            <TextField variant='outlined' label='Search service' style={{width:'100%'}}/>
+            <div style={{maxHeight:'200px',overflowY:'auto',width:'100%'}}>
+            {services.map(item =>
+              <FormControlLabel
+              control={<Checkbox   name="checkedH" />}
+              label={item.Services}
+              style={{width:'100%'}}
+              />
+            )}
+            </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
         </Grid>
