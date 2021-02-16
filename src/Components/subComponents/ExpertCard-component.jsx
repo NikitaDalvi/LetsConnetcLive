@@ -2,11 +2,7 @@
 import React,{useState} from 'react';
 import {connect} from 'react-redux';
 import {setExpertId} from '../../redux/user/user-actions';
-<<<<<<< HEAD
-import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid,IconButton,Link} from '@material-ui/core'
-=======
 import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid,IconButton} from '@material-ui/core'
->>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
 import Rating from '@material-ui/lab/Rating';
 import InfoIcon from '@material-ui/icons/Info';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -15,16 +11,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import {withRouter} from 'react-router-dom';
-<<<<<<< HEAD
-<<<<<<< HEAD
-import InfoIcon from '@material-ui/icons/Info';
-=======
-import { Player } from 'video-react';
-=======
 
->>>>>>> b9be8110bd1254fea8015114a09cc1dac898eaf1
-
->>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
 const useStyles = makeStyles(theme =>({
   root:{
     maxWidth:'90%',
@@ -81,29 +68,6 @@ function ExpertCard(props){
           </Grid>
 
           </Grid>
-          
-          <Grid item xs={6}>
-         
-          
-              <Link href={`${process.env.NODE_ENV === 'production' ? 'https://letnetworkdevstaging.obtainbpm.com' : `https://localhost:44327`}${props.videopath}`} rel="noopener" target="_blank">
-                <IconButton>
-                  <InfoIcon />
-                </IconButton>
-              </Link>
-          </Grid>
-<<<<<<< HEAD
-
-          <Grid item xs={6}>
-              
-          <Typography variant="h6"  component="p">
-            {props.ServiceGiven}
-          </Typography>
-
-          </Grid>
-
-
-=======
->>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
         </CardContent>
       <CardActionArea >
       <Button variant='outlined' style={{margin:'0 0 10px 10px'}} color='secondary' onClick={()=>{ console.log(props.id);props.setExpertId(props.id.toString());props.history.push('/UserPage/UserDetail');}}>Go to booking</Button>
@@ -122,7 +86,7 @@ function ExpertCard(props){
       <Fade in={open}>
         <div className={classes.paper}>
         <video fluid={false} width='700' height='600' autoPlay controls>
-          <source src={`https://letnetworkdevstaging.obtainbpm.com/${props.videopath}`}/>
+          <source src={`https://letnetworkdevstaging.obtainbpm.com${props.videopath}`}/>
         </video>
         <br/>
         <Button variant='outlined' onClick={()=>setOpen(false)}>Close</Button>

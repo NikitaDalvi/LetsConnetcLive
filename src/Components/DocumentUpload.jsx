@@ -320,7 +320,7 @@ function DocumentUpload({
   console.log(subsType);
   console.log(Items);
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm"> 
       <Typography className={classes.title} variant="h4">
         KYC verification
       </Typography>

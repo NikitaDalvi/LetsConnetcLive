@@ -3,6 +3,9 @@ import React,{useState} from "react";
 import {TextField,FormControl,InputAdornment,IconButton,OutlinedInput,makeStyles,Grid,Button} from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useMediaQuery } from 'react-responsive';
+import {
+  Typography
+} from "@material-ui/core";
 
 function UploadItem(props){
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
@@ -15,7 +18,11 @@ const [file,setFile] = React.useState('');
     inputFile:{
       width:isMobile?'200px':'300px',
       border:file!==''?'2px solid #07C306':'',
+    },
+    title: {
+      textAlign: "center",
     }
+    
 
   }));
 
@@ -30,7 +37,17 @@ function fileChange(event){
 
   return(
     <div style={{textAlign:'center'}}>
+     {props.item === 'Pan Card' &&<Typography className={classes.title} variant="h6"> 
+      Pan Card
+    </Typography>}
+    {props.item === 'Adhaar Card' &&<Typography className={classes.title} variant="h6"> 
+    Adhaar Card
+    </Typography>}
+    
+    
+    
     <FormControl className={classes.formControl}>
+      
 { props.item !=="uploadDocuments"&&<Grid container>
     <Grid item style={{marginBottom:'10px'}}>
     <OutlinedInput
