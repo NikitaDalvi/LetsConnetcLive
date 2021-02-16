@@ -97,6 +97,8 @@ function CommissionTable(props) {
     let commissions = [];
     commision.map(i => commissions.push(i.ServiceCharges));
     let total = commissions.reduce(getSum, 0);
+    let gst = 18/100*total;
+    total = total+gst;
     return total;
   }
 
@@ -213,7 +215,7 @@ function CommissionTable(props) {
         </Table>
       </TableContainer>
       <div className={classes.btnContainer}>
-        <Button className={classes.button} onClick={displayRazorPay}>Pay &#8377;{ }</Button>
+        <Button className={classes.button} onClick={displayRazorPay}>Pay &#8377;{getTotal()}</Button>
       </div>
       <Backdrop className={classes.backdrop} open={loading} style={{zIndex:'9999'}}>
         <img src={loader} alt='loading' style={{opacity:'1'}} width='200' height='200'/>

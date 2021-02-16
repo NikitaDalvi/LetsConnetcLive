@@ -72,8 +72,11 @@ function RegistrationForm(props) {
         //const userId = userData.data.output.Id;
         if (userData.data.output !== null) {
           setRegisteredUser(userData.data.output);
-
-          history.push('/Registration/Subscription');
+          if(userType === 'Service-Provider'){
+              history.push('/Registration/Subscription');
+          }else{
+              history.push('/Registration/KYC');
+          }
         }
       }
     } else {

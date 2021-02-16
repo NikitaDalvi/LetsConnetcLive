@@ -41,8 +41,9 @@ function fileChange(event){
         error={(props.item==='Pan Card' && props.validate)?true:false}
         value={file}
         className={classes.inputFile}
+        placeholder={props.item}
        />
-      <input name='file' onChange={fileChange} variant='outlined' id={`document${props.id}`} style={{display:'none'}} type='file'/>
+      <input name='file' label={props.item} onChange={fileChange} variant='outlined' id={`document${props.id}`} style={{display:'none'}} type='file'/>
       </Grid>
       <Grid item>
       <label htmlFor={`document${props.id}`}>

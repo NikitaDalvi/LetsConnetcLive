@@ -98,28 +98,37 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           Latitude: lat.toString(),
           Longitude: long.toString()
         });
-
-        getNearbyExperts(request)
-          .then(res => {
-            if (res) {
-              console.log(res.data);
-              if (res.data.output) {
-                setLoading(false);
-                let filterResult = [];
-                if(filterApplied.length>0){
-                  if(filterApplied.ServiceType!==null){
-                    res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServiceType===filterApplied.ServiceType&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+        try {
+          getNearbyExperts(request)
+            .then(res => {
+              if (res) {
+                console.log(res.data);
+                if (res.data.output) {
+                  setLoading(false);
+                  let filterResult = [];
+                  if(filterApplied.length>0){
+                    if(filterApplied.ServiceType!==null){
+                      res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServiceType===filterApplied.ServiceType&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                    }else{
+                      res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                    }
                   }else{
-                    res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                      filterResult = res.data.output;
                   }
+                  setFilteredList(filterResult);
+                  setNearbyList(res.data.output);
                 }else{
-                    filterResult = res.data.output;
+                  setLoading(false);
                 }
-                setFilteredList(filterResult);
-                setNearbyList(res.data.output);
+              }else{
+                setLoading(false);
               }
-            }
-          });
+            });
+        } catch (e) {
+          console.log(e);
+          setLoading(false)
+        }
+
 
       };
 

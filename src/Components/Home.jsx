@@ -24,8 +24,8 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
   const useStyles = makeStyles(theme => ({
     card:{
       marginRight:'10px',
-      minWidth:'300px',
-      minHeight:'250px',
+      minWidth:'250px',
+      minHeight:'200px',
       marginBottom:'10px',
       color:'white'
     },
@@ -91,7 +91,7 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
     <div>
       <img src={homeVector} style={{position:'absolute',top: '0', left: '500px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
       <div className='row mb-5' >
-        <div className={isMobile ? 'col-lg-12' : 'col-lg-8'} style={{paddingTop:"120px",paddingLeft:'150px'}}>
+        <div className={isMobile ? 'col-lg-12' : 'col-lg-6'} style={{paddingTop:"120px",paddingLeft:'150px'}}>
           <div style={{display:'flex',width:'100%',flexWrap:'wrap',paddingLeft:'50px'}}>
             <Card className={classes.card} style={{background:'rgba(187,96,252,0.6)'}}>
               <CardContent>
