@@ -40,7 +40,7 @@ function DocumentUpload({
   var SPitem = [];
   if(user){
     if(user.UserRole===2 || user.UserRole===4){
-      SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+      SPitem = ["Adhaar Card", "Pan Card"];
     }else{
       SPitem = [
         "Company PAN Card",
@@ -225,33 +225,46 @@ function DocumentUpload({
 
   React.useEffect(() => {
     if (user) {
-      setUserType("Service-Provider");
       setProgress(100);
     }
   }, [setProgress, user]);
 
   const uploadDocuments = () => {
-    if (
-      subsType === "Individual" &&
-      (AdhaarCard.file === null || AdhaarCard.number === "")
-    ) {
-      alert("Adhaar Card document and Adhaar Card number is mandatory!");
-      return;
+    if(userType==='Service-Provider'){
+      if (
+        subsType === "Individual" &&
+        (AdhaarCard.file === null || AdhaarCard.number === "")
+      ) {
+        alert("Adhaar Card document and Adhaar Card number is mandatory!");
+        return;
+      }
+    }else{
+      if ((AdhaarCard.file===null||AdhaarCard.number==="")&&(panCard.file===null||panCard.number==='')) {
+        alert("Both number and file of either Adhaar Card or Pan Card is mandatory!");
+        return;
+      }
     }
     debugger;
     const allDocuments = [];
     let result = null;
-    if (subsType === "Individual") {
-      allDocuments.push(AdhaarCard, panCard, CACertificate);
-    } else {
-      allDocuments.push(
-        incorporationCertificate,
-        panCard,
-        udyogAdhar,
-        CACertificate
-      );
+    if(userType==='Service-Provider'){
+      if (subsType === "Individual") {
+        allDocuments.push(AdhaarCard, panCard, CACertificate);
+      } else {
+        allDocuments.push(
+          incorporationCertificate,
+          panCard,
+          udyogAdhar,
+          CACertificate
+        );
+      }
+    }else{
+      if(AdhaarCard.file===null||AdhaarCard.number===""){
+        allDocuments.push(panCard);
+      }else{
+        allDocuments.push(AdhaarCard);
+      }
     }
-
     console.log(allDocuments);
     allDocuments.map(async (document) => {
       let formdata = new FormData();
@@ -272,14 +285,18 @@ function DocumentUpload({
         setRegisteredUser(null);
         console.log(res);
         setUser(user);
+      if(userType==='Service-Provider'){
         if (user.UserRole !== 6) {
           history.push("/UserPage/ServiceProvider/MyServices/BasicToDetails");
         } else {
           history.push("/UserPage/SPAdmin/MyEmployees");
         }
+      }else{
+        history.push('/UserPage/Customer/NearbyExperts');
+      }
       }
 
-      console.log(res)
+      console.log(res);
     });
   };
 
@@ -307,6 +324,9 @@ function DocumentUpload({
       <Typography className={classes.title} variant="h4">
         KYC verification
       </Typography>
+      {userType!=='Service-Provider'&&<Typography variant='h6'>
+      Upload file and number of either one of the documents.
+      </Typography>}
       <br />
       <br />
       {Items.map((uploadItem, index) => (

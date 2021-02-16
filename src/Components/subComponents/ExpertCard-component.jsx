@@ -16,9 +16,13 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import {withRouter} from 'react-router-dom';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import InfoIcon from '@material-ui/icons/Info';
 =======
 import { Player } from 'video-react';
+=======
+
+>>>>>>> b9be8110bd1254fea8015114a09cc1dac898eaf1
 
 >>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
 const useStyles = makeStyles(theme =>({
