@@ -1,7 +1,7 @@
 /*jshint esversion:9*/
-
+/*jshint -W087*/
 export const ChangeUserServiceStatus = (currentUser,object) => {
-  
+
   const{type,ServiceCharge,ServiceGiven} = object;
   var chargeType = 0;
   var serviceType = 0;
@@ -55,3 +55,10 @@ export const ChangeUserServiceStatus = (currentUser,object) => {
   }
         return currentUser;
 };
+
+
+// 
+// export const setProfilePicture = file => {
+//
+//   return srcEncoded;
+// };

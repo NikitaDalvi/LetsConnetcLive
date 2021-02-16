@@ -24,6 +24,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
 import { withRouter } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import Resizer from 'react-image-file-resizer';
 import { API } from '../API';
 
 
@@ -267,8 +268,25 @@ function UserProfile({ currentUser, editUser, setDPPath, userType, history, edit
 
 
 
+  const resizeFile = (file) => new Promise(resolve => {
+      Resizer.imageFileResizer(file, 300, 300, 'JPEG', 50, 0,
+      uri => {
+        resolve(uri);
+      },
+      'base64'
+      );
+  });
+
+
   const dpChange = async (event) => {
     let image = event.target.files[0];
+    console.log(image);
+    try {
+        const compressed = await resizeFile(image);
+        console.log(compressed);
+    } catch(err) {
+        console.log(err);
+    }
     let formdata = new FormData();
     formdata.append('Files', image);
     formdata.append('AddedById', currentUser.Id);
@@ -285,7 +303,12 @@ function UserProfile({ currentUser, editUser, setDPPath, userType, history, edit
     if (result != null) {
       console.log(result.data);
       if (result.data.responseCode === 200) {
-        const DPPath = result.data.output.DPPath;
+        let DPPath = result.data.output.DPPath;
+        // if(!process.env.NODE_ENV||process.env.NODE_ENV==='development'){
+        //   DPPath = `https://localhost:44327${DPPath}`
+        // }else{
+        //   DPPath = `${process.env.REACT_APP_PROD_BASE_URL}${DPPath}`
+        // }
         setDPPath(DPPath);
         setSeverity('success');
         setAlert('Display picture was changed successfully !');
@@ -550,7 +573,11 @@ function UserProfile({ currentUser, editUser, setDPPath, userType, history, edit
       <Container maxWidth='sm' className={classes.container}>
         <input onChange={dpChange} className={classes.input} id="icon-button-file" type="file" />
         <label htmlFor="icon-button-file">
+<<<<<<< HEAD
           {currentUser && <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? `https://localhost:44327/${currentUser.DPPath}` : `${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`} className={classes.large} />}
+=======
+          {currentUser&&<Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${currentUser.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${currentUser.DPPath}`} className={classes.large} />}
+>>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
         </label>
         <form>
           <TextField id="standard-basic" name='FullName' value={data.FullName} onChange={handleChange} style={{ width: '50%', marginBottom: '10px' }} label="Full Name" />

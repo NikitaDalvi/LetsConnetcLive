@@ -97,6 +97,8 @@ function CommissionTable(props) {
     let commissions = [];
     commision.map(i => commissions.push(i.ServiceCharges));
     let total = commissions.reduce(getSum, 0);
+    
+    let GstPrice= Math.round(total*18/100)
     return total;
   }
 

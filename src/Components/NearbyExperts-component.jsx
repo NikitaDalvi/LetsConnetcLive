@@ -2,7 +2,7 @@
 /*jshint -W087*/
 
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpertCard from './subComponents/ExpertCard-component';
@@ -44,6 +44,14 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       margin: {
         margin: theme.spacing(1),
       },
+      servicesFilter:{
+        maxHeight:'200px',
+        overflowY:'auto',
+        width:'100%',
+        '&::-webkit-scrollbar':{
+          display:'none'
+        }
+      }
     }));
 
 
@@ -71,6 +79,9 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     ServiceCharge:0,
     radius:'5'
   });
+  const [services,setServices] = useState([]);
+  const [servicesLoading,setServicesLoading] = useState(false);
+  const [filteredServices,setFilteredServices] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -112,6 +123,11 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
       };
 
+      async function fillServices(){
+        let result = await getServices();
+        setFilteredServices(result.data.output);
+        setServices(result.data.output);
+      }
 
 
 
@@ -123,6 +139,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       }
 
       getServiceTypes();
+          fillServices();
     }
   }, [currentUser, radius]);
 
@@ -137,17 +154,22 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     return setServiceTypes(res.data.output);
   }
 
-  useEffect(() => {
-    if (selectedServices.length !== 0) {
-      var filteredResult = [];
-      //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+  const getServices = async () => {
+    const res = await axios.post(`${API.URL}GetServices`,{ServiceTypeId:null,ticket:currentUser.Ticket});
+    return res;
+  };
 
-      selectedServices.forEach(item=>{
-        nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
-      })
-      setFilteredList(filteredResult);
-    }
-  }, [selectedServices]);
+  // useEffect(() => {
+  //   if (selectedServices.length !== 0) {
+  //     var filteredResult = [];
+  //     //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+  //
+  //     selectedServices.forEach(item=>{
+  //       nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
+  //     })
+  //     setFilteredList(filteredResult);
+  //   }
+  // }, [selectedServices]);
 
   // useEffect(()=>{
   //
@@ -310,6 +332,20 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   };
 
 
+  const handleSearch = async e => {
+    const {value} = e.target;
+    setServicesLoading(true);
+    let result = await searchService(value);
+    setFilteredServices(result);
+    setServicesLoading(false);
+  };
+
+  const searchService = value => {
+    let current = services;
+    current = current.filter(item => item.Services.toLowerCase().includes(value.toLowerCase()));
+    return current;
+  };
+
   return (
     <Container>
       <Backdrop className={classes.backdrop} open={loading} >
@@ -363,8 +399,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
         </Grid>
 
         <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'994':''}}>
-       
-        
+
+
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -425,6 +461,30 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
                 <FormControlLabel value={3} control={<Radio />} label="Full Time" />
               </RadioGroup>
             </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+        <Grid item xs={isMobile?'12':'4'} className={classes.gridItem} style={{zIndex:isMobile?'990':''}}>
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Filter by Service</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{display:'block'}}>
+            <TextField variant='outlined' label='Search service' style={{width:'100%',marginBottom:'10px'}} onChange={handleSearch}/>
+            <div className={classes.servicesFilter} style={{maxHeight:'200px',overflowY:'auto',width:'100%',overflowX:'none'}}>
+            {servicesLoading&&'Loading...'}
+            {!servicesLoading&&filteredServices&&filteredServices.map(item =>
+              <FormControlLabel
+              control={<Checkbox   name="checkedH" />}
+              label={item.Services}
+              style={{width:'100%'}}
+              />
+            )}
+            </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
         </Grid>

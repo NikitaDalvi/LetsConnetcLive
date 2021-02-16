@@ -5,7 +5,7 @@ function SubscriptionCard(props) {
 
   console.log(props)
   const calculatediscount = () => {
-    let { price, discount,PriceAfterGST } = props
+    let { price, discount } = props
     return price- (price * discount / 100)
 
   }

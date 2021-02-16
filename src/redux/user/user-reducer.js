@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 import {UserActionTypes} from './user-types';
 import {ChangeUserServiceStatus} from './user-utils';
 
@@ -67,6 +68,7 @@ const userReducer = (state=Initial_State, action) => {
     };
 
     case UserActionTypes.SET_PROFILE_PICTURE:
+
     return{
       ...state,
       currentUser:{...state.currentUser,DPPath:action.payload}

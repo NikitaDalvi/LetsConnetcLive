@@ -8,6 +8,9 @@ import { selectCurrentUser, selectIsHome,selectRegisteredUser } from '../redux/u
 import { setIsHome, setCurrentUser,setRegisteredUser, setUserType } from '../redux/user/user-actions';
 // import Content from "./subComponents/home-content";
 import { Typography, makeStyles, Button } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import { withRouter } from 'react-router-dom';
 import { Box } from "@material-ui/core";
 import { useMediaQuery } from 'react-responsive';
@@ -16,8 +19,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,setRegisteredUser,registeredUser }) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+  //'linear-gradient(239.6deg, rgba(187,96,252,0.6) 2.39%, rgba(255,83,67,0.6) 82.96%)'
 
   const useStyles = makeStyles(theme => ({
+    card:{
+      marginRight:'10px',
+      minWidth:'300px',
+      minHeight:'250px',
+      marginBottom:'10px',
+      color:'white'
+    },
     TypographyBrand: {
       textAlign: isMobile ? 'left' : 'right',
       color: 'gray',
@@ -80,18 +91,86 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
     <div>
       <img src={homeVector} style={{position:'absolute',top: '0', left: '500px', zIndex: '-9999', display: isMobile ? 'none' : '' }} />
       <div className='row mb-5' >
-        <div className={isMobile ? 'col-lg-12' : 'col-lg-4'} >
-          <Typography className={classes.TypographyBrand} variant="h6" gutterBottom>
-            Let's Connect
-      </Typography>
-          <Typography className={classes.TypographyStart} variant="h5" gutterBottom>
-            Your Business / Profession
-      </Typography>
+        <div className={isMobile ? 'col-lg-12' : 'col-lg-8'} style={{paddingTop:"120px",paddingLeft:'150px'}}>
+          <div style={{display:'flex',width:'100%',flexWrap:'wrap',paddingLeft:'50px'}}>
+            <Card className={classes.card} style={{background:'rgba(187,96,252,0.6)'}}>
+              <CardContent>
+                <Typography  color="textSecondary" gutterBottom>
+                  Word of the Day
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  bull
+                </Typography>
+                <Typography  color="textSecondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card className={classes.card} style={{background:'rgba(248,29,92,0.6)'}}>
+              <CardContent>
+                <Typography  color="textSecondary" gutterBottom>
+                  Word of the Day
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  bull
+                </Typography>
+                <Typography  color="textSecondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card className={classes.card} style={{background:'rgba(248,29,92,0.6)'}}>
+              <CardContent>
+                <Typography  color="textSecondary" gutterBottom>
+                  Word of the Day
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  bull
+                </Typography>
+                <Typography  color="textSecondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card className={classes.card} style={{background:'rgba(187,96,252,0.6)'}}>
+              <CardContent>
+                <Typography  color="textSecondary" gutterBottom>
+                  Word of the Day
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  bull
+                </Typography>
+                <Typography  color="textSecondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent>
+            </Card>
+       </div>
 
 
       <Button className={classes.buttonLeft} style={{marginBottom:isMobile?'50px':"",marginTop:isMobile?'50px':""}} onClick={() => { videoClick() }}>&#10095;</Button>
         </div>
-        <div className={isMobile ? 'col-lg-12' : 'col-lg-8'} style={{ textAlign: 'right' }}>
+        <div className={isMobile ? 'col-lg-12' : 'col-lg-4'} style={{ textAlign: 'right' }}>
           <img src={img} />
         </div>
       </div>

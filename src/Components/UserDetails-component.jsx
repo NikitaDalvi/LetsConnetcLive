@@ -396,8 +396,8 @@ function UserDetailPage({ expertId, currentUser }) {
       width:isMobile?'350px':''
     },
     large: {
-      width: theme.spacing(7),
-      height: theme.spacing(7),
+      width: theme.spacing(10),
+      height: theme.spacing(10),
     },
     paper: {
       padding: theme.spacing(2),
@@ -427,9 +427,8 @@ function UserDetailPage({ expertId, currentUser }) {
         <Grid item lg='6' md="12" sm="12" className={classes.profileSection}>
           <Paper elevation={2} className={classes.paper}>
             <Grid container style={{ marginBottom: '20px' }}>
-
               <Grid container direction="row" justify="space-between" alignItems={isMobile?'flex-start':"flex-end"} style={{ marginTop: '2rem' }} item xs={isMobile?'2':'4'} className={classes.gridItem}>
-              <Avatar alt="Remy Sharp" src={!process.env.NODE_ENV||process.env.NODE_ENV==='development'?`https://localhost:44327${expertDetails.BasicDetails.DPPath}`:`${process.env.REACT_APP_PROD_BASE_URL}${expertDetails.BasicDetails.DPPath}`} className={isMobile?'':classes.large} />
+              <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_PROD_BASE_URL}/${expertDetails.BasicDetails.DPPath}`} className={isMobile?'':classes.large} />
               </Grid>
               <Grid item xs={isMobile?'10':"auto"} style={{ padding: isMobile ? '30px 10px 0px 10px' : '30px 20px 0px' }}>
                 <Typography variant={isMobile ? 'h6' : 'h5'}>{expertDetails.BasicDetails.ServiceProvider}</Typography>
@@ -447,9 +446,15 @@ function UserDetailPage({ expertId, currentUser }) {
             <Typography variant='h6'>About me:</Typography>
             <Typography variant='body1'>{expertDetails.BasicDetails.Description ? expertDetails.BasicDetails.Description : 'No Description found'}.</Typography>
             <Typography variant='h6'>How do I charge?</Typography>
-
             <Typography variant='body1'>{expertDetails.BasicDetails.ServiceCharge ? `I charge per ${expertDetails.BasicDetails.ServiceCharge === 1 ? 'Hour' : expertDetails.BasicDetails.ServiceCharge === 2 ? 'Assignment' : `FullDay(${expertDetails.BasicDetails.WorkingDays===1?'Mon-Fri':'Mon-Sat'})`}` : ''}.</Typography>
+<<<<<<< HEAD
             
+=======
+            <Typography variant='h6'>Address List:</Typography>
+            {expertDetails&&expertDetails.BasicDetails.AddressList.map(
+              (item,index)=> <Typography variant='body1'>{`${index+1}.  ${item.Address}`}</Typography>
+            )}
+>>>>>>> cd0ef29f717cffbafabf71b898f9e6a34150bb0f
           </Paper>
         </Grid>
         <Grid item xs={isMobile?'12':'6'} className={classes.profileSection}>
