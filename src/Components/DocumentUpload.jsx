@@ -39,19 +39,24 @@ function DocumentUpload({
 }) {
   var SPitem = [];
   if(user){
-    if(user.UserRole===2 || user.UserRole===4){
-      SPitem = ["Adhaar Card", "Pan Card"];
+    if(user.UserRole===5 || user.UserRole===4){
+      SPitem = ["Adhaar Card","GSTNumber"];
     }else{
-      SPitem = [
-        "Company PAN Card",
-        "Incorporation Certificate/Incorporation proof",
-        "Udhyog Adhaar",
-        "CA Certificate",
-      ];
+      if (subsType === "Individual") {
+        SPitem = ["Adhaar Card", "Pan Card", "CA Certificate","GSTNumber"];
+      }
+      else{
+        SPitem = [
+          "Company PAN Card",
+          "Incorporation Certificate/Incorporation proof",
+          "Udhyog Adhaar",
+          "CA Certificate",
+        ];
+      }
     }
   }else{
     if (subsType === "Individual") {
-      SPitem = ["Adhaar Card", "Pan Card", "CA Certificate"];
+      SPitem = ["Adhaar Card", "Pan Card", "CA Certificate","GSTNumber"];
     } else {
       SPitem = [
         "Company PAN Card",
@@ -101,6 +106,12 @@ function DocumentUpload({
     type: 7,
     number: "",
   });
+
+  const [gstNumber,setGstNumber] = React.useState({
+    file: null,
+    type: 10,
+    number: "",
+  })
 
   function handleChange(event, id) {
     console.log("called");
@@ -219,15 +230,35 @@ function DocumentUpload({
         }
 
         break;
+        case "GSTNumber":
+          if (name === "file") {
+            let file = event.target.files[0];
+            setGstNumber((prevValue) => {
+              return {
+                ...prevValue,
+                file: file,
+              };
+            });
+          } else {
+            setGstNumber((prevValue) => {
+              return {
+                ...prevValue,
+                number: value,
+              };
+            });
+          }
+
+          break;
       default:
     }
   }
 
-  React.useEffect(() => {
-    if (user) {
-      setProgress(100);
-    }
-  }, [setProgress, user]);
+  // React.useEffect(() => {
+  //   if (user) {
+  //     setProgress(100);
+  //   }
+  //   setProgress(100);
+  // }, [setProgress, user]);
 
   const uploadDocuments = () => {
     if(userType==='Service-Provider'){
@@ -320,7 +351,7 @@ function DocumentUpload({
   console.log(subsType);
   console.log(Items);
   return (
-    <Container maxWidth="sm"> 
+    <Container maxWidth="sm">
       <Typography className={classes.title} variant="h4">
         KYC verification
       </Typography>
@@ -335,6 +366,7 @@ function DocumentUpload({
           validate={validation}
           change={handleChange}
           id={index}
+          userType={userType}
         />
       ))}
       <div style={{ textAlign: "center", marginBottom: "10px" }}>

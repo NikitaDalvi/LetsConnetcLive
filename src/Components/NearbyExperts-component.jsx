@@ -82,6 +82,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
   const [services,setServices] = useState([]);
   const [servicesLoading,setServicesLoading] = useState(false);
   const [filteredServices,setFilteredServices] = useState([]);
+  const [selectedFilterServices,setSelectedFilterServices] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -309,6 +310,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
 
 
+
   const handleNearby = async(radius) => {
     const request = {
       Radius: parseInt(radius),
@@ -353,6 +355,17 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     let current = services;
     current = current.filter(item => item.Services.toLowerCase().includes(value.toLowerCase()));
     return current;
+  };
+
+  const handleServiceSelect = e => {
+    const {value} = e.target;
+    let current = selectedFilterServices;
+    if(current.includes(value)){
+      current = current.filter(item => item!==value);
+    }else{
+      current.push(value);
+    }
+    
   };
 
   return (
@@ -488,7 +501,9 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             {servicesLoading&&'Loading...'}
             {!servicesLoading&&filteredServices&&filteredServices.map(item =>
               <FormControlLabel
+              onChange={handleServiceSelect}
               control={<Checkbox   name="checkedH" />}
+              value={item.Services}
               label={item.Services}
               style={{width:'100%'}}
               />
@@ -500,7 +515,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
       </Grid>
       <Grid container>
         {filteredList.map(item => <Grid item xs={isMobile?'12':'3'} className={classes.gridItem}>
-          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} ServiceGiven={item && item.ServiceGiven===1?'Onsite':item && item.ServiceGiven===2?'Remote':item && item.ServiceGiven===2?'onsiteorofflineboth': null}  resumename={`https://letnetworkdevstaging.obtainbpm.com/${item && item.ResumePath}`}/>
+          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} ServiceGiven={item && item.ServiceGiven===1?'Onsite':item && item.ServiceGiven===2?'Remote':item && item.ServiceGiven===2?'onsiteorofflineboth': null}  resumename={item && item.ResumePath} videopath={item&&item.IntroductoryVideoPath}/>
         </Grid>)}
       </Grid>
     </Container>
