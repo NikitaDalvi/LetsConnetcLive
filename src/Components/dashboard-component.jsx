@@ -173,7 +173,7 @@ const Dashboard = (props) => {
                 name="RATING"
                 quantity={
                   dashboardDetails !== null
-                    ? `${dashboardDetails.AvgRating}`
+                    ? `${Math.round (dashboardDetails.AvgRating)}`
                     : "5 &#10032;"
                 }
 
@@ -270,7 +270,7 @@ const Dashboard = (props) => {
                 name="RATING"
                 rating={
                   dashboardCustomerDetails !== null
-                    ? `${dashboardCustomerDetails.AvgRating}`
+                    ? `${Math.round(dashboardCustomerDetails.AvgRating)}`
                     : "5 &#10032;"
                 }
               />
