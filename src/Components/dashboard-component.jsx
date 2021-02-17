@@ -161,8 +161,8 @@ const Dashboard = (props) => {
                 name="COMMISSION DUE"
                 quantity={
                   dashboardDetails !== null
-                    ? dashboardDetails.CommissionDue
-                    : "50"
+                    ? Math.round(dashboardDetails.CommissionDue*100)/100
+                    : "0"
                 }
               />
             </Grid>
@@ -173,7 +173,7 @@ const Dashboard = (props) => {
                 name="RATING"
                 quantity={
                   dashboardDetails !== null
-                    ? `${Math.round (dashboardDetails.AvgRating)}`
+                    ? `${Math.round(dashboardDetails.AvgRating*10)/10}`
                     : "5 &#10032;"
                 }
 
@@ -270,7 +270,7 @@ const Dashboard = (props) => {
                 name="RATING"
                 rating={
                   dashboardCustomerDetails !== null
-                    ? `${Math.round(dashboardCustomerDetails.AvgRating)}`
+                    ? `${Math.round(dashboardCustomerDetails.AvgRating*10)/10}`
                     : "5 &#10032;"
                 }
               />
