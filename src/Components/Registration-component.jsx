@@ -17,7 +17,7 @@ import { useMediaQuery } from 'react-responsive';
 
 
 
-function Registration({setProgress,type,setIshome,history,userType,progress}){
+function Registration({setProgress,type,setIshome,history,userType,progress,registeredUser}){
 
     const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
@@ -48,9 +48,23 @@ function Registration({setProgress,type,setIshome,history,userType,progress}){
 
 
   useEffect(()=>{
-    console.log('called');
-    setProgress(0);
-  },[]);
+    if(registeredUser){
+      switch (registeredUser.status) {
+        case 0:
+          setProgress(0);
+          break;
+        case 1:
+          setProgress(50);
+          break;
+        case 2:
+          setProgress(100);
+          break;
+        default:
+
+      }
+    }
+
+  },[registeredUser]);
 
 
 //
@@ -215,7 +229,8 @@ return(
 const mapStateToProps = ({user}) =>({
   currentUser: user.currentUser,
   progress: user.progress,
-  userType:user.userType
+  userType:user.userType,
+  registeredUser:user.registeredUser
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -22,7 +22,7 @@ const [file,setFile] = React.useState('');
     title: {
       textAlign: "center",
     }
-    
+
 
   }));
 
@@ -37,18 +37,12 @@ function fileChange(event){
 
   return(
     <div style={{textAlign:'center'}}>
-     {props.item === 'Pan Card' &&<Typography className={classes.title} variant="h6"> 
-      Pan Card
-    </Typography>}
-    {props.item === 'Adhaar Card' &&<Typography className={classes.title} variant="h6"> 
-    Adhaar Card
-    </Typography>}
-    
-    
-    
+    <Typography className={classes.title} variant="h6">
+      {props.item}
+    </Typography>
     <FormControl className={classes.formControl}>
-      
-{ props.item !=="uploadDocuments"&&<Grid container>
+
+{ props.item !=="GSTNumber"&&<Grid container>
     <Grid item style={{marginBottom:'10px'}}>
     <OutlinedInput
          id="outlined-adornment-weight"
@@ -70,7 +64,7 @@ function fileChange(event){
     </label>
     </Grid>
 </Grid>}
-{props.item!=='CA Certificate'&&<TextField id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />}
+{props.item!=='CA Certificate'&&<TextField helperText={(props.userType==='Service-Provider'||props.userType===2||props.userType===3)&&props.item==='GSTNumber'?"Optional":''} id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />}
     </FormControl>
     <br/>
     </div>

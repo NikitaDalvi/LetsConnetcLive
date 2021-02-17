@@ -2,7 +2,8 @@
 import React,{useState} from 'react';
 import {connect} from 'react-redux';
 import {setExpertId} from '../../redux/user/user-actions';
-import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid,IconButton} from '@material-ui/core'
+import PropTypes from 'prop-types';
+import {Card,CardActionArea,CardActions,CardContent,CardMedia,makeStyles,Typography,Button,Grid,IconButton,Tab,Tabs,Paper,Box,AppBar} from '@material-ui/core'
 import Rating from '@material-ui/lab/Rating';
 import InfoIcon from '@material-ui/icons/Info';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
@@ -10,6 +11,7 @@ import profile from '../../Images/profile.jpg';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import { Document, Page } from 'react-pdf';
 import {withRouter} from 'react-router-dom';
 
 const useStyles = makeStyles(theme =>({
@@ -25,18 +27,70 @@ const useStyles = makeStyles(theme =>({
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
+   minHeight:'500px'
  },
  paper: {
    backgroundColor: theme.palette.background.paper,
    boxShadow: theme.shadows[5],
    padding: theme.spacing(2, 4, 3),
+   minHeight:'679px',
+   minWidth:'712px'
  },
+ tabRoot:{
+   flexGrow: 1,
+   width: '100%',
+   backgroundColor: theme.palette.background.paper,
+ }
 }));
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-auto-tab-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
+  };
+}
 
 
 function ExpertCard(props){
   const classes = useStyles();
   const [open,setOpen] = useState(false);
+  const [value, setValue] = useState(0);
+  const [numPages, setNumPages] = useState(null);
+ const [pageNumber, setPageNumber] = useState(0);
+
+ function onDocumentLoadSuccess({ numPages }) {
+   setNumPages(numPages);
+ }
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return(
     <Card className={classes.root}>
 
@@ -85,10 +139,37 @@ function ExpertCard(props){
     >
       <Fade in={open}>
         <div className={classes.paper}>
-        <video fluid={false} width='700' height='600' autoPlay controls>
-          <source src={`https://letnetworkdevstaging.obtainbpm.com${props.videopath}`}/>
-        </video>
-        <br/>
+          <div className={classes.tabRoot}>
+             <AppBar position="static" color="default">
+               <Tabs
+                 value={value}
+                 onChange={handleChange}
+                 indicatorColor="secondary"
+                 textColor="secondary"
+                 centered
+               >
+                 <Tab label="Video" {...a11yProps(0)} />
+                 <Tab label="Resume" {...a11yProps(1)} />
+               </Tabs>
+             </AppBar>
+             <TabPanel value={value} index={0}>
+               <video fluid={false} width='600' height='500' autoPlay controls>
+                 <source src={`https://letnetworkdevstaging.obtainbpm.com${props.videopath}`}/>
+               </video>
+             </TabPanel>
+             <TabPanel value={value} index={1} disabled={props.resumename?false:true}>
+               <div>
+                <p>The url is https://letnetworkdevstaging.obtainbpm.com/Attachment/1b119e52-7b26-4ece-b2bb-5de3b2f12dfe/Resume/KRAAuthorization.pdf</p>
+                 <Document
+                   file="https://letnetworkdevstaging.obtainbpm.com/Attachment/1b119e52-7b26-4ece-b2bb-5de3b2f12dfe/Resume/KRAAuthorization.pdf"
+                   onLoadSuccess={onDocumentLoadSuccess}
+                 >
+                   <Page pageNumber={pageNumber} />
+                 </Document>
+                 <p>Page {pageNumber} of {numPages}</p>
+               </div>
+             </TabPanel>
+          </div>
         <Button variant='outlined' onClick={()=>setOpen(false)}>Close</Button>
         </div>
       </Fade>
