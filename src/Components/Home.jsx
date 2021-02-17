@@ -95,73 +95,71 @@ function Home({ setIsHome, setCurrentUser, setUserType, currentUser, history,set
           <div style={{display:'flex',width:'100%',flexWrap:'wrap',paddingLeft:'50px'}}>
             <Card className={classes.card} style={{background:'rgba(187,96,252,0.6)'}}>
               <CardContent>
-                <Typography  color="textSecondary" gutterBottom>
-                  Word of the Day
+                <Typography component="h2">
+                  1.Time to unlock Your potential
                 </Typography>
-                <Typography variant="h5" component="h2">
-                  bull
+                <Typography component="h2">
+                  2.Time to Embrace the Change
                 </Typography>
-                <Typography  color="textSecondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
+                <Typography component="h2">
+                  3.Time to Work for Yourself
                   <br />
-                  {'"a benevolent smile"'}
+                  4.Lets people Search u<br/>
+                  5. Time Schedular<br/>
+                  6. Its Time for LetsConnect 
+
                 </Typography>
               </CardContent>
             </Card>
             <Card className={classes.card} style={{background:'rgba(248,29,92,0.6)'}}>
               <CardContent>
-                <Typography  color="textSecondary" gutterBottom>
-                  Word of the Day
+                <Typography  component="h2">
+                 1. Work from anywhere
                 </Typography>
-                <Typography variant="h5" component="h2">
-                  bull
+                <Typography component="h2">
+                 2. Earn during idle times
                 </Typography>
-                <Typography  color="textSecondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
+                <Typography component="h2">
+                  3. Personalized Work Dashboard
                   <br />
-                  {'"a benevolent smile"'}
+                  4. Get you Dashboard Today !<br/>
+                  5. Register Online & <br/>
+                      Dawonload u r App !
                 </Typography>
               </CardContent>
             </Card>
             <Card className={classes.card} style={{background:'rgba(248,29,92,0.6)'}}>
               <CardContent>
-                <Typography  color="textSecondary" gutterBottom>
-                  Word of the Day
+                
+              <Typography component="h2">
+                  1.Work from online/onsite
                 </Typography>
-                <Typography variant="h5" component="h2">
-                  bull
+                <Typography component="h2">
+                  2.Accept or Reject Request
                 </Typography>
-                <Typography  color="textSecondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
+                <Typography component="h2">
+                  3.Time to change working <br/>model
                   <br />
-                  {'"a benevolent smile"'}
+                  4.Profile Display with<br />
+                  5.Marketing poster & Video<br/>
+                  6.Effortless Search nearby
                 </Typography>
               </CardContent>
             </Card>
             <Card className={classes.card} style={{background:'rgba(187,96,252,0.6)'}}>
               <CardContent>
-                <Typography  color="textSecondary" gutterBottom>
-                  Word of the Day
+              <Typography component="h2">
+                  1.Setup U R Profile
                 </Typography>
-                <Typography variant="h5" component="h2">
-                  bull
+                <Typography component="h2">
+                  2.Let People Search 
                 </Typography>
-                <Typography  color="textSecondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2" component="p">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
+                <Typography component="h2">
+                  3.Hourly / daily or<br/>
+                 Assignment based
+                <br />
+                  4.Rating And Reviews<br/>
+                  5.Capture up 2 locations
                 </Typography>
               </CardContent>
             </Card>
