@@ -77,7 +77,8 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     ServiceType:null,
     ServiceGiven:0,
     ServiceCharge:0,
-    radius:'5'
+    radius:'5',
+    Service:[]
   });
   const [services,setServices] = useState([]);
   const [servicesLoading,setServicesLoading] = useState(false);
@@ -267,12 +268,21 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     if(name==='Rating'||name==='ServiceGiven'||name==='ServiceCharge'){
           currentFilters[name] = parseInt(value);
     }else{
-      if(value===""){
-        currentFilters[name] = null;
+      if(name==='Service'){
+        let currentServices = currentFilters.Service;
+        if(currentServices.includes(value)){
+          currentServices = currentServices.filter(item => item!==value);
+        }else{
+          currentServices.push(value);
+        }
+        currentFilters.Service= currentServices;
       }else{
-        currentFilters[name] = value;
+        if(value===""){
+          currentFilters[name] = null;
+        }else{
+          currentFilters[name] = value;
+        }
       }
-
     }
     setFilterApplied(currentList);
     setFilters(currentFilters);
@@ -302,6 +312,9 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
           }
         });
         filterResult = array;
+      }
+      if(currentList.includes('Service')&&currentFilters.Service.length>0){
+        filterResult = handleServiceSelect(currentFilters.Service,filterResult);
       }
     }
     setFilteredList(filterResult);
@@ -357,15 +370,28 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
     return current;
   };
 
-  const handleServiceSelect = e => {
-    const {value} = e.target;
-    let current = selectedFilterServices;
-    if(current.includes(value)){
-      current = current.filter(item => item!==value);
-    }else{
-      current.push(value);
-    }
-    
+  const handleServiceSelect = (current,list) => {
+    //setLoading(true);
+    // const {value} = e.target;
+    // let current = selectedFilterServices;
+    // if(current.includes(value)){
+    //   current = current.filter(item => item!==value);
+    // }else{
+    //   current.push(value);
+    // }
+    let filtered=[];
+    const setFilter = expert => {
+      if(!filtered.includes(expert)){
+        filtered.push(expert);
+      }
+    };
+    list.forEach((expert, i) => {
+      expert.servicesList.map(service => current.includes(service.Services)?setFilter(expert):'');
+    });
+    return filtered;
+    // setSelectedFilterServices(current);
+    // setFilteredList(filtered);
+    // setLoading(false);
   };
 
   return (
@@ -398,7 +424,7 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'996':''}}>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'996':'1000'}}>
           <ExpansionPanel className={classes.panel}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -501,8 +527,9 @@ function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
             {servicesLoading&&'Loading...'}
             {!servicesLoading&&filteredServices&&filteredServices.map(item =>
               <FormControlLabel
-              onChange={handleServiceSelect}
-              control={<Checkbox   name="checkedH" />}
+              onChange={applyFilter}
+              control={<Checkbox   name="Service" />}
+              name='Service'
               value={item.Services}
               label={item.Services}
               style={{width:'100%'}}
