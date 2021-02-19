@@ -57,7 +57,7 @@ export const removeTimeSlot = (availabilityList, object) => {
 
   if(existingDay){
     return availabilityList.map(item => item.WorkingDays === object.day?{
-      ...item,TimeSlotDetails:item.TimeSlotDetails.filter(slot => slot.TimeslotId !== object.Id)
+      ...item,TimeSlotDetails:item.TimeSlotDetails.filter(slot => slot.Id !== object.Id)
     }:item);
   }
   return   availabilityList;

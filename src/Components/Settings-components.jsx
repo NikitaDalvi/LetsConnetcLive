@@ -5,18 +5,22 @@ import { Switch, Route} from "react-router-dom";
 import ChangePassword from './changePassword-component';
 import Deactivation from './Deactivation-component';
 import MySubscription from './MySubscription-component';
+import { useMediaQuery } from 'react-responsive';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > * + *': {
-      marginLeft: theme.spacing(2),
-    },
-    marginTop:'3%'
-  }
 
-}));
 
 function Settings(){
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+    const useStyles = makeStyles((theme) => ({
+      root: {
+        '& > * + *': {
+          marginLeft: isMobile?theme.spacing(3):theme.spacing(2),
+        },
+        marginTop:'3%'
+      }
+
+    }));
   const classes = useStyles();
   return(
     <Container>
@@ -29,6 +33,9 @@ function Settings(){
   </Link>
   <Link  color="inherit" className={classes.link} href='/UserPage/Settings/Deactivation' >
     Deactivation
+  </Link>
+  <Link color="inherit" className={classes.link} href='/UserPage/Settings/Notification'>
+    Notification
   </Link>
 </Typography>
 <br/>

@@ -11,6 +11,16 @@ export const editCurrentUser = user => ({
   payload:user
 });
 
+export const editResume = resume => ({
+  type:UserActionTypes.EDIT_RESUME,
+  payload:resume
+});
+
+export const editVideo = video => ({
+  type:UserActionTypes.EDIT_VIDEO,
+  payload:video
+});
+
 export const setIsHome = value => ({
   type:UserActionTypes.SET_ISHOME,
   payload:value
@@ -51,6 +61,7 @@ export const setDashboardDetails = object => ({
   payload:object
 });
 
+
 export const setProfessionalList = value => ({
   type:UserActionTypes.SET_PROFESSIONAL_LIST,
   payload:value
@@ -81,3 +92,8 @@ export const setExpertId = value =>({
   type:UserActionTypes.SET_EXPERT_ID,
   payload:value
 });
+
+export const setServicesAdded = value => ({
+  type:UserActionTypes.SET_SERVICES_ADDED,
+  payload:value
+})

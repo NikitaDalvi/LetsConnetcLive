@@ -1,460 +1,509 @@
 /*jshint esversion:9*/
-import React,{useState,useEffect} from 'react';
-import 'date-fns';
-import {Grid,Checkbox,Typography,TextField,makeStyles,FormControl,InputLabel,Select,MenuItem} from '@material-ui/core';
-import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardTimePicker,MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {connect} from 'react-redux';
-import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from '../../redux/user/user-selector';
-import {selectServiceType,selectWorkingHours} from '../../redux/service/service-selector';
-import {addAvailability,removeTimeslot} from '../../redux/service/service-actions';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import { v4 as uuidv4 } from 'uuid';
+/*jshint -W087*/
+import React, { useState, useEffect } from "react";
+import "date-fns";
+import {
+  Grid,
+  Checkbox,
+  Typography,
+  TextField,
+  makeStyles,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Backdrop
+} from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "../../redux/user/user-selector";
+import {
+  selectServiceType,
+  selectWorkingHours,
+} from "../../redux/service/service-selector";
+import {
+  addAvailability,
+  removeTimeslot,
+  removeAvailability,
+  setServicesProgress
+} from "../../redux/service/service-actions";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import { v4 as uuidv4 } from "uuid";
+import { API } from '../../API';
+import loader from '../../Images/loader.gif'
+import axios from 'axios';
+import moment from "moment";
+import { useMediaQuery } from 'react-responsive';
 
-function DayTime({workingHours,currentUser,serviceTypeId,addWorkingHours,day,removeTimeSlot,alert,savedDays}){
+function DayTime({
+  workingHours,
+  currentUser,
+  serviceTypeId,
+  addWorkingHours,
+  day,
+  removeTimeSlot,
+  alert,
+  savedDays,
+  removeAvailability,
+  typeId,
+  invalidFormat,
+  setProgress
+}) {
+  const [slot, setSlot] = useState({
+    // ServiceProviderId:'',
+    // ServiceTypeId:'',
 
-const [slot,setSlot] = useState({
-  ServiceProviderId:'',
-  ServiceTypeId:'',
-  WorkingDays:'',
-  TimeSlotDetails:{
-    TimeslotId:'',
-    StartTime:'',
-    StartAMPM:'',
-    EndTime:'',
-    EndAMPM:''
-  }
-});
-// const [timeSlot,setTimeSlot] = useState({
-//   startTime:'',
-//   endTime:'',
-//   buffer:''
-// });
-const [startTime, setStartTime] = useState(null);
-const [endTime, setEndTime] = useState(null);
-const [buffer, setBuffer] = useState('');
-const [disable,setDisable] = useState(true);
-const [timeslots,setTimeslots] = useState([]);
-const [checked,setChecked] = useState(false);
-const [WeekDay,setWeekDay] = useState('');
-const [error,setError] = useState(false);
-const [bufferError,setBufferError] = useState(false);
-const [existence,setExistence] = useState(false);
-
-
-
-const handleCheck = (event) => {
-  var checkBox = event.target;
-  var name = event.target.name;
-
-  if(checkBox.checked){
-    setSlot(prevValue => {return {...prevValue,WorkingDays:name};});
-    setChecked(true);
-    setDisable(false);
-  }else{
-    setSlot(prevValue => {return {...prevValue,WorkingDays:''};});
-      setChecked(false);
-    setDisable(true);
-  }
-};
-
-// const handleChange = event => {
-//   const {name,value} = event.target;
-//   setBuffer(value);
-//   setSlot(prevValue => {return{
-//     ...prevValue,
-//     TimeSlotDetails:{
-//       ...prevValue.TimeSlotDetails,
-//       [name]:value
-//     }
-//   };});
-// };
-
-const onStartChange = event => {
-  const{value} = event.target;
-  setStartTime(value);
-  setSlot(prevValue => {return{
-    ...prevValue,
-    TimeSlotDetails:{
-      ...prevValue.TimeSlotDetails,
-      TimeslotId:uuidv4(),
-      StartTime:value
-    }
-  };});
-  console.log(slot.TimeSlotDetails);
-};
-
-const onStartAMPM = event => {
-  const {value}=event.target;
-  setSlot(prevValue => {return{
-    ...prevValue,
-    TimeSlotDetails:{
-      ...prevValue.TimeSlotDetails,
-      StartAMPM:value
-    }
-  };});
-  console.log(slot.TimeSlotDetails);
-};
-
-const onEndChange = event => {
-    const{value} = event.target;
-  setEndTime(value);
-  console.log(slot);
-  setSlot(prevValue => {return{
-    ...prevValue,
-    TimeSlotDetails:{
-      ...prevValue.TimeSlotDetails,
-      EndTime:value
-    }
-  };});
-};
-
-const onEndAMPM = event => {
-  const {value}=event.target;
-  setSlot(prevValue => {return{
-    ...prevValue,
-    TimeSlotDetails:{
-      ...prevValue.TimeSlotDetails,
-      EndAMPM:value
-    }
-  };});
-  console.log(slot.TimeSlotDetails);
-};
-
-const handleClick = () => {
-  // const StartTime = startTime.toString();
-  // const EndTime = endTime.toString();
-  // const timeSlot = {
-  //   startTime: StartTime.slice(16,21),
-  //   endTime: EndTime.slice(16,21),
-  //   buffer: buffer
-  // };
-  const Slot = {
-    ...slot,
-    TimeSlotDetails:{
-      TimeslotId:slot.TimeSlotDetails.TimeslotId,
-      StartTime:`${slot.TimeSlotDetails.StartTime} ${slot.TimeSlotDetails.StartAMPM}`,
-      EndTime:`${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`
-    }
-  };
-debugger
-  console.log(Slot);
-  if(startTime === null || endTime === null){
-    setError(true);
-    return;
-  }else{
-    setError(false);
-  }
-debugger
-if(timeslots.length < 2){
-  console.log(slot);
-
-addWorkingHours(Slot);
-}else{
-  return alert();
-}
-
-  //
-  // setSlot({
-  //   ServiceProviderId:'',
-  //   ServiceTypeId:'',
-  //   WorkingDays:'',
-  //   TimeSlot:null
+    WorkingDays: "",
+    TimeSlotDetails: {
+      Id:null,
+      StartTime: "",
+      StartAMPM: "",
+      EndTime: "",
+      EndAMPM: "",
+    },
+  });
+  // const [timeSlot,setTimeSlot] = useState({
+  //   startTime:'',
+  //   endTime:'',
+  //   buffer:''
   // });
-};
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [buffer, setBuffer] = useState("");
+  const [disable, setDisable] = useState(true);
+  const [timeslots, setTimeslots] = useState([]);
+  const [checked, setChecked] = useState(false);
+  const [WeekDay, setWeekDay] = useState("");
+  const [error, setError] = useState(false);
+  const [bufferError, setBufferError] = useState(false);
+  const [existence, setExistence] = useState(false);
+  const [loading,setLoading] = useState(false);
 
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 
-const removeTimeslot = (Id) => {
-  const object ={
-    day:day,
-    Id:Id
+  const handleCheck = (event) => {
+    var checkBox = event.target;
+    var name = event.target.name;
+
+    if (checkBox.checked) {
+      setSlot((prevValue) => {
+        return { ...prevValue, WorkingDays: Number(name) };
+      });
+      setChecked(true);
+      setDisable(false);
+    } else {
+      removeAvailability(day);
+      setSlot({
+        WorkingDays: "",
+        TimeSlotDetails: {
+          Id:null,
+          StartTime: "",
+          StartAMPM: "",
+          EndTime: "",
+          EndAMPM: "",
+        },
+      });
+      setTimeslots([]);
+      setChecked(false);
+      setDisable(true);
+    }
   };
-  removeTimeSlot(object);
-};
 
-useEffect(() => {
-  if(currentUser!= null){
-    setSlot(prevValue => {return{
-      ...prevValue,
-      ServiceProviderId:currentUser.Id,
-      ServiceTypeId:serviceTypeId
-    };});
-  }
+  // const handleChange = event => {
+  //   const {name,value} = event.target;
+  //   setBuffer(value);
+  //   setSlot(prevValue => {return{
+  //     ...prevValue,
+  //     TimeSlotDetails:{
+  //       ...prevValue.TimeSlotDetails,
+  //       [name]:value
+  //     }
+  //   };});
+  // };
 
-},[serviceTypeId,currentUser]);
+  const onStartChange = (event) => {
+    //const{value} = event.target;
+  //  const Day = workingHours.find((item) => item.WorkingDays === day);
+    setStartTime(event);
+    setSlot((prevValue) => {
+      return {
+        ...prevValue,
+        TimeSlotDetails: {
+          ...prevValue.TimeSlotDetails,
+          StartTime: moment(event).format("hh:mm A"),
+        },
+      };
+    });
+    console.log(slot.TimeSlotDetails);
+    console.log(event);
+  };
 
+  const onStartAMPM = (event) => {
+    //const { value } = event.target;
+    setSlot((prevValue) => {
+      return {
+        ...prevValue,
+        TimeSlotDetails: {
+          ...prevValue.TimeSlotDetails,
+          StartAMPM: event,
+        },
+      };
+    });
+    console.log(slot.TimeSlotDetails);
+  };
 
-useEffect(() => {
+  const onEndChange = (event) => {
+    // const{value} = event.target;
+    setEndTime(event);
+    console.log(moment(event).format("hh:mm A"));
+    setSlot((prevValue) => {
+      return {
+        ...prevValue,
+        TimeSlotDetails: {
+          ...prevValue.TimeSlotDetails,
+          EndTime: moment(event).format("hh:mm A"),
+        },
+      };
+    });
+  };
 
-if(day!=null){
-debugger
-  if(workingHours.length!==0){
-    const Day = workingHours.find(item => item.WorkingDays === day);
-    if(Day!=null){
-        setTimeslots(Day.TimeSlotDetails);
-        setSlot(prevValue => {return{
-          ...prevValue,
-            WorkingDays:day
-        };});
+  const onEndAMPM = (event) => {
+    //const { value } = event.target;
+    setSlot((prevValue) => {
+      return {
+        ...prevValue,
+        TimeSlotDetails: {
+          ...prevValue.TimeSlotDetails,
+          EndAMPM: event,
+        },
+      };
+    });
+    console.log(slot.TimeSlotDetails);
+  };
+
+  const handleClick = () => {
+
+    // const StartTime = startTime.toString();
+    // const EndTime = endTime.toString();
+    // const timeSlot = {
+    //   startTime: StartTime.slice(16,21),
+    //   endTime: EndTime.slice(16,21),
+    //   buffer: buffer
+    // };
+    let min1 = slot.TimeSlotDetails.StartTime.split(':')[1];
+    let min2 = slot.TimeSlotDetails.EndTime.split(':')[1];
+
+    // let diff = null;
+    // if(parseInt(min1.split(' ')[0])>parseInt(min2.split(' ')[0])){
+    //         diff = parseInt(min1.split(' ')[0])-parseInt(min2.split(' ')[0]);
+    // }else{
+    //   diff = parseInt(min2.split(' ')[0])-parseInt(min1.split(' ')[0]);
+    // }
+    debugger;
+
+      const Slot = {
+        ...slot,
+        TimeSlotDetails: {
+          StartTime: `${slot.TimeSlotDetails.StartTime} ${slot.TimeSlotDetails.StartAMPM}`,
+          EndTime: `${slot.TimeSlotDetails.EndTime} ${slot.TimeSlotDetails.EndAMPM}`,
+        },
+
+      };
+
+      console.log(Slot);
+      if (startTime === null || endTime === null) {
+        setError(true);
+        setChecked(false);
+
+        return;
+      } else {
+        setError(false);
         setChecked(true);
-        setDisable(false);
 
-        if(savedDays.length !== 0){
-          const exist = savedDays.find(Day => Day === day);
-          if(exist){
-            setExistence(true);
-            setDisable(true);
+      }
+    if((parseInt(min1.split(' ')[0])===0||parseInt(min1.split(' ')[0])===30)&&(parseInt(min2.split(' ')[0])===0||parseInt(min2.split(' ')[0])===30)){
+      if (timeslots.length < 2) {
+        setLoading(true);
+        console.log(slot);
+        let timeSlot={
+          StartTime:slot.TimeSlotDetails.StartTime,
+          EndTime:slot.TimeSlotDetails.EndTime
+        };
+        let req = {
+          ServiceTypeId:typeId,
+          WorkingDays:slot.WorkingDays,
+          TimeSlotDetails:timeSlot,
+          ticket:currentUser.Ticket
+        };
+        console.log(req);
+        AddSlot(req)
+        .then(res => {
+          console.log(res);
+          let slot = Slot;
+          slot.TimeSlotDetails.Id = res.data.output.TimeSlotId;
+          addWorkingHours(slot);
+          if (currentUser.isLocationsAdded) {
+            setProgress(100);
+          } else {
+            setProgress(66);
+          }
+          setLoading(false);
+        })
+        .catch(err=> {
+          setLoading(false);
+          alert('Some error occured!');
+        });
+
+      } else {
+        return alert();
+      }
+    }else{
+            invalidFormat();
+          }
+
+
+      setSlot({
+        ServiceProviderId:'',
+        ServiceTypeId:'',
+        WorkingDays:'',
+        TimeSlot:null
+      });
+      setStartTime(null);
+      setEndTime(null);
+
+  };
+
+  const AddSlot = async req => {
+    let result = await axios.post(`${API.URL}SaveWorkingHours`, req);
+    return result;
+  };
+
+  const removeTimeslot = (Id) => {
+    setLoading(true);
+    const object = {
+      day: day,
+      Id: Id,
+    };
+
+    let req = {
+      TimeSlotId:Id,
+      SerAvailibiltyId:slot.Id,
+      ticket:currentUser.Ticket
+    };
+    console.log(req);
+    removeSlot(req)
+    .then(res => {
+      console.log(res);
+      removeTimeSlot(object);
+      setChecked(false);
+        setLoading(false);
+    })
+    .catch(err => {
+        setLoading(false);
+      alert('error occured!');
+    });
+
+
+
+  };
+
+  const removeSlot = async req => {
+    let result = await axios.post(`${API.URL}DeleteTimeSlot`, req);
+    return result;
+  };
+
+  useEffect(() => {
+    if (currentUser != null) {
+      setSlot((prevValue) => {
+        return {
+          ...prevValue,
+          ServiceProviderId: currentUser.Id,
+          ServiceTypeId: serviceTypeId,
+        };
+      });
+    }
+  }, [serviceTypeId, currentUser]);
+
+  useEffect(() => {
+
+    if (day != null) {
+      if (workingHours.length !== 0) {
+        const Day = workingHours.find((item) => item.WorkingDays === day);
+        console.log(Day);
+        if (Day != null) {
+          setTimeslots(Day.TimeSlotDetails);
+          setSlot((prevValue) => {
+            return {
+              ...prevValue,
+              WorkingDays: day,
+              Id:Day.Id
+            };
+
+          });
+          setChecked(true);
+          setDisable(false);
+
+          if (savedDays.length !== 0) {
+            const exist = savedDays.find((Day) => Day == day);
+            if (exist) {
+              setExistence(true);
+              setDisable(true);
+            }
           }
         }
+      }
     }
-  }
-// if(selectedDays.length !== 0 ){
-//   switch (day) {
-//     case 'Sunday':
-//     const sundayExist=selectedDays.find(day =>  day.WorkingDays===7);
-//     if(sundayExist){
-//       setChecked(true);
-//       setExistence(true);
-//       setDisable(true);
-//     }
-//       setWeekDay('Sun');
-//       break;
-//       case 'Monday':
-//         const mondayExist=selectedDays.find(day =>  day.WorkingDays===1);
-//         if(mondayExist){
-//           setChecked(true);
-//           setExistence(true);
-//           setDisable(true);
-//         }
-//         setWeekDay('Mon');
-//         break;
-//       case 'Tuesday':
-//       const tuesdayExist=selectedDays.find(day =>  day.WorkingDays===2);
-//       if(tuesdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Tue');
-//         break;
-//       case 'Wednesday':
-//       const wednesdayExist=selectedDays.find(day =>  day.WorkingDays===3);
-//       if(wednesdayExist){
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Wed');
-//         break;
-//       case 'Thursday':
-//       const thursdayExist=selectedDays.find(day =>  day.WorkingDays===4);
-//       if(thursdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Thu');
-//         break;
-//       case 'Friday':
-//       const fridayExist=selectedDays.find(day =>  day.WorkingDays===5);
-//       if(fridayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Fri');
-//         break;
-//       case 'Saturday':
-//       const saturdayExist=selectedDays.find(day =>  day.WorkingDays===6);
-//       if(saturdayExist){
-//         setChecked(true);
-//         setExistence(true);
-//         setDisable(true);
-//       }
-//         setWeekDay('Sat');
-//         break;
-//     default:
-//
-//   }
-// }
+  }, [day, savedDays, workingHours, setExistence]);
 
-}
+  const useStyles = makeStyles((theme) => ({
+    picker: {
+      margin: "0 10px 10px 10px",
+    },
+    addBtn: {
+      margin: "8px 10px 5px 10px",
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    AMPM: {
+      margin: theme.spacing(1),
+      paddingTop: "15px",
+    },
+  }));
 
-},[day, savedDays,workingHours,setExistence]);
-
-
-
-const useStyles = makeStyles((theme) => ({
-  picker:{
-    margin:'0 10px 10px 10px'
-  },
-  addBtn:{
-    margin:'8px 10px 5px 10px'
-  },
-  formControl: {
-   margin: theme.spacing(1),
-   minWidth: 120,
- },
- AMPM:{
-   margin: theme.spacing(1),
-   paddingTop:'15px'
- }
-
-}));
-
-const classes = useStyles();
-  return(
+  const classes = useStyles();
+  return (
     <Grid container>
       <Grid item xs={2}>
         <Grid container>
-          <Grid item xs={3}>
-          <Checkbox
-         onChange={handleCheck}
-         checked={checked}
-         color="default"
-         inputProps={{ 'aria-label': 'checkbox with default color' }}
-         name={day}
-         disabled={existence}
-       />
+          <Grid item xs={isMobile?6:3}>
+            <Checkbox
+              onChange={handleCheck}
+              checked={checked}
+              color="default"
+              inputProps={{ "aria-label": "checkbox with default color" }}
+              name={day}
+            />
           </Grid>
           <Grid item xs={6}>
-            <Typography style={{width:'50%',margin:'8px 10px 5px 10px'}} variant='h5'>{day === 'Monday'?'Mon':day==='Tuesday'?'Tue':day==='Wednesday'?'Wed':day==='Thursday'?'Thu':day === 'Friday'?'Fri':day==='Saturday'?'Sat':day==='Sunday'?'Sun':''}</Typography>
+            <Typography
+              style={{ width: "50%", margin: "8px 10px 5px 10px" }}
+              variant="h5"
+            >
+              {day == 1
+                ? "Mon"
+                : day == 2
+                ? "Tue"
+                : day == 3
+                ? "Wed"
+                : day == 4
+                ? "Thu"
+                : day == 5
+                ? "Fri"
+                : day == 6
+                ? "Sat"
+                : day == 7
+                ? "Sun"
+                : 0}
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={9}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container>
-          <Grid item xs={4}>
-          <FormControl className={classes.formControl}>
-       <InputLabel id="demo-simple-select-label">Start Time</InputLabel>
-       <Select
-         labelId="demo-simple-select-label"
-         id="demo-simple-select"
-         onChange={onStartChange}
-         value={slot.TimeSlotDetails.StartTime}
-       >
-         <MenuItem value={'12:00'}>12:00</MenuItem>
-         <MenuItem value={'1:00'}>1:00</MenuItem>
-         <MenuItem value={'2:00'}>2:00</MenuItem>
-         <MenuItem value={'3:00'}>3:00</MenuItem>
-         <MenuItem value={'4:00'}>4:00</MenuItem>
-         <MenuItem value={'5:00'}>5:00</MenuItem>
-         <MenuItem value={'6:00'}>6:00</MenuItem>
-         <MenuItem value={'7:00'}>7:00</MenuItem>
-         <MenuItem value={'8:00'}>8:00</MenuItem>
-         <MenuItem value={'9:00'}>9:00</MenuItem>
-         <MenuItem value={'10:00'}>10:00</MenuItem>
-         <MenuItem value={'11:00'}>11:00</MenuItem>
-       </Select>
-     </FormControl>
-     <FormControl className={classes.AMPM}>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    onChange={onStartAMPM}
-    value={slot.TimeSlotDetails.StartAMPM}
-  >
-    <MenuItem value={'PM'}>PM</MenuItem>
-    <MenuItem value={'AM'}>AM</MenuItem>
-  </Select>
-</FormControl>
-          </Grid>
-          <Grid item xs={4}>
-          <FormControl className={classes.formControl}>
-       <InputLabel id="demo-simple-select-label">End Time</InputLabel>
-       <Select
-       value={slot.TimeSlotDetails.EndTime}
-         labelId="demo-simple-select-label"
-         id="demo-simple-select"
-         onChange={onEndChange}
-       >
-         <MenuItem value={'12:00'}>12:00</MenuItem>
-         <MenuItem value={'1:00'}>1:00</MenuItem>
-         <MenuItem value={'2:00'}>2:00</MenuItem>
-         <MenuItem value={'3:00'}>3:00</MenuItem>
-         <MenuItem value={'4:00'}>4:00</MenuItem>
-         <MenuItem value={'5:00'}>5:00</MenuItem>
-         <MenuItem value={'6:00'}>6:00</MenuItem>
-         <MenuItem value={'7:00'}>7:00</MenuItem>
-         <MenuItem value={'8:00'}>8:00</MenuItem>
-         <MenuItem value={'9:00'}>9:00</MenuItem>
-         <MenuItem value={'10:00'}>10:00</MenuItem>
-         <MenuItem value={'11:00'}>11:00</MenuItem>
-       </Select>
-     </FormControl>
+      <Grid item xs={isMobile?12:9}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid container>
+            <Grid item xs={isMobile?5:4}>
+              <FormControl className={classes.formControl}>
+                <KeyboardTimePicker
+                  margin="normal"
+                  id="time-picker"
+                  format = "hh:mm a"
+                  //label="Start Time"
+                  value={startTime}
+                  onChange={onStartChange}
+                  minutesStep={30}
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                />
+              </FormControl>
+            </Grid>
 
-     <FormControl className={classes.AMPM}>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    value={slot.TimeSlotDetails.EndAMPM}
-    onChange={onEndAMPM}
-  >
-    <MenuItem value={'PM'}>PM</MenuItem>
-    <MenuItem value={'AM'}>AM</MenuItem>
-  </Select>
-</FormControl>
+            <Grid item xs={isMobile?5:4}>
+              <FormControl className={classes.formControl}>
+                <KeyboardTimePicker
+                  margin="normal"
+                  id="time-picker"
+                  format = "hh:mm a"
+                  // label="End Time"
+                  value={endTime}
+                  onChange={onEndChange}
+
+                  minutesStep={30}
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={2}>
+              <Fab
+                size="small"
+                className={classes.addBtn}
+                color="secondary"
+                aria-label="add"
+                onClick={handleClick}
+              >
+                <AddIcon />
+              </Fab>
+            </Grid>
           </Grid>
-          <Grid item xs={2}>
-          <Fab size="small" disabled={disable} className={classes.addBtn} color="secondary" aria-label="add" onClick={handleClick}>
-            <AddIcon />
-          </Fab>
-          </Grid>
-        </Grid>
-      </MuiPickersUtilsProvider>
-      {timeslots.map((item,index) =><div key={index} style={{marginBottom:'5px',padding:'8px'}}> <Typography variant='body1'>From:{item.StartTime} - To:{item.EndTime}  <RemoveCircleIcon style={{display:disable?'none':''}} type='button' color='secondary' onClick={() => {removeTimeslot(item.TimeslotId);}}/></Typography></div>)}
+        </MuiPickersUtilsProvider>
+        {timeslots.map((item, index) => (
+          <div key={index} style={{ marginBottom: "5px", padding: "8px" }}>
+            {" "}
+            <Typography variant="body1">
+              From:{item.StartTime} - To:
+              {item.EndTime}{" "}
+              <RemoveCircleIcon
+                type="button"
+                color="secondary"
+                onClick={() => {
+                  removeTimeslot(item.Id);
+                }}
+              />
+            </Typography>
+          </div>
+        ))}
       </Grid>
-
+      <Backdrop className={classes.backdrop} open={loading} style={{ zIndex: '9999' }}>
+        <img src={loader} alt='loading' style={{ opacity: '1' }} width='200' height='200' />
+      </Backdrop>
     </Grid>
-  )
-
-
-
+  );
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser : selectCurrentUser,
+  currentUser: selectCurrentUser,
   serviceTypeId: selectServiceType,
-  workingHours: selectWorkingHours
-})
+  workingHours: selectWorkingHours,
+});
 
-const mapDispatchToProps = dispatch => ({
-  addWorkingHours : slot => dispatch(addAvailability(slot)),
-  removeTimeSlot: slot => dispatch(removeTimeslot(slot))
-})
+const mapDispatchToProps = (dispatch) => ({
+  addWorkingHours: (slot) => dispatch(addAvailability(slot)),
+  removeTimeSlot: (slot) => dispatch(removeTimeslot(slot)),
+  removeAvailability: (day)=> dispatch(removeAvailability(day)),
+    setProgress: value => dispatch(setServicesProgress(value)),
+});
 
-export default connect(mapStateToProps,mapDispatchToProps)(DayTime);
-
-
-
-// <div className="form-row ml-4">
-// <div className="col-lg-3 ml-2" >
-//   <input name={this.props.day}  onClick={this.handleCheck} type="checkbox" className=" col-lg-1" style={{cursor:'pointer'}}/>
-//   <label className=" col-lg-3"  style={{fontSize:"20px", textAlign:"left", color:"#4B66EA"}}>{this.props.day}</label>
-// </div>
-// <div className="col-lg-8 form-row ml-5" id={this.props.day} >
-//   <div className="col-lg-5" style={{marginLeft:"20px"}}>
-//   <TimePicker
-//       name="startTime"
-//       onChange={this.onStartChange}
-//       value={this.state.startTime}
-//       disabled={this.state.checked===this.props.day? false:true}
-//     />
-//     </div>
-//     <span>:</span>
-//     <div className="col-lg-5">
-//     <TimePicker
-//     name="endTime"
-//       onChange={this.onEndChange}
-//       value={this.state.endTime}
-//       disabled={this.state.checked===this.props.day? false:true}
-//     />
-//       </div>
-//
-// </div>
-// </div>
-// <br/>
+export default connect(mapStateToProps, mapDispatchToProps)(DayTime);

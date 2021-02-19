@@ -1,195 +1,222 @@
 /*jshint esversion :9*/
+/*jshint -W087*/
 
-import React,{useEffect,useState} from 'react';
-import {Container,Grid,makeStyles,ExpansionPanel,ExpansionPanelSummary,ExpansionPanelDetails,Typography,Checkbox,FilledInput,FormControl,InputAdornment,InputLabel,IconButton,Backdrop,CircularProgress,RadioGroup,FormControlLabel,Radio } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Container, Grid, makeStyles, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Checkbox, FilledInput, FormControl, InputAdornment, InputLabel, IconButton, Backdrop, CircularProgress, RadioGroup, FormControlLabel, Radio, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpertCard from './subComponents/ExpertCard-component';
 import axios from 'axios';
-import {connect} from 'react-redux';
-import {createStructuredSelector} from 'reselect';
-import {selectCurrentUser} from '../redux/user/user-selector';
-import {selectNearbySPList} from '../redux/service/service-selector';
-import {setNearbySPList} from '../redux/service/service-actions';
-import {API} from '../API';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../redux/user/user-selector';
+import { selectNearbySPList } from '../redux/service/service-selector';
+import { setNearbySPList } from '../redux/service/service-actions';
+import { useMediaQuery } from 'react-responsive';
+import { API } from '../API';
 import clsx from 'clsx';
 
 
-const useStyles = makeStyles(theme =>({
-  gridItem:{
-    margin:theme.spacing(0)
-  },
-  heading: {
-   fontSize: theme.typography.pxToRem(15),
-   fontWeight: theme.typography.fontWeightRegular,
- },
- panel:{
-   width:'15%',
-   margin:theme.spacing(1),
-   zIndex: '500',
-   position:'fixed'
- },
- textField: {
-    width: '40ch',
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-}));
-
-const data =[
-  {
-    name:'Devang Khandhar',
-    serviceType:'CA',
-    rating:4.5,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Saurabh Mane',
-    serviceType:'Web development',
-    rating:4.5,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Saikiran Bait',
-    serviceType:'Music',
-    rating:3.5,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Nikhil Hinduja',
-    serviceType:'Data Science',
-    rating:4,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Nikita Dalvi',
-    serviceType:'Dance',
-    rating:3.8,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Rahul Roy',
-    serviceType:'Content Writing',
-    rating:4,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Jason Kinny',
-    serviceType:'Pharmaceuticals',
-    rating:4.5,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  },
-  {
-    name:'Devang Khandhar',
-    serviceType:'CA',
-    rating:4,
-    address:'1667 Terra Street,South Whidbey,Washington'
-  }
-];
 
 
+function NearbyExperts({ setNearbySPList, currentUser, nearbySPs }) {
 
-function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+    const useStyles = makeStyles(theme => ({
+      gridItem: {
+        margin: theme.spacing(4),
+        //marginBottom:'10px'
+      },
+      heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+      },
+      panel: {
+        width: isMobile?'50%':'15%',
+        margin: theme.spacing(1),
+        zIndex: '500',
+        position: 'fixed'
+      },
+      textField: {
+        width: '30ch',
+      },
+      margin: {
+        margin: theme.spacing(1),
+      },
+      servicesFilter:{
+        maxHeight:'200px',
+        overflowY:'auto',
+        width:'100%',
+        '&::-webkit-scrollbar':{
+          display:'none'
+        }
+      }
+    }));
+
+
   const classes = useStyles();
-  const [serviceTypes,setServiceTypes] = useState([]);
-  const [nearbyList,setNearbyList] = useState([]);
-  const [searchText,setSearchText] = useState('');
-  const [location,setLocation] = useState({
-    Latitude:'',
-    Longitude:''
+  const [serviceTypes, setServiceTypes] = useState([]);
+  const [nearbyList, setNearbyList] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [location, setLocation] = useState({
+    Latitude: '',
+    Longitude: ''
   });
-  const [filteredList,setFilteredList] = useState([]);
-  const [selectedServices,setSelectedServices] = useState([]);
-  const [selectedRatings,setSelectedRatings] = useState([]);
-  const [loading,setLoading] = useState(false);
-  const [ratingFilter,setRatingFilter] = useState('');
-  const [radius,setRadius] = useState('5');
+  const [filteredList, setFilteredList] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [ratingFilter, setRatingFilter] = useState('');
+  const [radius, setRadius] = useState('5');
+  const [locationFilter,setLocationFilter] = useState(0);
+  const [chargeFilter,setChargeFilter] = useState(0);
+  const [filterApplied,setFilterApplied] = useState([]);
+  const [filters,setFilters] = useState({
+    Rating:0,
+    ServiceType:null,
+    ServiceGiven:0,
+    ServiceCharge:0,
+    radius:'5',
+    Service:[]
+  });
+  const [services,setServices] = useState([]);
+  const [servicesLoading,setServicesLoading] = useState(false);
+  const [filteredServices,setFilteredServices] = useState([]);
+  const [selectedFilterServices,setSelectedFilterServices] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setLoading(true);
     console.log(radius);
-    const getLocation = () => {
-      if(navigator.geolocation){
-         navigator.geolocation.getCurrentPosition(showPosition,showError);
-      }else{
-        alert('Geolocation is not supported by this browser.');
-      }
-    };
+    console.log(navigator.permissions.allow)
 
-    const showPosition = async(position) => {
-      const request = {
-        Radius: parseInt(radius),
-        Latitude: position.coords.latitude.toString(),
-        Longitude: position.coords.longitude.toString()
-      }
-      setLocation({
-        Latitude:position.coords.latitude.toString(),
-        Longitude: position.coords.longitude.toString()
-      });
-      // const res = await axios.post(`${API.URL}getNearbyServiceProviders`,request);
-      getNearbyExperts(request)
-      .then(res => {
-        if(res){
-          console.log(res.data);
-          if(res.data.output){
-            setLoading(false);
-            setNearbyList(res.data.output);
-            setFilteredList(res.data.output);
-          }
+      const showPosition = async (lat,long) => {
+        const request = {
+          Radius: parseInt(radius),
+          Latitude: lat.toString(),
+          Longitude: long.toString()
+        };
+        setLocation({
+          Latitude: lat.toString(),
+          Longitude: long.toString()
+        });
+        try {
+          getNearbyExperts(request)
+            .then(res => {
+              if (res) {
+                console.log(res.data);
+                if (res.data.output) {
+                  setLoading(false);
+                  let filterResult = [];
+                  if(filterApplied.length>0){
+                    if(filterApplied.ServiceType!==null){
+                      res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServiceType===filterApplied.ServiceType&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                    }else{
+                      res.data.output.map(item => item.Rating >= filterApplied.Rating&&item.ServicesGiven===filterApplied.ServicesGiven&&item.ServicesCharge===filterApplied.ServicesCharge?filterResult.push(item):item);
+                    }
+                  }else{
+                      filterResult = res.data.output;
+                  }
+                  setFilteredList(filterResult);
+                  setNearbyList(res.data.output);
+                }else{
+                  setLoading(false);
+                }
+              }else{
+                setLoading(false);
+              }
+            });
+        } catch (e) {
+          console.log(e);
+          setLoading(false)
         }
-      });
-
-    };
 
 
-    if(currentUser){
-        getLocation();
-        getServiceTypes();
+      };
+
+      async function fillServices(){
+        let result = await getServices();
+        setFilteredServices(result.data.output);
+        setServices(result.data.output);
+      }
+
+
+
+    if (currentUser) {
+      if(currentUser.LocationDetails){
+            showPosition(currentUser.LocationDetails[0].Latitude,currentUser.LocationDetails[0].Longitude);
+      }else{
+          showPosition(0,0);
+      }
+
+      getServiceTypes();
+          fillServices();
     }
-  },[currentUser,radius]);
+  }, [currentUser, radius]);
+
+
 
 
   // async function getNearbyExperts(){
   //
   // }
-  async function getServiceTypes(){
+  async function getServiceTypes() {
     const res = await axios.get(`${API.URL}getServiceTypes`);
     return setServiceTypes(res.data.output);
   }
 
-  useEffect(()=>{
-    if(selectedServices.length !== 0){
-      var filteredResult = [];
-      selectedServices.map(item => filteredResult.push(nearbyList.find(service=>service.ServiceType === item)));
-      setFilteredList(filteredResult);
+  const getServices = async () => {
+    const res = await axios.post(`${API.URL}GetServices`,{ServiceTypeId:null,ticket:currentUser.Ticket});
+    return res;
+  };
 
-    }
-  },[selectedServices]);
+  // useEffect(() => {
+  //   if (selectedServices.length !== 0) {
+  //     var filteredResult = [];
+  //     //selectedServices.map(item => filteredResult.push(nearbyList.find(service => service.ServiceType === item)));
+  //
+  //     selectedServices.forEach(item=>{
+  //       nearbyList.map(service => service.ServiceType === item?filteredResult.push(service):service);
+  //     })
+  //     setFilteredList(filteredResult);
+  //   }
+  // }, [selectedServices]);
 
   // useEffect(()=>{
   //
   // },[radius])
 
-  const getNearbyExperts = async(data) => {
-    const res = await axios.post(`${API.URL}getNearbyServiceProviders`,data);
+  const getNearbyExperts = async (data) => {
+    //data.Longitude = 18.499416
+    //data.Latitude =73.859024
+    const res = await axios.post(`${API.URL}getNearbyServiceProviders`, data);
     return res;
   }
 
-  useEffect(()=>{
-    debugger
-    if(ratingFilter){
+  useEffect(() => {
+
+    if (ratingFilter) {
+      console.log(ratingFilter);
+
+      let rating = parseInt(ratingFilter)
       var filteredResult = [];
-      filteredResult.push(nearbyList.find(service=>service.Rating >= ratingFilter));
+      debugger;
+      nearbyList.map(service =>
+        service.Rating>=rating?
+        filteredResult.push(service)
+        :
+        service);
+      //filteredResult.push(nearbyList.find(service => service.Rating >= ratingFilter));
       setFilteredList(filteredResult);
     }
-  },[ratingFilter]);
+  }, [ratingFilter]);
 
-
+  console.log(navigator.geolocation)
   function showError(error) {
-    switch(error.code) {
+
+    switch (error.code) {
       case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
+        alert("User denied the request for Geolocation.");
         break;
       case error.POSITION_UNAVAILABLE:
         alert("Location information is unavailable.");
@@ -201,7 +228,7 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
         alert("An unknown error occurred.");
         break;
 
-        default:
+      default:
         alert('An unknown error occurred!');
     }
   }
@@ -224,147 +251,299 @@ function NearbyExperts({setNearbySPList,currentUser,nearbySPs}){
   //     console.log(newChecked);
   // }
 
-
-  const handleChange = event => {
-    const {value} = event.target;
-    setSearchText(value);
-  };
-
-  const handleSearch = ()=>{
+  const applyFilter = async e => {
     setLoading(true);
-    const request = {
-      searchQuery: searchText,
-      Latitude: location.Latitude,
-      Longtitude: location.Longitude,
-      Radius: 5
-    };
-
-    search(request)
-    .then(res => {setLoading(false);setNearbyList(res);});
-  }
-
-  async function search(data){
-    const result = await axios.post('https://localhost:44327/api/searchServiceProviders',data);
-    return result.data.output;
-  }
-
-
-  const serviceFilterChange = (value) => {
-      const filters = [...selectedServices];
-      const currentIndex = filters.indexOf(value);
-      if(currentIndex !== -1){
-        filters.splice(currentIndex,1);
-      }else{
-        filters.push(value);
+    const{name,value} = e.target;
+    let currentList = filterApplied;
+        debugger;
+    if(value!==null&&value!=='0'&&value!==''){
+      if(!currentList.includes(name)){
+        currentList.push(name);
       }
-      setSelectedServices(filters);
+    }else{
+        currentList = currentList.filter(item => item !== name);
+    }
+    let currentFilters = filters;
+    debugger;
+    if(name==='Rating'||name==='ServiceGiven'||name==='ServiceCharge'){
+          currentFilters[name] = parseInt(value);
+    }else{
+      if(name==='Service'){
+        let currentServices = currentFilters.Service;
+        if(currentServices.includes(value)){
+          currentServices = currentServices.filter(item => item!==value);
+        }else{
+          currentServices.push(value);
+        }
+        currentFilters.Service= currentServices;
+      }else{
+        if(value===""){
+          currentFilters[name] = null;
+        }else{
+          currentFilters[name] = value;
+        }
+      }
+    }
+    setFilterApplied(currentList);
+    setFilters(currentFilters);
+    let filterResult = nearbyList;
+    if(currentList.length>0){
+      debugger;
+      if(currentList.includes('ServiceType')&&currentFilters.ServiceType!==null){
+        filterResult=filterResult.filter(item => item.ServiceType===currentFilters.ServiceType);
+      }
+      if(currentList.includes('ServiceCharge')&&currentFilters.ServiceCharge!==0){
+        filterResult=filterResult.filter(item => item.ServiceCharge===currentFilters.ServiceCharge);
+      }
+      if(currentList.includes('ServiceGiven')&&currentFilters.ServiceGiven!==0){
+        filterResult=filterResult.filter(item => item.ServiceGiven===currentFilters.ServiceGiven);
+      }
+      if(currentList.includes('Rating')&&currentFilters.Rating!==0){
+        filterResult=filterResult.filter(item => item.Rating>=currentFilters.Rating);
+      }
+      if(currentList.includes('radius')&&currentFilters.radius!=='0'){
+        let response = await handleNearby(currentFilters.radius);
+        console.log(response);
+        let array = [];
+        response.forEach((item, i) => {
+          let finding = filterResult.find(filtered => filtered.ServiceProviderId === item.ServiceProviderId);
+          if(finding){
+            array.push(finding);
+          }
+        });
+        filterResult = array;
+      }
+      if(currentList.includes('Service')&&currentFilters.Service.length>0){
+        filterResult = handleServiceSelect(currentFilters.Service,filterResult);
+      }
+    }
+    setFilteredList(filterResult);
+    setLoading(false);
   };
 
 
-  return(
+
+
+  const handleNearby = async(radius) => {
+    const request = {
+      Radius: parseInt(radius),
+      Latitude: currentUser.LocationDetails[0].Latitude.toString(),
+      Longitude: currentUser.LocationDetails[0].Longitude.toString()
+    };
+    setLocation({
+      Latitude: currentUser.LocationDetails[0].Latitude.toString(),
+      Longitude: currentUser.LocationDetails[0].Longitude.toString()
+    });
+
+    let response = await getNearbyExperts(request);
+    return response.data.output;
+  };
+
+
+
+
+  const handleLocation = e => {
+    const {value} = e.target;
+    console.log(value);
+    setLocationFilter(parseInt(value));
+    if(value==='0'){
+      setFilteredList(nearbyList);
+      return;
+    }
+    let filtered = [];
+    nearbyList.map(item => item.ServicesGiven === parseInt(value)? filtered.push(item):item);
+    setFilteredList(filtered);
+  };
+
+
+  const handleSearch = async e => {
+    const {value} = e.target;
+    setServicesLoading(true);
+    let result = await searchService(value);
+    setFilteredServices(result);
+    setServicesLoading(false);
+  };
+
+  const searchService = value => {
+    let current = services;
+    current = current.filter(item => item.Services.toLowerCase().includes(value.toLowerCase()));
+    return current;
+  };
+
+  const handleServiceSelect = (current,list) => {
+    //setLoading(true);
+    // const {value} = e.target;
+    // let current = selectedFilterServices;
+    // if(current.includes(value)){
+    //   current = current.filter(item => item!==value);
+    // }else{
+    //   current.push(value);
+    // }
+    let filtered=[];
+    const setFilter = expert => {
+      if(!filtered.includes(expert)){
+        filtered.push(expert);
+      }
+    };
+    list.forEach((expert, i) => {
+      expert.servicesList.map(service => current.includes(service.Services)?setFilter(expert):'');
+    });
+    return filtered;
+    // setSelectedFilterServices(current);
+    // setFilteredList(filtered);
+    // setLoading(false);
+  };
+
+  return (
     <Container>
-    <Backdrop className={classes.backdrop} open={loading} >
-       <CircularProgress color="inherit" />
-     </Backdrop>
+      <Backdrop className={classes.backdrop} open={loading} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Typography className={classes.heading}>Filter by</Typography>
       <Grid container>
-      <Grid item xs='3' className={classes.gridItem} >
-      <ExpansionPanel className={classes.panel}>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>Filter by Rating</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-      <FormControl component="fieldset">
-       <RadioGroup aria-label="gender" name="gender1" value={ratingFilter} onChange={event=>{setRatingFilter(event.target.value);}}>
-         <FormControlLabel value="1" control={<Radio />} label="> 1" />
-         <FormControlLabel value="2" control={<Radio />} label="> 2" />
-         <FormControlLabel value="3" control={<Radio />} label="> 3" />
-         <FormControlLabel value="4" control={<Radio />} label="> 4" />
-       </RadioGroup>
-     </FormControl>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:'999'}}>
+          <ExpansionPanel className={classes.panel}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Rating</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <FormControl component="fieldset">
+                <RadioGroup aria-label="gender" name="Rating" value={filters.Rating} onChange={applyFilter}>
+                  <FormControlLabel value={0}  control={<Radio />} label=" All" />
+                  <FormControlLabel value={1} control={<Radio />} label=" 1 & More" />
+                  <FormControlLabel value={2} control={<Radio />} label=" 2 & More" />
+                  <FormControlLabel value={3} control={<Radio />} label=" 3 & More" />
+                  <FormControlLabel value={4} control={<Radio />} label=" 4 & More" />
+                </RadioGroup>
+              </FormControl>
 
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-      </Grid>
-      <Grid item xs='3' className={classes.gridItem} >
-      <ExpansionPanel className={classes.panel}>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>Filter by Services</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-      <div style={{width:'100%'}}>
-      {serviceTypes.map(item =>
-        <React.Fragment>
-        <Checkbox
-        color="primary"
-        onChange={()=>{serviceFilterChange(item.Service)}}
-        inputProps={{ 'aria-label': 'secondary checkbox' }}
-        />
-        <span style={{paddingTop:'10px'}}>{item.Service}</span>
-        </React.Fragment>
-        )}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Grid>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'996':'1000'}}>
+          <ExpansionPanel className={classes.panel}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Profession</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <FormControl component="fieldset">
+                <RadioGroup aria-label="gender" name="ServiceType" value={filters.ServiceType} onChange={applyFilter}>
+                  <FormControlLabel value={null}  control={<Radio />} label=" All" />
+                  <FormControlLabel value='Doctor' control={<Radio />} label="Doctor" />
+                  <FormControlLabel value='CA' control={<Radio />} label="CA" />
+                </RadioGroup>
+              </FormControl>
 
-      </div>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-      </Grid>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Grid>
 
-      <Grid item xs='3' className={classes.gridItem} >
-      <ExpansionPanel className={classes.panel}>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>Filter by Distance</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-      <FormControl component="fieldset">
-       <RadioGroup aria-label="gender" name="gender1" value={radius} onChange={event=>{setRadius(event.target.value);}}>
-         <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
-         <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
-         <FormControlLabel value='10' control={<Radio />} label="Under 10Km" />
-         <FormControlLabel value='' control={<Radio />} label="All" />
-       </RadioGroup>
-     </FormControl>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
-      </Grid>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'994':''}}>
 
-      <Grid item xs='3' style={{textAlign:'right'}}>
-      <FormControl className={clsx(classes.margin, classes.textField)} variant="filled">
-        <InputLabel htmlFor="filled-adornment-password">Search</InputLabel>
-        <FilledInput
-          id="filled-adornment-password"
-          type='text'
-          onChange={handleChange}
-          value = {searchText}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle search"
-                edge="end"
-                onClick={()=>{handleSearch()}}
-              >
-                <SearchIcon/>
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
-      </Grid>
+
+          <ExpansionPanel className={classes.panel}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Distance</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <FormControl component="fieldset">
+                <RadioGroup aria-label="gender" name="radius" value={filters.radius} onChange={applyFilter}>
+                  <FormControlLabel value="100" control={<Radio />} label="> None" />
+                  <FormControlLabel value='2' control={<Radio />} label="Under 2Km" />
+                  <FormControlLabel value='5' control={<Radio />} label="Under 5Km" />
+                  <FormControlLabel value='10' control={<Radio />} label="Under 10Km" />
+                </RadioGroup>
+              </FormControl>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Grid>
+
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'992':''}}>
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Location</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <FormControl component="fieldset">
+              <RadioGroup aria-label="ServiceGiven" name="ServiceGiven" value={filters.ServiceGiven} onChange={applyFilter}>
+                <FormControlLabel value={0} control={<Radio />} label="> All" />
+                <FormControlLabel value={1} control={<Radio />} label="On Site" />
+                <FormControlLabel value={3} control={<Radio />} label="Virtual" />
+                <FormControlLabel value={4} control={<Radio />} label="OnSite/Virtual" />
+              </RadioGroup>
+            </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+        <Grid item xs={isMobile?'12':'2'} className={classes.gridItem} style={{zIndex:isMobile?'990':''}}>
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Charge</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <FormControl component="fieldset">
+              <RadioGroup aria-label="charge" name="ServiceCharge" value={filters.ServiceCharge} onChange={applyFilter}>
+                <FormControlLabel value={0} control={<Radio />} label="> All" />
+                <FormControlLabel value={1} control={<Radio />} label="per Hour" />
+                <FormControlLabel value={2} control={<Radio />} label="per Assignment" />
+                <FormControlLabel value={3} control={<Radio />} label="Full Time" />
+              </RadioGroup>
+            </FormControl>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
+        <Grid item xs={isMobile?'12':'4'} className={classes.gridItem} style={{zIndex:isMobile?'990':''}}>
+        <ExpansionPanel className={classes.panel}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Filter by Service</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{display:'block'}}>
+            <TextField variant='outlined' label='Search service' style={{width:'100%',marginBottom:'10px'}} onChange={handleSearch}/>
+            <div className={classes.servicesFilter} style={{maxHeight:'200px',overflowY:'auto',width:'100%',overflowX:'none'}}>
+            {servicesLoading&&'Loading...'}
+            {!servicesLoading&&filteredServices&&filteredServices.map(item =>
+              <FormControlLabel
+              onChange={applyFilter}
+              control={<Checkbox   name="Service" />}
+              name='Service'
+              value={item.Services}
+              label={item.Services}
+              style={{width:'100%'}}
+              />
+            )}
+            </div>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        </Grid>
       </Grid>
       <Grid container>
-      {filteredList.map(item => <Grid item xs='3' className={classes.gridItem}>
-        <ExpertCard id={item.ServiceProviderId} name={item.ServiceProvider} serviceType={item.ServiceType} rating={item.Rating} DPPath={`https://localhost:44327${item.DPPath}`} address={item.Address}/>
-      </Grid>)}
+        {filteredList.map(item => <Grid item xs={isMobile?'12':'3'} className={classes.gridItem}>
+          <ExpertCard id={item && item.ServiceProviderId} name={item && item.ServiceProvider} serviceType={item && item.ServiceType} rating={item && item.Rating} DPPath={`https://letnetworkdevstaging.obtainbpm.com/${item && item.DPPath}`} ServiceGiven={item && item.ServiceGiven===1?'Onsite':item && item.ServiceGiven===2?'Remote':item && item.ServiceGiven===2?'onsiteorofflineboth': null}  resumename={item && item.ResumePath} videopath={item&&item.IntroductoryVideoPath}/>
+        </Grid>)}
       </Grid>
     </Container>
   );
@@ -375,8 +554,8 @@ const mapStateToProps = createStructuredSelector({
   nearbySPs: selectNearbySPList
 });
 
-const mapDispatchToProps = dispatch =>({
+const mapDispatchToProps = dispatch => ({
   setNearbySPList: list => dispatch(setNearbySPList(list))
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(NearbyExperts);
+export default connect(mapStateToProps, mapDispatchToProps)(NearbyExperts);

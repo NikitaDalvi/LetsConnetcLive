@@ -8,6 +8,8 @@ import {selectCurrentUser} from '../redux/user/user-selector';
 import {setCurrentUser} from '../redux/user/user-actions';
 import MuiAlert from '@material-ui/lab/Alert';
 import {withRouter} from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { API } from '../API';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -32,6 +34,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function Deactivation({currentUser,setCurrentUser,history}){
+
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
   const [open, setOpen] = React.useState(false);
   const [alertOpen,setAlertOpen] = React.useState(false);
   const [severity,setSeverity] = React.useState('');
@@ -69,7 +74,7 @@ const handleAlertClose = (event, reason) => {
 
   const deactivateUser = async()=>{
     setLoading(true);
-    const result = await axios.post('https://localhost:44327/api/DeActivateAccount',request);
+    const result = await axios.post(`${API.URL}DeActivateAccount`,request);
     if(result){
       if(result.data.output === true){
         setCurrentUser(null);
@@ -100,7 +105,7 @@ const handleAlertClose = (event, reason) => {
          {alert}
        </Alert>
      </Snackbar>
-    <div style={{width:'25%'}}>
+    <div style={{width:isMobile?'50%':'25%'}}>
       <Button variant='contained' onClick={handleClickOpen} className={classes.button}>Deactivate Account</Button>
     </div>
     <Dialog

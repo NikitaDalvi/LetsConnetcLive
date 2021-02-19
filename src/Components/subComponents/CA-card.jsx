@@ -26,7 +26,7 @@ function CAcard(props){
      aria-expanded={open}
      variant="link"
    >
-     Services >
+     
    </Button>
   <Container>
    <Collapse in={open}>

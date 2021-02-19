@@ -1,5 +1,5 @@
 /*jshint esversion: 6*/
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Form from "./RegistrationForm";
 import Subscription from "./Subscription";
 //import CompanyDocumentUpload from "./CompanyDocumentUpload";
@@ -12,12 +12,17 @@ import {Container,styled,Typography,Button} from '@material-ui/core';
 import "react-step-progress-bar/styles.css";
 import Progressbar from './subComponents/ProgressBar';
 import {Switch, Route} from "react-router-dom";
-import MediaQuery from 'react-responsive';
+import { useMediaQuery } from 'react-responsive';
 
-class Registration extends React.Component{
-  constructor(){
-    super();
-    this.state={
+
+
+
+function Registration({setProgress,type,setIshome,history,userType,progress,registeredUser}){
+
+    const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
+
+  const[details,setDetails] = useState(
+    {
       stage: "1",
       registrationType:"",
       currentUserId:'',
@@ -38,8 +43,28 @@ class Registration extends React.Component{
       },
       allDocuments:[]
         }
-  }
+  )
 
+
+
+  useEffect(()=>{
+    if(registeredUser){
+      switch (registeredUser.status) {
+        case 0:
+          setProgress(0);
+          break;
+        case 1:
+          setProgress(50);
+          break;
+        case 2:
+          setProgress(100);
+          break;
+        default:
+
+      }
+    }
+
+  },[registeredUser]);
 
 
 //
@@ -80,7 +105,7 @@ class Registration extends React.Component{
 //
 // }
 
-SubsSelectionClick = (type,companyName) =>{
+const SubsSelectionClick = (type,companyName) =>{
   // console.log(this.state.currentUserId);
   // if(this.props.type==='Service-Provider'){
   //   const updatedData ={
@@ -111,22 +136,25 @@ SubsSelectionClick = (type,companyName) =>{
   // }
 
 // console.log(companyName);
-this.props.setProgress(100);
+  setProgress(100);
 
-if(this.props.type==='Service-Provider'){
-  this.setState({
-    stage:"3",
-    registrationType: type
-  })
+if(type==='Service-Provider'){
+  setDetails(prevValue=>{
+    return{
+      ...prevValue,
+        stage:"3",
+        registrationType: type
+    };
+  });
 }else{
-  this.props.setIshome(true);
-  this.props.history.push('/');
+  setIshome(true);
+  history.push('/');
 }
 
 
 }
 
-uploadDocuments = () => {
+const uploadDocuments = () => {
 //   const allDocuments = [];
 //   let result = null;
 //   allDocuments.push(incorporationCertificate,panCard,udyogAdhar);
@@ -148,38 +176,37 @@ uploadDocuments = () => {
 //     console.log(res);
 //   });
 
-  this.setState({
-    stage:'4'
+  setDetails(prevValue=>{
+    return{
+      ...prevValue,
+      stage:'4'
+    };
   });
 }
 
 
-componentDidMount(){
-    console.log('called');
-this.props.setProgress(0);
-}
 
 
+const{stage, registrationType} = details;
+const MyButton =  styled(Button)({
+     width:'100px',
+     fontSize:'12px',
+     background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
+     height:'40px',
+     color:'white',
+     borderRadius:'8px'
+ });
 
+ console.log('Registration Component:', userType)
 
-  render(){
-    const{stage, registrationType} = this.state;
-    const MyButton =  styled(Button)({
-         width:'100px',
-         fontSize:'12px',
-         background:'linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)',
-         height:'40px',
-         color:'white',
-         borderRadius:'8px'
-     });
 
 return(
   <div>
   <br/>
   <br/>
   <br/>
-  <Container maxWidth="sm" style={{textAlign:'center',width:'100%'}}>
-    <Progressbar type={this.props.userType} progress={this.props.progress} />
+  <Container maxWidth="sm" style={{textAlign:'center',width:'100%',marginLeft:isMobile?'100px':'',zoom:isMobile?'70%':''}}>
+    <Progressbar type={userType} progress={progress} />
 </Container>
 
 <br/>
@@ -196,14 +223,14 @@ return(
   </div>
 )
 
-}
   }
 
 
 const mapStateToProps = ({user}) =>({
   currentUser: user.currentUser,
   progress: user.progress,
-  userType:user.userType
+  userType:user.userType,
+  registeredUser:user.registeredUser
 })
 
 const mapDispatchToProps = dispatch => ({

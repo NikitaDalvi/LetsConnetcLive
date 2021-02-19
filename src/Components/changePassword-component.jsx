@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import MuiAlert from '@material-ui/lab/Alert';
 import {selectCurrentUser} from '../redux/user/user-selector';
+import { API } from '../API';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,7 @@ function ChangePassword({currentUser}){
         newPassword:data.currentPassword
       }
 
-      const result = await axios.post('https://localhost:44327/api/checkPassword',requestData);
+      const result = await axios.post(`${API.URL}checkPassword`,requestData);
       if(result){
         if(result.data){
           //setChecking(false);
@@ -88,12 +89,12 @@ function ChangePassword({currentUser}){
           newPassword:data.newPassword
         }
 
-        const checkResult = await axios.post('https://localhost:44327/api/checkPassword',requestData);
+        const checkResult = await axios.post(`${API.URL}checkPassword`,requestData);
         if(checkResult){
           if(checkResult.data){
             if(checkResult.data.responseCode === 200){
               setLoadingText('changing...');
-              const result = await axios.post('https://localhost:44327/api/changePassword',request);
+              const result = await axios.post(`${API.URL}changePassword`,request);
               if(result){
                 if(result.data){
                   setChanging(false);

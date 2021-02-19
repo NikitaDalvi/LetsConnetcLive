@@ -2,8 +2,13 @@ import React,{useState} from "react";
 //import Input from "./Input"
 import {TextField,FormControl,InputAdornment,IconButton,OutlinedInput,makeStyles,Grid,Button} from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useMediaQuery } from 'react-responsive';
+import {
+  Typography
+} from "@material-ui/core";
 
 function UploadItem(props){
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' });
 const [file,setFile] = React.useState('');
   const useStyles = makeStyles(theme =>({
     formControl:{
@@ -11,9 +16,13 @@ const [file,setFile] = React.useState('');
       width:'75%'
     },
     inputFile:{
-      width:'300px',
+      width:isMobile?'200px':'300px',
       border:file!==''?'2px solid #07C306':'',
+    },
+    title: {
+      textAlign: "center",
     }
+
 
   }));
 
@@ -28,8 +37,12 @@ function fileChange(event){
 
   return(
     <div style={{textAlign:'center'}}>
+    <Typography className={classes.title} variant="h6">
+      {props.item}
+    </Typography>
     <FormControl className={classes.formControl}>
-    <Grid container>
+
+{ props.item !=="GSTNumber"&&<Grid container>
     <Grid item style={{marginBottom:'10px'}}>
     <OutlinedInput
          id="outlined-adornment-weight"
@@ -39,8 +52,9 @@ function fileChange(event){
         error={(props.item==='Pan Card' && props.validate)?true:false}
         value={file}
         className={classes.inputFile}
+        placeholder={props.item}
        />
-      <input name='file' onChange={fileChange} variant='outlined' id={`document${props.id}`} style={{display:'none'}} type='file'/>
+      <input name='file' label={props.item} onChange={fileChange} variant='outlined' id={`document${props.id}`} style={{display:'none'}} type='file'/>
       </Grid>
       <Grid item>
       <label htmlFor={`document${props.id}`}>
@@ -49,8 +63,8 @@ function fileChange(event){
       </IconButton>
     </label>
     </Grid>
-</Grid>
-    <TextField id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />
+</Grid>}
+{props.item!=='CA Certificate'&&<TextField helperText={(props.userType==='Service-Provider'||props.userType===2||props.userType===3)&&props.item==='GSTNumber'?"Optional":''} id="outlined-basic" onChange={(event)=>{props.change(event,props.id);}} name='number' label={`${props.item} number`} variant="outlined" />}
     </FormControl>
     <br/>
     </div>

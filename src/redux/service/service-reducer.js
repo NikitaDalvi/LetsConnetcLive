@@ -30,6 +30,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
         dropdownList:[...state.dropdownList,action.payload]
       };
 
+    case serviceActionTypes.ADD_SERVICE_FROM_API: 
+    return {
+      ...state,
+      serviceList: action.payload
+    }
+
     case serviceActionTypes.ADD_SERVICE:
     return {
       ...state,
@@ -96,6 +102,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       workingHours:removeTimeSlot(state.workingHours,action.payload)
     };
 
+    case serviceActionTypes.REMOVE_AVAILABILITY:
+      return{
+        ...state,
+        workingHours:state.workingHours.find(item => item.WorkingDays === action.payload)?state.workingHours.filter(item => item.WorkingDays !== action.payload):state.workingHours
+      };
+
     case serviceActionTypes.ADD_RATING_AND_REVIEWS:
     return{
       ...state,
@@ -119,6 +131,12 @@ const serviceReducer = (state=INITIAL_STATE,action) => {
       ...state,
       nearbySPList:action.payload
     };
+
+    case serviceActionTypes.CLEAR_SERVICE:
+      return {
+        ...state,
+        serviceList: []
+      }
 
     default:
       return state;

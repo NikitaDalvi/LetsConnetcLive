@@ -20,10 +20,19 @@ export const addService = service => ({
   payload:service
 });
 
+export const addServicesFromAPI = services => ({
+  type: serviceActionTypes.ADD_SERVICE_FROM_API,
+  payload: services
+})
+
 export const removeService = service => ({
   type:serviceActionTypes.REMOVE_SERVICE,
   payload:service
 });
+
+export const clearService = () => ({
+  type: serviceActionTypes.CLEAR_SERVICE
+})
 
 export const addServiceTypes = type => ({
   type:serviceActionTypes.ADD_SERVICE_TYPES,
@@ -53,6 +62,11 @@ export const removeTimeslot = object => ({
   payload:object
 });
 
+export const removeAvailability = day => ({
+  type:serviceActionTypes.REMOVE_AVAILABILITY,
+  payload:day
+});
+
 export const setWorkingHours = list => ({
   type: serviceActionTypes.SET_WORKING_HOURS,
   payload:list
@@ -65,6 +79,11 @@ export const clearWorkingHours = () =>({
 export const addRatingAndReviews = ratings => ({
   type: serviceActionTypes.ADD_RATING_AND_REVIEWS,
   payload:ratings
+});
+
+export const addCommissionDue = commission => ({
+  type: serviceActionTypes.ADD_COMMISSIONDUE,
+  payload:commission
 });
 
 export const setServicesProgress = value => ({

@@ -39,6 +39,11 @@ export const selectRatingAndReviews = createSelector(
   service => service.ratingAndReviews
 );
 
+export const selectCommission = createSelector(
+  selectService,
+  service => service.commission
+);
+
 export const selectMyServicesProgress = createSelector(
   selectService,
   service => service.myServicesProgress

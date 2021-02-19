@@ -1,4 +1,5 @@
 /*jshint esversion:9*/
+/*jshint -W087*/
 import {UserActionTypes} from './user-types';
 import {ChangeUserServiceStatus} from './user-utils';
 
@@ -54,6 +55,7 @@ const userReducer = (state=Initial_State, action) => {
     };
 
     case UserActionTypes.SET_SUBSCRIPTION_TYPE:
+      debugger;
     return{
       ...state,
       subscriptionType: action.payload
@@ -66,6 +68,7 @@ const userReducer = (state=Initial_State, action) => {
     };
 
     case UserActionTypes.SET_PROFILE_PICTURE:
+
     return{
       ...state,
       currentUser:{...state.currentUser,DPPath:action.payload}
@@ -104,13 +107,31 @@ const userReducer = (state=Initial_State, action) => {
     case UserActionTypes.SET_COMPANY_DETAILS:
     return{
       ...state,
-      registeredUser:{...state.registeredUser,CompanyName:action.payload.companyName,CompanyId:action.payload.companyId}
+      registeredUser:{...state.registeredUser,CompanyName:action.payload.companyName,CompanyId:action.payload.companyId,UserRole:6}
     };
 
     case UserActionTypes.SET_EXPERT_ID:
     return{
       ...state,
       ExpertId: action.payload
+    };
+
+    case UserActionTypes.SET_SERVICES_ADDED:
+      return{
+        ...state,
+        currentUser:{...state.currentUser,isServicesAdded:action.payload}
+      };
+
+    case UserActionTypes.EDIT_RESUME:
+    return{
+      ...state,
+      currentUser:{...state.currentUser,ResumeName:action.payload.name,ResumePath:action.payload.path}
+    };
+
+    case UserActionTypes.EDIT_VIDEO:
+    return{
+      ...state,
+      currentUser:{...state.currentUser,IntroductoryVideoName:action.payload.name,IntroductoryVideoPath:action.payload.path}
     };
 
     default:

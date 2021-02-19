@@ -12,8 +12,7 @@ function Progressbar({type,progress}){
     percent={progress}
     filledBackground='linear-gradient(194.61deg, #BB60FC 15.89%, #FF5343 87.13%)'
     height={6}
-    width={isMobile?250:400}
-    
+    width={isMobile?350:400}
     >
     <Step transition="scale">
      {({ accomplished }) => (
@@ -83,7 +82,7 @@ function Progressbar({type,progress}){
              <g>
                 <circle cx="85" cy="50" r="15"
                 style={{ fill: `${accomplished ? '#FF5343' : 'gray'}` }}> </circle>
-  <text  x="15" y="90" fill={`${accomplished ? 'black' : 'gray'}`}>Purchase Subscription</text>
+  <text  x="15" y="90" fill={`${accomplished ? 'black' : 'gray'}`}>KYC Verification</text>
                </g>
 
           </svg>
